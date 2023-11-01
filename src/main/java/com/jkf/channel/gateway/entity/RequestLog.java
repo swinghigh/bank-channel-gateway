@@ -9,6 +9,8 @@ import java.util.Date;
 public class RequestLog implements Serializable {
     private Long id;
 
+    private String requestId;
+
     private String path;
 
     private Long waitTime;

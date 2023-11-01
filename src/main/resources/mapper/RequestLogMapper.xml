@@ -3,6 +3,7 @@
 <mapper namespace="com.jkf.channel.gateway.dao.RequestLogMapper" >
   <resultMap id="BaseResultMap" type="com.jkf.channel.gateway.entity.RequestLog" >
     <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="request_id" property="requestId" jdbcType="VARCHAR" />
     <result column="path" property="path" jdbcType="VARCHAR" />
     <result column="wait_time" property="waitTime" jdbcType="BIGINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -73,7 +74,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, `path`, wait_time, create_time, create_id, update_time, update_id
+    id, request_id, `path`, wait_time, create_time, create_id, update_time, update_id
   </sql>
   <sql id="Blob_Column_List" >
     reqParam, resparam
@@ -129,20 +130,23 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jkf.channel.gateway.entity.RequestLog" >
-    insert into request_log (id, `path`, wait_time, 
-      create_time, create_id, update_time, 
-      update_id, reqParam, resparam
-      )
-    values (#{id,jdbcType=BIGINT}, #{path,jdbcType=VARCHAR}, #{waitTime,jdbcType=BIGINT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{createId,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{updateId,jdbcType=BIGINT}, #{reqparam,jdbcType=LONGVARCHAR}, #{resparam,jdbcType=LONGVARCHAR}
-      )
+    insert into request_log (id, request_id, `path`, 
+      wait_time, create_time, create_id, 
+      update_time, update_id, reqParam, 
+      resparam)
+    values (#{id,jdbcType=BIGINT}, #{requestId,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, 
+      #{waitTime,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{createId,jdbcType=BIGINT}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}, #{reqparam,jdbcType=LONGVARCHAR}, 
+      #{resparam,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jkf.channel.gateway.entity.RequestLog" >
     insert into request_log
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
+      </if>
+      <if test="requestId != null" >
+        request_id,
       </if>
       <if test="path != null" >
         `path`,
@@ -172,6 +176,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         #{id,jdbcType=BIGINT},
+      </if>
+      <if test="requestId != null" >
+        #{requestId,jdbcType=VARCHAR},
       </if>
       <if test="path != null" >
         #{path,jdbcType=VARCHAR},
@@ -211,6 +218,9 @@
       <if test="record.id != null" >
         id = #{record.id,jdbcType=BIGINT},
       </if>
+      <if test="record.requestId != null" >
+        request_id = #{record.requestId,jdbcType=VARCHAR},
+      </if>
       <if test="record.path != null" >
         `path` = #{record.path,jdbcType=VARCHAR},
       </if>
@@ -243,6 +253,7 @@
   <update id="updateByExampleWithBLOBs" parameterType="map" >
     update request_log
     set id = #{record.id,jdbcType=BIGINT},
+      request_id = #{record.requestId,jdbcType=VARCHAR},
       `path` = #{record.path,jdbcType=VARCHAR},
       wait_time = #{record.waitTime,jdbcType=BIGINT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -258,6 +269,7 @@
   <update id="updateByExample" parameterType="map" >
     update request_log
     set id = #{record.id,jdbcType=BIGINT},
+      request_id = #{record.requestId,jdbcType=VARCHAR},
       `path` = #{record.path,jdbcType=VARCHAR},
       wait_time = #{record.waitTime,jdbcType=BIGINT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -271,6 +283,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jkf.channel.gateway.entity.RequestLog" >
     update request_log
     <set >
+      <if test="requestId != null" >
+        request_id = #{requestId,jdbcType=VARCHAR},
+      </if>
       <if test="path != null" >
         `path` = #{path,jdbcType=VARCHAR},
       </if>
@@ -300,7 +315,8 @@
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jkf.channel.gateway.entity.RequestLog" >
     update request_log
-    set `path` = #{path,jdbcType=VARCHAR},
+    set request_id = #{requestId,jdbcType=VARCHAR},
+      `path` = #{path,jdbcType=VARCHAR},
       wait_time = #{waitTime,jdbcType=BIGINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_id = #{createId,jdbcType=BIGINT},
@@ -312,7 +328,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jkf.channel.gateway.entity.RequestLog" >
     update request_log
-    set `path` = #{path,jdbcType=VARCHAR},
+    set request_id = #{requestId,jdbcType=VARCHAR},
+      `path` = #{path,jdbcType=VARCHAR},
       wait_time = #{waitTime,jdbcType=BIGINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_id = #{createId,jdbcType=BIGINT},

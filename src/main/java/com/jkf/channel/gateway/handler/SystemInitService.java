@@ -8,11 +8,14 @@ import com.jkf.channel.gateway.entity.OrgInterfceKey;
 import com.jkf.channel.gateway.service.OrgInfoService;
 import com.jkf.channel.gateway.service.OrgInterfceKeyService;
 import com.jkf.channel.gateway.service.OrgPermissionService;
+import com.jkf.channel.gateway.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +37,8 @@ public class SystemInitService {
     private OrgInterfceKeyService orgInterfceKeyService;
     @Autowired
     private OrgPermissionService orgPermissionService;
-
+    @Resource
+    private RedisTemplate redisTemplate;
     @PostConstruct
     private void init(){
         if(!CollectionUtils.isEmpty(openHandlerList)){
@@ -42,6 +46,7 @@ public class SystemInitService {
         }
         //加载信息
         reflush();
+        RedisUtil.setRedisTemplate(redisTemplate);
     }
     public static IOpenHandler getHandlerByMethod(String method){
         return BeanConstants.handlerMap.get(method);

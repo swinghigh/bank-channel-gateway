@@ -4,12 +4,16 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jkf.channel.gateway.constant.ErrorCode;
 import com.jkf.channel.gateway.constant.KeyConstants;
+import com.jkf.channel.gateway.constant.RedisConstants;
 import com.jkf.channel.gateway.entity.OrgInfo;
+import com.jkf.channel.gateway.entity.RequestLog;
 import com.jkf.channel.gateway.exception.BusinessException;
 import com.jkf.channel.gateway.service.KeyService;
 import com.jkf.channel.gateway.service.OrgInfoService;
 import com.jkf.channel.gateway.service.OrgPermissionService;
+import com.jkf.channel.gateway.utils.JsonUtils;
 import com.jkf.channel.gateway.utils.RSAUtil;
+import com.jkf.channel.gateway.utils.RedisUtil;
 import com.jkf.channel.gateway.utils.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -21,7 +25,10 @@ import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -60,6 +67,8 @@ public class OpenSignAspect {
     @Around("controllerLog()")
     public Object controllerLogs(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         MDC.put(KeyConstants.TRANS_ID, UUID.randomUUID().toString().replaceAll("-",""));
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
         //得到传递给目标方法的参数值
         Object[] obj = proceedingJoinPoint.getArgs();
         Map<String, Object> map = (Map) obj[0];
@@ -68,11 +77,29 @@ public class OpenSignAspect {
         }
         log.info("接口请求参数:{}", map);
         String result = "";
+        Long sTime=System.currentTimeMillis();
+        Date cDate=new Date();
         try {
             result = business(proceedingJoinPoint);
         } catch (Exception e) {
             log.error("出现异常", e);
             result = ResultUtils.publicResult(ErrorCode.EXCEPTION.getErrorCode(), "系统异常");
+        }finally {
+            Long eTime=System.currentTimeMillis();
+            try {
+                //将请求日志异步写入数据库中
+                RequestLog requestLog=new RequestLog();
+                requestLog.setRequestId((String) map.get("reqId"));
+                requestLog.setPath(request.getRequestURL().toString()+":"+map.get("method"));
+                requestLog.setReqparam(JsonUtils.toJson(map));
+                requestLog.setResparam(result);
+                requestLog.setWaitTime(eTime-sTime);
+                requestLog.setCreateTime(cDate);
+                requestLog.setUpdateTime(new Date());
+                RedisUtil.zset(RedisConstants.REDIS_KEY_LOG,System.currentTimeMillis(), JsonUtils.toJson(requestLog));
+            }catch (Exception e){
+                log.error("系统异常",e);
+            }
         }
         log.info("接口响应参数:{}", result);
         return result;
