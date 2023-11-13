@@ -2,6 +2,7 @@ package com.jkf.channel.gateway.constant;
 
 public enum OpenMethodEnum {
     TEST("TEST","测试"),
+    FILE_UPLOAD("FILE_UPLOAD","图片上传"),
     ;
 
     private String method;

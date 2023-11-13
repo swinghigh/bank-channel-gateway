@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jkf.channel.gateway.constant.ErrorCode;
 import com.jkf.channel.gateway.constant.KeyConstants;
+import com.jkf.channel.gateway.constant.OpenMethodEnum;
 import com.jkf.channel.gateway.constant.RedisConstants;
 import com.jkf.channel.gateway.entity.OrgInfo;
 import com.jkf.channel.gateway.entity.RequestLog;
@@ -66,39 +67,41 @@ public class OpenSignAspect {
      */
     @Around("controllerLog()")
     public Object controllerLogs(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        MDC.put(KeyConstants.TRANS_ID, UUID.randomUUID().toString().replaceAll("-",""));
+        MDC.put(KeyConstants.TRANS_ID, UUID.randomUUID().toString().replaceAll("-", ""));
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         //得到传递给目标方法的参数值
         Object[] obj = proceedingJoinPoint.getArgs();
         Map<String, Object> map = (Map) obj[0];
-        if(map!=null&&map.containsKey("reqId")){
-            MDC.put(KeyConstants.TRANS_ID,MDC.get(KeyConstants.TRANS_ID)+"_"+map.get("reqId"));
+        if (map != null && map.containsKey("reqId")) {
+            MDC.put(KeyConstants.TRANS_ID, MDC.get(KeyConstants.TRANS_ID) + "_" + map.get("reqId"));
         }
-        log.info("接口请求参数:{}", map);
+//        log.info("接口请求参数:{}", map);
         String result = "";
-        Long sTime=System.currentTimeMillis();
-        Date cDate=new Date();
+        Long sTime = System.currentTimeMillis();
+        Date cDate = new Date();
         try {
             result = business(proceedingJoinPoint);
         } catch (Exception e) {
             log.error("出现异常", e);
             result = ResultUtils.publicResult(ErrorCode.EXCEPTION.getErrorCode(), "系统异常");
-        }finally {
-            Long eTime=System.currentTimeMillis();
+        } finally {
+            Long eTime = System.currentTimeMillis();
             try {
                 //将请求日志异步写入数据库中
-                RequestLog requestLog=new RequestLog();
-                requestLog.setRequestId((String) map.get("reqId"));
-                requestLog.setPath(request.getRequestURL().toString()+":"+map.get("method"));
-                requestLog.setReqparam(JsonUtils.toJson(map));
-                requestLog.setResparam(result);
-                requestLog.setWaitTime(eTime-sTime);
-                requestLog.setCreateTime(cDate);
-                requestLog.setUpdateTime(new Date());
-                RedisUtil.zset(RedisConstants.REDIS_KEY_LOG,System.currentTimeMillis(), JsonUtils.toJson(requestLog));
-            }catch (Exception e){
-                log.error("系统异常",e);
+                if (!OpenMethodEnum.FILE_UPLOAD.equals((String) map.get("method"))) {
+                    RequestLog requestLog = new RequestLog();
+                    requestLog.setRequestId((String) map.get("reqId"));
+                    requestLog.setPath(request.getRequestURL().toString() + ":" + map.get("method"));
+                    requestLog.setReqparam(JsonUtils.toJson(map));
+                    requestLog.setResparam(result);
+                    requestLog.setWaitTime(eTime - sTime);
+                    requestLog.setCreateTime(cDate);
+                    requestLog.setUpdateTime(new Date());
+                    RedisUtil.zset(RedisConstants.REDIS_KEY_LOG, System.currentTimeMillis(), JsonUtils.toJson(requestLog));
+                }
+            } catch (Exception e) {
+                log.error("系统异常", e);
             }
         }
         log.info("接口响应参数:{}", result);
@@ -108,13 +111,15 @@ public class OpenSignAspect {
     private String business(ProceedingJoinPoint proceedingJoinPoint) {
         Object[] obj = proceedingJoinPoint.getArgs();
         Map<String, Object> map = (Map) obj[0];
-        log.info("接口请求参数:{}", map);
+        if (!OpenMethodEnum.FILE_UPLOAD.equals((String) map.get("method"))) {
+            log.info("接口请求参数:{}", map);
+        }
         //公共参数校验
         String checkResult = checkPublicValue(map);
         if (!"success".equals(checkResult)) {
             return ResultUtils.publicResult(ErrorCode.PARAM_ERROR.getErrorCode(), checkResult);
         }
-        Map<String,Object> result=new HashMap<>();
+        Map<String, Object> result = new HashMap<>();
         try {
             String orgNo = (String) map.get("orgNo");
             String publicKey = keyService.getOrgPublicKey(orgNo);
@@ -170,15 +175,15 @@ public class OpenSignAspect {
             } else {
                 return ResultUtils.publicResult(ErrorCode.FAIL.getErrorCode(), "请求失败");
             }
-        }catch (BusinessException be){
+        } catch (BusinessException be) {
             return ResultUtils.publicResult(be.getCode(), be.getMessage());
-        }catch (Exception e) {
-            log.error("出现异常",e);
+        } catch (Exception e) {
+            log.error("出现异常", e);
             return ResultUtils.publicResult(ErrorCode.EXCEPTION.getErrorCode(), "系统异常");
-        }catch (Throwable t){
-            log.error("出现异常",t);
+        } catch (Throwable t) {
+            log.error("出现异常", t);
             return ResultUtils.publicResult(ErrorCode.EXCEPTION.getErrorCode(), "系统异常");
-        } finally{
+        } finally {
             //清除当前线程中的变量
 
         }
@@ -192,13 +197,13 @@ public class OpenSignAspect {
      * @param map
      * @return
      */
-    private  String checkPublicValue(Map<String, Object> map) {
+    private String checkPublicValue(Map<String, Object> map) {
         String orgNo = (String) map.get("orgNo");
         if (StringUtils.isEmpty(orgNo)) {
             return "orgNo为空";
         }
-        OrgInfo orgInfo=orgInfoService.getOrgInfoFromCache(orgNo);
-        if(orgInfo==null){
+        OrgInfo orgInfo = orgInfoService.getOrgInfoFromCache(orgNo);
+        if (orgInfo == null) {
             return "机构不存在";
         }
         String reqId = (String) map.get("reqId");
