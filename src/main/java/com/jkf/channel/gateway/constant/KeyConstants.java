@@ -26,4 +26,17 @@ public class KeyConstants {
      * 全局id
      */
     public final static String TRANS_ID="transId";
+
+    /**
+     * 公司
+     */
+    public final static String AGENT_TYPE_COMPANY="1";
+    /**
+     * 个体
+     */
+    public final static String AGENT_TYPE_PERSION="2";
+    /**
+     * 个人
+     */
+    public final static String AGENT_TYPE_MICRO="3";
 }

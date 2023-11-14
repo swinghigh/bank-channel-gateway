@@ -11,6 +11,7 @@ public enum ErrorCode {
     PARAM_ERROR("0003","参数错误"),
     SIGN_FAIL("0004","签名失败"),
     NO_PERMISSION("0005","无接口权限"),
+    HAS_EXIT("0006","已存在"),
     ;
 
     private String errorCode;

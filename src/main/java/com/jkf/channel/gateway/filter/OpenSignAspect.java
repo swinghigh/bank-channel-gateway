@@ -160,6 +160,7 @@ public class OpenSignAspect {
             }
             params.put("orgNo", orgNo);
             params.put("method", method);
+            params.put("orgId",map.get("orgId"));
             obj[0] = params;
             Object res = proceedingJoinPoint.proceed(obj);
             log.info("接口响应的明文参数:{}", res);
@@ -206,6 +207,7 @@ public class OpenSignAspect {
         if (orgInfo == null) {
             return "机构不存在";
         }
+        map.put("orgId",orgInfo.getId());
         String reqId = (String) map.get("reqId");
         if (StringUtils.isEmpty(reqId)) {
             return "reqId为空";
