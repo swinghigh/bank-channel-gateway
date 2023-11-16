@@ -8,7 +8,7 @@ import java.io.Serializable;
 public class OrgInterfacePermission implements Serializable {
     private Long id;
 
-    private Long orgNo;
+    private String orgNo;
 
     private Long interfaceId;
     /**

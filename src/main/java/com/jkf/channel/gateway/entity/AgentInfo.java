@@ -88,7 +88,9 @@ public class AgentInfo implements Serializable {
     private String contactPhone;
 
     private String contactEmail;
-
+    /**
+     * 代理商状态0-正式、1-停用、2-待提交资质、3-审核中
+     */
     private String status;
 
     private String checkRemark;

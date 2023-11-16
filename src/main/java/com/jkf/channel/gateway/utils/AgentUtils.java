@@ -51,4 +51,69 @@ public class AgentUtils {
         agentInfo.setContactEmail(param.getString("contactEmail"));
         return agentInfo;
     }
+    public static AgentInfo buildAgentInfoEdit(JSONObject param){
+        AgentInfo agentInfo=new AgentInfo();
+//        agentInfo.setAgentName(param.getString("agentName"));
+        if(!StringUtils.isEmpty(param.getString("proviceCode"))) {
+            agentInfo.setProviceCode(param.getString("proviceCode"));
+        }
+        if(!StringUtils.isEmpty(param.getString("cityCode"))) {
+            agentInfo.setCityCode(param.getString("cityCode"));
+        }
+        if(!StringUtils.isEmpty(param.getString("countryCode"))) {
+            agentInfo.setCountryCode(param.getString("countryCode"));
+        }
+        if(!StringUtils.isEmpty(param.getString("address"))) {
+            agentInfo.setAddress(param.getString("address"));
+        }
+        if(!StringUtils.isEmpty(param.getString("agentType"))) {
+            agentInfo.setAgentType(param.getString("agentType"));
+        }
+        if(!StringUtils.isEmpty(param.getString("businessLicense"))) {
+            agentInfo.setBusinessLicense(param.getString("businessLicense"));
+        }
+        if(!StringUtils.isEmpty(param.getString("businessAmt"))) {
+            agentInfo.setBusinessAmt(param.getString("businessAmt"));
+        }
+        if(!StringUtils.isEmpty(param.getString("businessExpireStart"))) {
+            agentInfo.setBusinessExpireStart(param.getString("businessExpireStart"));
+        }
+        if(!StringUtils.isEmpty(param.getString("businessExpireEnd"))) {
+            agentInfo.setBusinessExpireEnd(param.getString("businessExpireEnd"));
+        }
+        if(!StringUtils.isEmpty(param.getString("legalName"))) {
+            agentInfo.setLegalName(param.getString("legalName"));
+        }
+        if(!StringUtils.isEmpty(param.getString("legalCertType"))) {
+            agentInfo.setLegalCertType(param.getString("legalCertType"));
+        }
+        if(!StringUtils.isEmpty(param.getString("legalCertNo"))) {
+            agentInfo.setLegalCertNo(AESUtil.encrypt(param.getString("legalCertNo"),AESUtil.key));
+        }
+        if(!StringUtils.isEmpty(param.getString("legalPhone"))) {
+            agentInfo.setLegalPhone(AESUtil.encrypt(param.getString("legalPhone"),AESUtil.key));
+        }
+        if(!StringUtils.isEmpty(param.getString("legalExpireStart"))) {
+            agentInfo.setLegalExpireStart(param.getString("legalExpireStart"));
+        }
+        if(!StringUtils.isEmpty(param.getString("legalExpireEnd"))) {
+            agentInfo.setLegalExpireEnd(param.getString("legalExpireEnd"));
+        }
+        if(!StringUtils.isEmpty(param.getString("contactName"))) {
+            agentInfo.setContactName(param.getString("contactName"));
+        }
+        if(!StringUtils.isEmpty(param.getString("contactCertType"))) {
+            agentInfo.setContactCertType(param.getString("contactCertType"));
+        }
+        if(!StringUtils.isEmpty(param.getString("contactCertNo"))) {
+            agentInfo.setContactCertNo(AESUtil.encrypt(param.getString("contactCertNo"),AESUtil.key));
+        }
+        if(!StringUtils.isEmpty(param.getString("contactPhone"))) {
+            agentInfo.setContactPhone(AESUtil.encrypt(param.getString("contactPhone"),AESUtil.key));
+        }
+        if(!StringUtils.isEmpty(param.getString("contactEmail"))) {
+            agentInfo.setContactEmail(param.getString("contactEmail"));
+        }
+        return agentInfo;
+    }
 }

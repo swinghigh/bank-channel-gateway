@@ -121,8 +121,11 @@ public class OpenSignAspect {
         }
         Map<String, Object> result = new HashMap<>();
         try {
+            Object orgId=map.get("orgId");
+            map.remove("orgId");
             String orgNo = (String) map.get("orgNo");
             String publicKey = keyService.getOrgPublicKey(orgNo);
+//            log.info("公钥:{}",publicKey);
             if (StringUtils.isEmpty(publicKey)) {
                 return ResultUtils.publicResult(ErrorCode.SIGN_FAIL.getErrorCode(), "获取密钥失败");
             }
@@ -160,7 +163,7 @@ public class OpenSignAspect {
             }
             params.put("orgNo", orgNo);
             params.put("method", method);
-            params.put("orgId",map.get("orgId"));
+            params.put("orgId",orgId);
             obj[0] = params;
             Object res = proceedingJoinPoint.proceed(obj);
             log.info("接口响应的明文参数:{}", res);

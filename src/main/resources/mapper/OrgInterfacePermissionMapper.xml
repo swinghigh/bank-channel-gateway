@@ -3,7 +3,7 @@
 <mapper namespace="com.jkf.channel.gateway.dao.OrgInterfacePermissionMapper" >
   <resultMap id="BaseResultMap" type="com.jkf.channel.gateway.entity.OrgInterfacePermission" >
     <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="org_no" property="orgNo" jdbcType="BIGINT" />
+    <result column="org_no" property="orgNo" jdbcType="VARCHAR" />
     <result column="interface_id" property="interfaceId" jdbcType="BIGINT" />
     <result column="interface_code" property="interfaceCode" jdbcType="VARCHAR" />
   </resultMap>
@@ -102,7 +102,7 @@
   <insert id="insert" parameterType="com.jkf.channel.gateway.entity.OrgInterfacePermission" >
     insert into org_interface_permission (id, org_no, interface_id
       )
-    values (#{id,jdbcType=BIGINT}, #{orgNo,jdbcType=BIGINT}, #{interfaceId,jdbcType=BIGINT}
+    values (#{id,jdbcType=BIGINT}, #{orgNo,jdbcType=VARCHAR}, #{interfaceId,jdbcType=BIGINT}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.jkf.channel.gateway.entity.OrgInterfacePermission" >
@@ -123,7 +123,7 @@
         #{id,jdbcType=BIGINT},
       </if>
       <if test="orgNo != null" >
-        #{orgNo,jdbcType=BIGINT},
+        #{orgNo,jdbcType=VARCHAR},
       </if>
       <if test="interfaceId != null" >
         #{interfaceId,jdbcType=BIGINT},
@@ -143,7 +143,7 @@
         id = #{record.id,jdbcType=BIGINT},
       </if>
       <if test="record.orgNo != null" >
-        org_no = #{record.orgNo,jdbcType=BIGINT},
+        org_no = #{record.orgNo,jdbcType=VARCHAR},
       </if>
       <if test="record.interfaceId != null" >
         interface_id = #{record.interfaceId,jdbcType=BIGINT},
@@ -156,7 +156,7 @@
   <update id="updateByExample" parameterType="map" >
     update org_interface_permission
     set id = #{record.id,jdbcType=BIGINT},
-      org_no = #{record.orgNo,jdbcType=BIGINT},
+      org_no = #{record.orgNo,jdbcType=VARCHAR},
       interface_id = #{record.interfaceId,jdbcType=BIGINT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -166,7 +166,7 @@
     update org_interface_permission
     <set >
       <if test="orgNo != null" >
-        org_no = #{orgNo,jdbcType=BIGINT},
+        org_no = #{orgNo,jdbcType=VARCHAR},
       </if>
       <if test="interfaceId != null" >
         interface_id = #{interfaceId,jdbcType=BIGINT},
@@ -176,7 +176,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jkf.channel.gateway.entity.OrgInterfacePermission" >
     update org_interface_permission
-    set org_no = #{orgNo,jdbcType=BIGINT},
+    set org_no = #{orgNo,jdbcType=VARCHAR},
       interface_id = #{interfaceId,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>

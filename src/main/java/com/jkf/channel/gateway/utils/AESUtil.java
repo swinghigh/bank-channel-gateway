@@ -1,5 +1,4 @@
 package com.jkf.channel.gateway.utils;
-
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -22,7 +21,7 @@ public class AESUtil {
      */
     public static String encrypt(String data, String key) {
         try {
-//            key = key.substring(0, 16);
+            key = key.substring(0, 16);
             byte[] raw = key.getBytes(CODEING);
             SecretKeySpec secretKeySpec = new SecretKeySpec(raw, KEY_ALGORITHM);
             Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);
@@ -42,7 +41,7 @@ public class AESUtil {
      */
     public static String decrypt(String data, String key) {
         try {
-//            key = key.substring(0, 16);
+            key = key.substring(0, 16);
             byte[] raw = key.getBytes(CODEING);
             SecretKeySpec secretKeySpec = new SecretKeySpec(raw, KEY_ALGORITHM);
             Cipher cipher = Cipher.getInstance(DEFAULT_CIPHER_ALGORITHM);
@@ -54,5 +53,18 @@ public class AESUtil {
             ex.printStackTrace();
         }
         return null;
+    }
+    public static void main(String[] args){
+        String data="111";
+        String key="F242FEBEE296D159B5D2EA708CE31E10";
+        System.out.println("加密后的结果:"+encrypt( data,  key));
+        String data1="AB2005950B269668065DE459DD07A420";
+        System.out.println("解密后的结果:" + decrypt(data1,key));
+        /* System.out.println("解密后的结果:"+decrypt(encrypt( data,  key),key));*/
+       /*try {
+           System.out.println("解密后的结果:" + decrypt(data,encrypt(key,key)));
+       }catch (Exception e){
+           e.printStackTrace();
+       }*/
     }
 }

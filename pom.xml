@@ -172,11 +172,11 @@
         <!--<version>2.5.6.SEC01</version>-->
         <!--</dependency>-->
 
-        <dependency>
-            <groupId>com.dataEncryp</groupId>
-            <artifactId>dataEncryp</artifactId>
-            <version>1.0</version>
-        </dependency>
+        <!--        <dependency>
+                  <groupId>com.dataEncryp</groupId>
+                  <artifactId>dataEncryp</artifactId>
+                  <version>1.0</version>
+              </dependency>-->
         <!-- httpclient -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>

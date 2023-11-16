@@ -4,6 +4,8 @@ public enum OpenMethodEnum {
     TEST("TEST","测试"),
     FILE_UPLOAD("FILE_UPLOAD","图片上传"),
     AGENT_ADD("AGENT_ADD","代理商添加"),
+    AGENT_EDIT("AGENT_EDIT","代理商修改"),
+    AGENT_QUERY("AGENT_QUERY","代理商查询"),
     ;
 
     private String method;

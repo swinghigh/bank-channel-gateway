@@ -8,10 +8,7 @@ import com.jkf.channel.gateway.constant.OpenMethodEnum;
 import com.jkf.channel.gateway.dao.AgentInfoMapper;
 import com.jkf.channel.gateway.dao.FileInfoMapper;
 import com.jkf.channel.gateway.dao.FileInfoRelationMapper;
-import com.jkf.channel.gateway.entity.AgentInfo;
-import com.jkf.channel.gateway.entity.AgentInfoExample;
-import com.jkf.channel.gateway.entity.FileInfo;
-import com.jkf.channel.gateway.entity.FileInfoRelationExample;
+import com.jkf.channel.gateway.entity.*;
 import com.jkf.channel.gateway.exception.BusinessException;
 import com.jkf.channel.gateway.handler.IOpenHandler;
 import com.jkf.channel.gateway.utils.AgentUtils;
@@ -24,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 代理商添加
@@ -94,10 +92,16 @@ public class AgentHandler implements IOpenHandler {
         fileMap.values().stream().forEach(value -> fileIds.add(value));
         FileInfoRelationExample example=new FileInfoRelationExample();
         example.createCriteria().andFileIdIn(fileIds);
-        int size=fileInfoRelationMapper.countByExample(example);
-        if(size!=fileIds.size()){
+        List<FileInfoRelation> res=fileInfoRelationMapper.selectByExample(example);
+        if(res==null||res.size()==0){
             throw new BusinessException(ErrorCode.PARAM_ERROR.getErrorCode(),"存在未传入系统的fileId");
         }
+        List<String> fileIdsList=res.stream().map(e->e.getFileId()).collect(Collectors.toList());
+        fileMap.values().stream().forEach(value -> {
+            if(!fileIdsList.contains(value)){
+                throw new BusinessException(ErrorCode.PARAM_ERROR.getErrorCode(),value+"系统不存在");
+            }
+        });
     }
 
     @Override
@@ -136,7 +140,7 @@ public class AgentHandler implements IOpenHandler {
             });
             fileInfoMapper.patchInsert(files);
         }
-        Map<String, Object> result = ResultUtils.businessResult(ErrorCode.SUCCESS.getErrorCode(), "上传成功");
+        Map<String, Object> result = ResultUtils.businessResult(ErrorCode.SUCCESS.getErrorCode(), "添加成功");
         result.put("agentId", agentInfo.getId());
         return result;
     }
