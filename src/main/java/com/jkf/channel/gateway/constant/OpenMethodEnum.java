@@ -6,6 +6,13 @@ public enum OpenMethodEnum {
     AGENT_ADD("AGENT_ADD","代理商添加"),
     AGENT_EDIT("AGENT_EDIT","代理商修改"),
     AGENT_QUERY("AGENT_QUERY","代理商查询"),
+    USER_ADD("USER_ADD","用户注册"),
+    USER_EDIT("USER_EDIT","用户修改"),
+    USER_QUERY("USER_QUERY","用户查询"),
+    FQ_MCHT_ADD("FQ_MCHT_ADD","分期商户开通"),
+    FQ_MCHT_EDIT("FQ_MCHT_EDIT","分期商户修改"),
+    FQ_MCHT_QUERY("FQ_MCHT_QUERY","分期商户信息查询"),
+    FQ_MCHT_BIND_CARD("FQ_MCHT_BIND_CARD","分期商户绑银行卡"),
     ;
 
     private String method;

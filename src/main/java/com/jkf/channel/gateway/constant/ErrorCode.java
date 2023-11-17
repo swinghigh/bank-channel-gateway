@@ -12,6 +12,7 @@ public enum ErrorCode {
     SIGN_FAIL("0004","签名失败"),
     NO_PERMISSION("0005","无接口权限"),
     HAS_EXIT("0006","已存在"),
+    PHONE_HAS_EXIT("0007","手机号已注册"),
     ;
 
     private String errorCode;
