@@ -6,6 +6,7 @@ import com.jkf.channel.gateway.constant.ErrorCode;
 import com.jkf.channel.gateway.constant.KeyConstants;
 import com.jkf.channel.gateway.constant.OpenMethodEnum;
 import com.jkf.channel.gateway.dao.AgentInfoMapper;
+import com.jkf.channel.gateway.dao.AreaUnionMapper;
 import com.jkf.channel.gateway.dao.FileInfoMapper;
 import com.jkf.channel.gateway.dao.FileInfoRelationMapper;
 import com.jkf.channel.gateway.entity.*;
@@ -15,6 +16,7 @@ import com.jkf.channel.gateway.utils.AgentUtils;
 import com.jkf.channel.gateway.utils.AssertUtils;
 import com.jkf.channel.gateway.utils.FileContentUtils;
 import com.jkf.channel.gateway.utils.ResultUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +39,8 @@ public class AgentEditHandler implements IOpenHandler {
     private FileInfoRelationMapper fileInfoRelationMapper;
     @Resource
     private FileInfoMapper fileInfoMapper;
+    @Resource
+    private AreaUnionMapper areaUnionMapper;
     @Override
     public String getMethod() {
         return OpenMethodEnum.AGENT_EDIT.getMethod();
@@ -73,6 +77,17 @@ public class AgentEditHandler implements IOpenHandler {
         AgentInfo agentInfo=agentInfos.get(0);
         JSONArray fileContent = jsonObject.getJSONArray("fileContent");
         Map<String, String> fileMap= FileContentUtils.convertPhotos(fileContent);
+        validateImage(agentInfo.getAgentType(), fileMap);
+        //查询省市区的名称
+        if(!StringUtils.isEmpty(jsonObject.getString("countryCode"))) {
+            AreaUnionExample addressExample = new AreaUnionExample();
+            addressExample.createCriteria().andCountyNoEqualTo(jsonObject.getString("countryCode"));
+            List<AreaUnion> areaUnions = areaUnionMapper.selectByExample(addressExample);
+            AssertUtils.collectIsEmpty(areaUnions, ErrorCode.PARAM_ERROR.getErrorCode(), "传入的区县编码错误");
+            AreaUnion areaUnion = areaUnions.get(0);
+            String addressName = areaUnion.getStateNm() + "," + areaUnion.getCityNm() + "," + areaUnion.getCountyNm();
+            jsonObject.put("addressName", addressName);
+        }
         //保存代理商信息
         AgentInfo agentInfoEdit= AgentUtils.buildAgentInfoEdit(jsonObject);
         agentInfoEdit.setId(agentInfo.getId());

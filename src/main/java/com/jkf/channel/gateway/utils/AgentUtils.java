@@ -25,6 +25,7 @@ public class AgentUtils {
         agentInfo.setCityCode(param.getString("cityCode"));
         agentInfo.setCountryCode(param.getString("countryCode"));
         agentInfo.setAddress(param.getString("address"));
+        agentInfo.setAddressName(param.getString("addressName"));
         agentInfo.setAgentType(param.getString("agentType"));
         agentInfo.setBusinessLicense(param.getString("businessLicense"));
         agentInfo.setBusinessAmt(param.getString("businessAmt"));
@@ -62,6 +63,7 @@ public class AgentUtils {
         }
         if(!StringUtils.isEmpty(param.getString("countryCode"))) {
             agentInfo.setCountryCode(param.getString("countryCode"));
+            agentInfo.setAddressName(param.getString("addressName"));
         }
         if(!StringUtils.isEmpty(param.getString("address"))) {
             agentInfo.setAddress(param.getString("address"));

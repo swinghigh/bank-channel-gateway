@@ -6,6 +6,7 @@ import com.jkf.channel.gateway.constant.ErrorCode;
 import com.jkf.channel.gateway.constant.KeyConstants;
 import com.jkf.channel.gateway.constant.OpenMethodEnum;
 import com.jkf.channel.gateway.dao.AgentInfoMapper;
+import com.jkf.channel.gateway.dao.AreaUnionMapper;
 import com.jkf.channel.gateway.dao.FileInfoMapper;
 import com.jkf.channel.gateway.dao.FileInfoRelationMapper;
 import com.jkf.channel.gateway.entity.*;
@@ -36,6 +37,8 @@ public class AgentHandler implements IOpenHandler {
     private FileInfoRelationMapper fileInfoRelationMapper;
     @Resource
     private FileInfoMapper fileInfoMapper;
+    @Resource
+    private AreaUnionMapper areaUnionMapper;
     @Override
     public String getMethod() {
         return OpenMethodEnum.AGENT_ADD.getMethod();
@@ -54,6 +57,14 @@ public class AgentHandler implements IOpenHandler {
         AssertUtils.customHasLength(jsonObject.getString("countryCode"), ErrorCode.PARAM_ERROR.getErrorCode(),"区编号为空");
         AssertUtils.customHasLength(jsonObject.getString("address"), ErrorCode.PARAM_ERROR.getErrorCode(),"地址为空");
         AssertUtils.customHasLength(jsonObject.getString("agentType"), ErrorCode.PARAM_ERROR.getErrorCode(),"代理商类型为空");
+        //查询省市区的名称
+        AreaUnionExample addressExample=new AreaUnionExample();
+        addressExample.createCriteria().andCountyNoEqualTo(jsonObject.getString("countryCode"));
+        List<AreaUnion> areaUnions=areaUnionMapper.selectByExample(addressExample);
+        AssertUtils.collectIsEmpty(areaUnions,ErrorCode.PARAM_ERROR.getErrorCode(),"传入的区县编码错误");
+        AreaUnion areaUnion=areaUnions.get(0);
+        String addressName=areaUnion.getStateNm()+","+areaUnion.getCityNm()+","+areaUnion.getCountyNm();
+        jsonObject.put("addressName",addressName);
         if(!KeyConstants.AGENT_TYPE_MICRO.equals(jsonObject.getString("agentType"))){
             AssertUtils.customHasLength(jsonObject.getString("businessLicense"), ErrorCode.PARAM_ERROR.getErrorCode(),"businessLicense为空");
             AssertUtils.customHasLength(jsonObject.getString("businessAmt"), ErrorCode.PARAM_ERROR.getErrorCode(),"businessAmt为空");

@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jkf.channel.gateway.dao.AreaUnionMapper" >
+  <resultMap id="BaseResultMap" type="com.jkf.channel.gateway.entity.AreaUnion" >
+    <result column="PROV_NO" property="provNo" jdbcType="CHAR" />
+    <result column="STATE_NM" property="stateNm" jdbcType="VARCHAR" />
+    <result column="CITY_NO" property="cityNo" jdbcType="CHAR" />
+    <result column="CITY_NM" property="cityNm" jdbcType="VARCHAR" />
+    <result column="COUNTY_NO" property="countyNo" jdbcType="CHAR" />
+    <result column="COUNTY_NM" property="countyNm" jdbcType="VARCHAR" />
+    <result column="UNION_AREA" property="unionArea" jdbcType="CHAR" />
+    <result column="ZONE_COUNTY" property="zoneCounty" jdbcType="VARCHAR" />
+    <result column="ZONE_PROV" property="zoneProv" jdbcType="VARCHAR" />
+    <result column="ZONE_CITY" property="zoneCity" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    PROV_NO, STATE_NM, CITY_NO, CITY_NM, COUNTY_NO, COUNTY_NM, UNION_AREA, ZONE_COUNTY, 
+    ZONE_PROV, ZONE_CITY
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jkf.channel.gateway.entity.AreaUnionExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from area_union
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <delete id="deleteByExample" parameterType="com.jkf.channel.gateway.entity.AreaUnionExample" >
+    delete from area_union
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jkf.channel.gateway.entity.AreaUnion" >
+    insert into area_union (PROV_NO, STATE_NM, CITY_NO, 
+      CITY_NM, COUNTY_NO, COUNTY_NM, 
+      UNION_AREA, ZONE_COUNTY, ZONE_PROV, 
+      ZONE_CITY)
+    values (#{provNo,jdbcType=CHAR}, #{stateNm,jdbcType=VARCHAR}, #{cityNo,jdbcType=CHAR}, 
+      #{cityNm,jdbcType=VARCHAR}, #{countyNo,jdbcType=CHAR}, #{countyNm,jdbcType=VARCHAR}, 
+      #{unionArea,jdbcType=CHAR}, #{zoneCounty,jdbcType=VARCHAR}, #{zoneProv,jdbcType=VARCHAR}, 
+      #{zoneCity,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jkf.channel.gateway.entity.AreaUnion" >
+    insert into area_union
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="provNo != null" >
+        PROV_NO,
+      </if>
+      <if test="stateNm != null" >
+        STATE_NM,
+      </if>
+      <if test="cityNo != null" >
+        CITY_NO,
+      </if>
+      <if test="cityNm != null" >
+        CITY_NM,
+      </if>
+      <if test="countyNo != null" >
+        COUNTY_NO,
+      </if>
+      <if test="countyNm != null" >
+        COUNTY_NM,
+      </if>
+      <if test="unionArea != null" >
+        UNION_AREA,
+      </if>
+      <if test="zoneCounty != null" >
+        ZONE_COUNTY,
+      </if>
+      <if test="zoneProv != null" >
+        ZONE_PROV,
+      </if>
+      <if test="zoneCity != null" >
+        ZONE_CITY,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="provNo != null" >
+        #{provNo,jdbcType=CHAR},
+      </if>
+      <if test="stateNm != null" >
+        #{stateNm,jdbcType=VARCHAR},
+      </if>
+      <if test="cityNo != null" >
+        #{cityNo,jdbcType=CHAR},
+      </if>
+      <if test="cityNm != null" >
+        #{cityNm,jdbcType=VARCHAR},
+      </if>
+      <if test="countyNo != null" >
+        #{countyNo,jdbcType=CHAR},
+      </if>
+      <if test="countyNm != null" >
+        #{countyNm,jdbcType=VARCHAR},
+      </if>
+      <if test="unionArea != null" >
+        #{unionArea,jdbcType=CHAR},
+      </if>
+      <if test="zoneCounty != null" >
+        #{zoneCounty,jdbcType=VARCHAR},
+      </if>
+      <if test="zoneProv != null" >
+        #{zoneProv,jdbcType=VARCHAR},
+      </if>
+      <if test="zoneCity != null" >
+        #{zoneCity,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jkf.channel.gateway.entity.AreaUnionExample" resultType="java.lang.Integer" >
+    select count(*) from area_union
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update area_union
+    <set >
+      <if test="record.provNo != null" >
+        PROV_NO = #{record.provNo,jdbcType=CHAR},
+      </if>
+      <if test="record.stateNm != null" >
+        STATE_NM = #{record.stateNm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cityNo != null" >
+        CITY_NO = #{record.cityNo,jdbcType=CHAR},
+      </if>
+      <if test="record.cityNm != null" >
+        CITY_NM = #{record.cityNm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.countyNo != null" >
+        COUNTY_NO = #{record.countyNo,jdbcType=CHAR},
+      </if>
+      <if test="record.countyNm != null" >
+        COUNTY_NM = #{record.countyNm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unionArea != null" >
+        UNION_AREA = #{record.unionArea,jdbcType=CHAR},
+      </if>
+      <if test="record.zoneCounty != null" >
+        ZONE_COUNTY = #{record.zoneCounty,jdbcType=VARCHAR},
+      </if>
+      <if test="record.zoneProv != null" >
+        ZONE_PROV = #{record.zoneProv,jdbcType=VARCHAR},
+      </if>
+      <if test="record.zoneCity != null" >
+        ZONE_CITY = #{record.zoneCity,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update area_union
+    set PROV_NO = #{record.provNo,jdbcType=CHAR},
+      STATE_NM = #{record.stateNm,jdbcType=VARCHAR},
+      CITY_NO = #{record.cityNo,jdbcType=CHAR},
+      CITY_NM = #{record.cityNm,jdbcType=VARCHAR},
+      COUNTY_NO = #{record.countyNo,jdbcType=CHAR},
+      COUNTY_NM = #{record.countyNm,jdbcType=VARCHAR},
+      UNION_AREA = #{record.unionArea,jdbcType=CHAR},
+      ZONE_COUNTY = #{record.zoneCounty,jdbcType=VARCHAR},
+      ZONE_PROV = #{record.zoneProv,jdbcType=VARCHAR},
+      ZONE_CITY = #{record.zoneCity,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+</mapper>

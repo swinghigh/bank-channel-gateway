@@ -41,6 +41,10 @@ public class AgentInfo implements Serializable {
      */
     private String countryCode;
     /**
+     * 省市区的名称的，以逗号分割
+     */
+    private String addressName;
+    /**
      * 地址
      */
     private String address;
