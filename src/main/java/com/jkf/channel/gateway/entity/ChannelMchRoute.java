@@ -3,16 +3,16 @@ package com.jkf.channel.gateway.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-public class ChannelPro implements Serializable {
+public class ChannelMchRoute implements Serializable {
     private Long id;
+
+    private Long mchId;
 
     private Long channelId;
 
-    private String keyName;
+    private String channelMchtNo;
 
-    private String keyValue;
-
-    private String keyDesc;
+    private Integer channelOrder;
 
     private Date createTime;
 
@@ -32,6 +32,14 @@ public class ChannelPro implements Serializable {
         this.id = id;
     }
 
+    public Long getMchId() {
+        return mchId;
+    }
+
+    public void setMchId(Long mchId) {
+        this.mchId = mchId;
+    }
+
     public Long getChannelId() {
         return channelId;
     }
@@ -40,28 +48,20 @@ public class ChannelPro implements Serializable {
         this.channelId = channelId;
     }
 
-    public String getKeyName() {
-        return keyName;
+    public String getChannelMchtNo() {
+        return channelMchtNo;
     }
 
-    public void setKeyName(String keyName) {
-        this.keyName = keyName == null ? null : keyName.trim();
+    public void setChannelMchtNo(String channelMchtNo) {
+        this.channelMchtNo = channelMchtNo == null ? null : channelMchtNo.trim();
     }
 
-    public String getKeyValue() {
-        return keyValue;
+    public Integer getChannelOrder() {
+        return channelOrder;
     }
 
-    public void setKeyValue(String keyValue) {
-        this.keyValue = keyValue == null ? null : keyValue.trim();
-    }
-
-    public String getKeyDesc() {
-        return keyDesc;
-    }
-
-    public void setKeyDesc(String keyDesc) {
-        this.keyDesc = keyDesc == null ? null : keyDesc.trim();
+    public void setChannelOrder(Integer channelOrder) {
+        this.channelOrder = channelOrder;
     }
 
     public Date getCreateTime() {
@@ -103,10 +103,10 @@ public class ChannelPro implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", mchId=").append(mchId);
         sb.append(", channelId=").append(channelId);
-        sb.append(", keyName=").append(keyName);
-        sb.append(", keyValue=").append(keyValue);
-        sb.append(", keyDesc=").append(keyDesc);
+        sb.append(", channelMchtNo=").append(channelMchtNo);
+        sb.append(", channelOrder=").append(channelOrder);
         sb.append(", createTime=").append(createTime);
         sb.append(", createId=").append(createId);
         sb.append(", updateTime=").append(updateTime);

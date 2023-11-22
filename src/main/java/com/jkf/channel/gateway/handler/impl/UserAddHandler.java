@@ -47,7 +47,7 @@ public class UserAddHandler implements IOpenHandler {
         if (userCount > 0) {
             throw new BusinessException(ErrorCode.HAS_EXIT.getErrorCode(), "outUserId已经存在");
         }
-        //是否判断用户手机号已经存在
+        //是否判断用户手机号已经存在(手机号不允许重复)
         example.createCriteria().andUserPhoneEqualTo(jsonObject.getString("userPhone"));
         int userCount1 = mchUserInfoMapper.countByExample(example);
         if (userCount1 > 0) {

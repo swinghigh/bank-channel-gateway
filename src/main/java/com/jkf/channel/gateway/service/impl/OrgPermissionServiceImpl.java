@@ -20,21 +20,22 @@ public class OrgPermissionServiceImpl implements OrgPermissionService {
     @Resource
     private OrgInterfacePermissionMapper orgInterfacePermissionMapper;
     @Override
-    public boolean validateMethod(String orgNo, String method) {
-        log.info("机构{}-方法{}", orgNo, method);
-        String key=orgNo+"-"+method;
+    public boolean validateMethod(String orgAppNo, String method) {
+        log.info("机构{}-方法{}", orgAppNo, method);
+        String key=orgAppNo+"-"+method;
         if(BeanConstants.orgSet.contains(key)){
             return true;
         }
         //从数据库查询
-        if(findOne( orgNo,  method)!=null){
+        if(findOne( orgAppNo,  method)!=null){
             BeanConstants.orgSet.add(key);
+            return true;
         }
         return false;
     }
 
-    public OrgInterfacePermission findOne(String orgNo, String method){
-       return orgInterfacePermissionMapper.selectByOrgNoAndInterfaeCode(orgNo,method);
+    public OrgInterfacePermission findOne(String orgAppNo, String method){
+       return orgInterfacePermissionMapper.selectByOrgNoAndInterfaeCode(orgAppNo,method);
     }
 
     @Override

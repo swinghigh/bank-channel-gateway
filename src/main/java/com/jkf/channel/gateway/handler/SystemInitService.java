@@ -65,14 +65,14 @@ public class SystemInitService {
         //加载机构密钥
         List<OrgInterfceKey> orgInterfceKeys=orgInterfceKeyService.findAll();
         if(!CollectionUtils.isEmpty(orgInterfceKeys)){
-            BeanConstants.orgKeyMap =orgInterfceKeys.stream().collect(Collectors.toMap(OrgInterfceKey::getOrgNo,orgInterfceKey->orgInterfceKey,  (key1 , key2) -> key1 ));
+            BeanConstants.orgKeyMap =orgInterfceKeys.stream().collect(Collectors.toMap(OrgInterfceKey::getOrgAppNo,orgInterfceKey->orgInterfceKey,  (key1 , key2) -> key1 ));
         }else {
             BeanConstants.orgKeyMap =new ConcurrentHashMap<>();
         }
         //加载机构权限
         List<OrgInterfacePermission> interfacePermissions= orgPermissionService.selectAll();
         if(!CollectionUtils.isEmpty(interfacePermissions)){
-            BeanConstants.orgSet =interfacePermissions.stream().map(obj->obj.getOrgNo()+"-"+obj.getInterfaceCode()).collect(Collectors.toSet());
+            BeanConstants.orgSet =interfacePermissions.stream().map(obj->obj.getOrgAppNo()+"-"+obj.getInterfaceCode()).collect(Collectors.toSet());
         }else{
             BeanConstants.orgSet =new ConcurrentHashSet<>();
         }

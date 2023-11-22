@@ -19,32 +19,25 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 分期商户绑卡
- *
  * @author xiangyu
- * @date 2023/11/17 19:09
+ * @date 2023/11/21 18:35
  */
 @Service
-public class FqMchtBindCardHandler implements IOpenHandler {
+public class FqMchtFaceAuthHandler implements IOpenHandler {
     @Resource
     private MchInfoMapper mchInfoMapper;
     @Autowired
     private IHyService hyService;
-
     @Override
     public String getMethod() {
-        return OpenMethodEnum.FQ_MCHT_BIND_CARD.getMethod();
+        return OpenMethodEnum.FQ_MCHT_FACE_AUTH.getMethod();
     }
 
     @Override
     public Map<String, Object> handler(JSONObject jsonObject) {
         AssertUtils.customHasLength(jsonObject.getString("orgId"), ErrorCode.PARAM_ERROR.getErrorCode(), "所属机构为空");
         AssertUtils.customHasLength(jsonObject.getString("mchNo"), ErrorCode.PARAM_ERROR.getErrorCode(), "mchNo为空");
-        AssertUtils.customHasLength(jsonObject.getString("bankAccount"), ErrorCode.PARAM_ERROR.getErrorCode(), "bankAccount为空");
-        AssertUtils.customHasLength(jsonObject.getString("bankAccountName"), ErrorCode.PARAM_ERROR.getErrorCode(), "bankAccountName为空");
-        if (StringUtils.isEmpty(jsonObject.getString("settlementCardNum")) && StringUtils.isEmpty(jsonObject.getString("acctOpenBankName"))) {
-            throw new BusinessException(ErrorCode.PARAM_ERROR.getErrorCode(), "settlementCardNum与acctOpenBankName同时为空");
-        }
+        AssertUtils.customHasLength(jsonObject.getString("returnUrl"), ErrorCode.PARAM_ERROR.getErrorCode(), "returnUrl为空");
         MchInfoExample mchExample = new MchInfoExample();
         mchExample.createCriteria().andOrgIdEqualTo(jsonObject.getLong("orgId")).andMchNoEqualTo(jsonObject.getString("mchNo"));
         List<MchInfo> mchInfos = mchInfoMapper.selectByExample(mchExample);
@@ -52,6 +45,6 @@ public class FqMchtBindCardHandler implements IOpenHandler {
         MchInfo mchInfo = mchInfos.get(0);
         jsonObject.put("mchNo", mchInfo.getMchNo());
         jsonObject.put("mchId", mchInfo.getId());
-        return hyService.bindCard(jsonObject);
+        return hyService.authToken(jsonObject);
     }
 }

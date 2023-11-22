@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.jkf.channel.gateway.dao.SysConfigMapper" >
-  <resultMap id="BaseResultMap" type="com.jkf.channel.gateway.entity.SysConfig" >
+<mapper namespace="com.jkf.channel.gateway.dao.ChannelMchRouteMapper" >
+  <resultMap id="BaseResultMap" type="com.jkf.channel.gateway.entity.ChannelMchRoute" >
     <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="config_name" property="configName" jdbcType="VARCHAR" />
-    <result column="config_key" property="configKey" jdbcType="VARCHAR" />
-    <result column="config_desc" property="configDesc" jdbcType="VARCHAR" />
-    <result column="config_value" property="configValue" jdbcType="VARCHAR" />
+    <result column="mch_id" property="mchId" jdbcType="BIGINT" />
+    <result column="channel_id" property="channelId" jdbcType="BIGINT" />
+    <result column="channel_mcht_no" property="channelMchtNo" jdbcType="VARCHAR" />
+    <result column="channel_order" property="channelOrder" jdbcType="INTEGER" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_id" property="createId" jdbcType="BIGINT" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
@@ -71,17 +71,17 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, config_name, config_key, config_desc, config_value, create_time, create_id, update_time, 
+    id, mch_id, channel_id, channel_mcht_no, channel_order, create_time, create_id, update_time, 
     update_id
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jkf.channel.gateway.entity.SysConfigExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jkf.channel.gateway.entity.ChannelMchRouteExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     'true' as QUERYID,
     <include refid="Base_Column_List" />
-    from sys_config
+    from channel_mch_route
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -92,46 +92,46 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
-    from sys_config
+    from channel_mch_route
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from sys_config
+    delete from channel_mch_route
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.jkf.channel.gateway.entity.SysConfigExample" >
-    delete from sys_config
+  <delete id="deleteByExample" parameterType="com.jkf.channel.gateway.entity.ChannelMchRouteExample" >
+    delete from channel_mch_route
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jkf.channel.gateway.entity.SysConfig" >
-    insert into sys_config (id, config_name, config_key, 
-      config_desc, config_value, create_time, 
+  <insert id="insert" parameterType="com.jkf.channel.gateway.entity.ChannelMchRoute" >
+    insert into channel_mch_route (id, mch_id, channel_id, 
+      channel_mcht_no, channel_order, create_time, 
       create_id, update_time, update_id
       )
-    values (#{id,jdbcType=BIGINT}, #{configName,jdbcType=VARCHAR}, #{configKey,jdbcType=VARCHAR}, 
-      #{configDesc,jdbcType=VARCHAR}, #{configValue,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+    values (#{id,jdbcType=BIGINT}, #{mchId,jdbcType=BIGINT}, #{channelId,jdbcType=BIGINT}, 
+      #{channelMchtNo,jdbcType=VARCHAR}, #{channelOrder,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
       #{createId,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.jkf.channel.gateway.entity.SysConfig" >
-    insert into sys_config
+  <insert id="insertSelective" parameterType="com.jkf.channel.gateway.entity.ChannelMchRoute" >
+    insert into channel_mch_route
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
       </if>
-      <if test="configName != null" >
-        config_name,
+      <if test="mchId != null" >
+        mch_id,
       </if>
-      <if test="configKey != null" >
-        config_key,
+      <if test="channelId != null" >
+        channel_id,
       </if>
-      <if test="configDesc != null" >
-        config_desc,
+      <if test="channelMchtNo != null" >
+        channel_mcht_no,
       </if>
-      <if test="configValue != null" >
-        config_value,
+      <if test="channelOrder != null" >
+        channel_order,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -150,17 +150,17 @@
       <if test="id != null" >
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="configName != null" >
-        #{configName,jdbcType=VARCHAR},
+      <if test="mchId != null" >
+        #{mchId,jdbcType=BIGINT},
       </if>
-      <if test="configKey != null" >
-        #{configKey,jdbcType=VARCHAR},
+      <if test="channelId != null" >
+        #{channelId,jdbcType=BIGINT},
       </if>
-      <if test="configDesc != null" >
-        #{configDesc,jdbcType=VARCHAR},
+      <if test="channelMchtNo != null" >
+        #{channelMchtNo,jdbcType=VARCHAR},
       </if>
-      <if test="configValue != null" >
-        #{configValue,jdbcType=VARCHAR},
+      <if test="channelOrder != null" >
+        #{channelOrder,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -176,29 +176,29 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jkf.channel.gateway.entity.SysConfigExample" resultType="java.lang.Integer" >
-    select count(*) from sys_config
+  <select id="countByExample" parameterType="com.jkf.channel.gateway.entity.ChannelMchRouteExample" resultType="java.lang.Integer" >
+    select count(*) from channel_mch_route
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update sys_config
+    update channel_mch_route
     <set >
       <if test="record.id != null" >
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.configName != null" >
-        config_name = #{record.configName,jdbcType=VARCHAR},
+      <if test="record.mchId != null" >
+        mch_id = #{record.mchId,jdbcType=BIGINT},
       </if>
-      <if test="record.configKey != null" >
-        config_key = #{record.configKey,jdbcType=VARCHAR},
+      <if test="record.channelId != null" >
+        channel_id = #{record.channelId,jdbcType=BIGINT},
       </if>
-      <if test="record.configDesc != null" >
-        config_desc = #{record.configDesc,jdbcType=VARCHAR},
+      <if test="record.channelMchtNo != null" >
+        channel_mcht_no = #{record.channelMchtNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.configValue != null" >
-        config_value = #{record.configValue,jdbcType=VARCHAR},
+      <if test="record.channelOrder != null" >
+        channel_order = #{record.channelOrder,jdbcType=INTEGER},
       </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -218,12 +218,12 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update sys_config
+    update channel_mch_route
     set id = #{record.id,jdbcType=BIGINT},
-      config_name = #{record.configName,jdbcType=VARCHAR},
-      config_key = #{record.configKey,jdbcType=VARCHAR},
-      config_desc = #{record.configDesc,jdbcType=VARCHAR},
-      config_value = #{record.configValue,jdbcType=VARCHAR},
+      mch_id = #{record.mchId,jdbcType=BIGINT},
+      channel_id = #{record.channelId,jdbcType=BIGINT},
+      channel_mcht_no = #{record.channelMchtNo,jdbcType=VARCHAR},
+      channel_order = #{record.channelOrder,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_id = #{record.createId,jdbcType=BIGINT},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -232,20 +232,20 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jkf.channel.gateway.entity.SysConfig" >
-    update sys_config
+  <update id="updateByPrimaryKeySelective" parameterType="com.jkf.channel.gateway.entity.ChannelMchRoute" >
+    update channel_mch_route
     <set >
-      <if test="configName != null" >
-        config_name = #{configName,jdbcType=VARCHAR},
+      <if test="mchId != null" >
+        mch_id = #{mchId,jdbcType=BIGINT},
       </if>
-      <if test="configKey != null" >
-        config_key = #{configKey,jdbcType=VARCHAR},
+      <if test="channelId != null" >
+        channel_id = #{channelId,jdbcType=BIGINT},
       </if>
-      <if test="configDesc != null" >
-        config_desc = #{configDesc,jdbcType=VARCHAR},
+      <if test="channelMchtNo != null" >
+        channel_mcht_no = #{channelMchtNo,jdbcType=VARCHAR},
       </if>
-      <if test="configValue != null" >
-        config_value = #{configValue,jdbcType=VARCHAR},
+      <if test="channelOrder != null" >
+        channel_order = #{channelOrder,jdbcType=INTEGER},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -262,12 +262,12 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jkf.channel.gateway.entity.SysConfig" >
-    update sys_config
-    set config_name = #{configName,jdbcType=VARCHAR},
-      config_key = #{configKey,jdbcType=VARCHAR},
-      config_desc = #{configDesc,jdbcType=VARCHAR},
-      config_value = #{configValue,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.jkf.channel.gateway.entity.ChannelMchRoute" >
+    update channel_mch_route
+    set mch_id = #{mchId,jdbcType=BIGINT},
+      channel_id = #{channelId,jdbcType=BIGINT},
+      channel_mcht_no = #{channelMchtNo,jdbcType=VARCHAR},
+      channel_order = #{channelOrder,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_id = #{createId,jdbcType=BIGINT},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
@@ -275,7 +275,12 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
-  <select id="getSeq" resultType="int" parameterType="java.lang.String" >
-    select get_seq(#{seqName})
+  <select id="selectByMchtIdAndCompanyCode" resultMap="BaseResultMap" >
+    select
+    r.*
+    from channel_mch_route r
+    left join  channel_info ci on ci.id=r.channel_id
+    where ci.channelcompany_no = #{channelCompanyCode}
+    and r.mch_id=#{mchId}
   </select>
 </mapper>

@@ -10,9 +10,9 @@ import java.util.List;
  */
 public interface OrgInterfceKeyService {
 
-    public OrgInterfceKey getFromCache(String orgNo);
+    public OrgInterfceKey getFromCache(String orgAppNo);
 
-    public OrgInterfceKey getFromDb(String orgNo);
+    public OrgInterfceKey getFromDb(String orgAppNo);
 
     public List<OrgInterfceKey> findAll();
 }

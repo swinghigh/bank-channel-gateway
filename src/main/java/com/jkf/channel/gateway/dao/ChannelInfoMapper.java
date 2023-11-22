@@ -30,4 +30,6 @@ public interface ChannelInfoMapper {
     int updateByPrimaryKeySelective(ChannelInfo record);
 
     int updateByPrimaryKey(ChannelInfo record);
+
+    List<ChannelInfo> selectChannelByOrgIdAndChannelCompanyNo(@Param("orgId")Long  orgId,@Param("channelCompanyNo")String channelCompanyNo);
 }

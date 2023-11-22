@@ -384,4 +384,15 @@
       update_id = #{updateId,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="selectChannelByOrgIdAndChannelCompanyNo" resultMap="BaseResultMap"  >
+    select
+     ci.*
+    from channel_info ci left join org_channel_permission cp
+    on ci.id=cp.channel_id
+    where
+     cp.org_id=#{orgId}
+     and
+     ci.channelcompany_no = #{channelCompanyNo,jdbcType=VARCHAR}
+  </select>
 </mapper>

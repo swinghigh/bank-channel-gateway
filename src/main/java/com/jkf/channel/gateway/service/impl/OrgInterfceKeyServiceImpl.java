@@ -20,22 +20,22 @@ public class OrgInterfceKeyServiceImpl implements OrgInterfceKeyService {
     @Resource
     private OrgInterfceKeyMapper orgInterfceKeyMapper;
     @Override
-    public OrgInterfceKey getFromCache(String orgNo) {
-        OrgInterfceKey orgInterfceKey=BeanConstants.orgKeyMap.get(orgNo);
+    public OrgInterfceKey getFromCache(String orgAppNo) {
+        OrgInterfceKey orgInterfceKey=BeanConstants.orgKeyMap.get(orgAppNo);
         if(orgInterfceKey!=null){
             return orgInterfceKey;
         }
-        orgInterfceKey=getFromDb( orgNo);
+        orgInterfceKey=getFromDb( orgAppNo);
         if(orgInterfceKey!=null){
-            BeanConstants.orgKeyMap.put(orgInterfceKey.getOrgNo(),orgInterfceKey);
+            BeanConstants.orgKeyMap.put(orgInterfceKey.getOrgAppNo(),orgInterfceKey);
         }
         return orgInterfceKey;
     }
 
     @Override
-    public OrgInterfceKey getFromDb(String orgNo) {
+    public OrgInterfceKey getFromDb(String orgAppNo) {
         OrgInterfceKeyExample example=new OrgInterfceKeyExample();
-        example.createCriteria().andOrgNoEqualTo(orgNo);
+        example.createCriteria().andOrgAppNoEqualTo(orgAppNo);
         List<OrgInterfceKey> orgInterfceKeys=orgInterfceKeyMapper.selectByExample(example);
         if(!CollectionUtils.isEmpty(orgInterfceKeys)){
             return orgInterfceKeys.get(0);

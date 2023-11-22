@@ -7,10 +7,12 @@ import com.jkf.channel.gateway.constant.KeyConstants;
 import com.jkf.channel.gateway.constant.OpenMethodEnum;
 import com.jkf.channel.gateway.constant.RedisConstants;
 import com.jkf.channel.gateway.entity.OrgInfo;
+import com.jkf.channel.gateway.entity.OrgInterfceKey;
 import com.jkf.channel.gateway.entity.RequestLog;
 import com.jkf.channel.gateway.exception.BusinessException;
 import com.jkf.channel.gateway.service.KeyService;
 import com.jkf.channel.gateway.service.OrgInfoService;
+import com.jkf.channel.gateway.service.OrgInterfceKeyService;
 import com.jkf.channel.gateway.service.OrgPermissionService;
 import com.jkf.channel.gateway.utils.JsonUtils;
 import com.jkf.channel.gateway.utils.RSAUtil;
@@ -51,6 +53,8 @@ public class OpenSignAspect {
     private OrgPermissionService orgPermissionService;
     @Autowired
     private OrgInfoService orgInfoService;
+    @Autowired
+    private OrgInterfceKeyService orgInterfceKeyService;
 
     /**
      * 切入点描述 这个是PayController的切入点
@@ -123,8 +127,8 @@ public class OpenSignAspect {
         try {
             Object orgId=map.get("orgId");
             map.remove("orgId");
-            String orgNo = (String) map.get("orgNo");
-            String publicKey = keyService.getOrgPublicKey(orgNo);
+            String orgAppNo = (String) map.get("orgAppNo");
+            String publicKey = keyService.getOrgPublicKey(orgAppNo);
 //            log.info("公钥:{}",publicKey);
             if (StringUtils.isEmpty(publicKey)) {
                 return ResultUtils.publicResult(ErrorCode.SIGN_FAIL.getErrorCode(), "获取密钥失败");
@@ -135,7 +139,7 @@ public class OpenSignAspect {
             }
             String reqData = (String) map.get("reqData");
             //获取平台的私钥
-            String privateKey = keyService.getPlatPrivateKey(orgNo);
+            String privateKey = keyService.getPlatPrivateKey(orgAppNo);
             if (StringUtils.isEmpty(privateKey)) {
                 return ResultUtils.publicResult(ErrorCode.SIGN_FAIL.getErrorCode(), "获取密钥失败");
             }
@@ -158,12 +162,13 @@ public class OpenSignAspect {
             //3. 验证商户状态
             String method = (String) map.get("method");
             //判断机构是否有权限
-            if (!orgPermissionService.validateMethod(orgNo, method)) {
+            if (!orgPermissionService.validateMethod(orgAppNo, method)) {
                 return ResultUtils.publicResult(ErrorCode.NO_PERMISSION.getErrorCode(), "接口无权限");
             }
-            params.put("orgNo", orgNo);
+            params.put("orgNo", orgAppNo);
             params.put("method", method);
             params.put("orgId",orgId);
+            params.put("orgAppNo", orgAppNo);
             obj[0] = params;
             Object res = proceedingJoinPoint.proceed(obj);
             log.info("接口响应的明文参数:{}", res);
@@ -202,15 +207,20 @@ public class OpenSignAspect {
      * @return
      */
     private String checkPublicValue(Map<String, Object> map) {
-        String orgNo = (String) map.get("orgNo");
-        if (StringUtils.isEmpty(orgNo)) {
-            return "orgNo为空";
+        String orgAppNo = (String) map.get("orgAppNo");
+        if (StringUtils.isEmpty(orgAppNo)) {
+            return "orgAppNo为空";
         }
-        OrgInfo orgInfo = orgInfoService.getOrgInfoFromCache(orgNo);
+      /*  OrgInfo orgInfo = orgInfoService.getOrgInfoFromCache(orgAppNo);
         if (orgInfo == null) {
-            return "机构不存在";
+            return "机构应用不存在";
         }
-        map.put("orgId",orgInfo.getId());
+        map.put("orgId",orgInfo.getId());*/
+        OrgInterfceKey orgInterfceKey=orgInterfceKeyService.getFromCache(orgAppNo);
+        if (orgInterfceKey == null) {
+            return "机构应用不存在";
+        }
+        map.put("orgId",orgInterfceKey.getOrgId());
         String reqId = (String) map.get("reqId");
         if (StringUtils.isEmpty(reqId)) {
             return "reqId为空";

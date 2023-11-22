@@ -8,13 +8,25 @@ import java.io.Serializable;
 public class OrgInterfacePermission implements Serializable {
     private Long id;
 
-    private String orgNo;
+    private String orgAppNo;
 
     private Long interfaceId;
-    /**
-     * 需要关联查询才有值
-     */
+
     private String interfaceCode;
 
     private static final long serialVersionUID = 1L;
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+        sb.append(", id=").append(id);
+        sb.append(", orgAppNo=").append(orgAppNo);
+        sb.append(", interfaceId=").append(interfaceId);
+        sb.append(", serialVersionUID=").append(serialVersionUID);
+        sb.append("]");
+        return sb.toString();
+    }
 }

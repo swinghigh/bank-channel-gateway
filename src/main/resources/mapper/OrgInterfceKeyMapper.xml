@@ -3,12 +3,15 @@
 <mapper namespace="com.jkf.channel.gateway.dao.OrgInterfceKeyMapper" >
   <resultMap id="BaseResultMap" type="com.jkf.channel.gateway.entity.OrgInterfceKey" >
     <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="org_no" property="orgNo" jdbcType="VARCHAR" />
+    <result column="org_app_no" property="orgAppNo" jdbcType="VARCHAR" />
+    <result column="org_app_name" property="orgAppName" jdbcType="VARCHAR" />
+    <result column="org_id" property="orgId" jdbcType="BIGINT" />
     <result column="org_private_key" property="orgPrivateKey" jdbcType="VARCHAR" />
     <result column="org_public_key" property="orgPublicKey" jdbcType="VARCHAR" />
     <result column="plat_private_key" property="platPrivateKey" jdbcType="VARCHAR" />
     <result column="plat_public_key" property="platPublicKey" jdbcType="VARCHAR" />
     <result column="pay_notify_url" property="payNotifyUrl" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_id" property="createId" jdbcType="BIGINT" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
@@ -73,8 +76,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, org_no, org_private_key, org_public_key, plat_private_key, plat_public_key, pay_notify_url, 
-    create_time, create_id, update_time, update_id
+    id, org_app_no, org_app_name, org_id, org_private_key, org_public_key, plat_private_key, 
+    plat_public_key, pay_notify_url, `status`, create_time, create_id, update_time, update_id
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jkf.channel.gateway.entity.OrgInterfceKeyExample" >
     select
@@ -108,13 +111,15 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jkf.channel.gateway.entity.OrgInterfceKey" >
-    insert into org_interfce_key (id, org_no, org_private_key, 
-      org_public_key, plat_private_key, plat_public_key, 
-      pay_notify_url, create_time, create_id, 
+    insert into org_interfce_key (id, org_app_no, org_app_name, 
+      org_id, org_private_key, org_public_key, 
+      plat_private_key, plat_public_key, pay_notify_url, 
+      `status`, create_time, create_id, 
       update_time, update_id)
-    values (#{id,jdbcType=BIGINT}, #{orgNo,jdbcType=VARCHAR}, #{orgPrivateKey,jdbcType=VARCHAR}, 
-      #{orgPublicKey,jdbcType=VARCHAR}, #{platPrivateKey,jdbcType=VARCHAR}, #{platPublicKey,jdbcType=VARCHAR}, 
-      #{payNotifyUrl,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createId,jdbcType=BIGINT}, 
+    values (#{id,jdbcType=BIGINT}, #{orgAppNo,jdbcType=VARCHAR}, #{orgAppName,jdbcType=VARCHAR}, 
+      #{orgId,jdbcType=BIGINT}, #{orgPrivateKey,jdbcType=VARCHAR}, #{orgPublicKey,jdbcType=VARCHAR}, 
+      #{platPrivateKey,jdbcType=VARCHAR}, #{platPublicKey,jdbcType=VARCHAR}, #{payNotifyUrl,jdbcType=VARCHAR}, 
+      #{status,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createId,jdbcType=BIGINT}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jkf.channel.gateway.entity.OrgInterfceKey" >
@@ -123,8 +128,14 @@
       <if test="id != null" >
         id,
       </if>
-      <if test="orgNo != null" >
-        org_no,
+      <if test="orgAppNo != null" >
+        org_app_no,
+      </if>
+      <if test="orgAppName != null" >
+        org_app_name,
+      </if>
+      <if test="orgId != null" >
+        org_id,
       </if>
       <if test="orgPrivateKey != null" >
         org_private_key,
@@ -140,6 +151,9 @@
       </if>
       <if test="payNotifyUrl != null" >
         pay_notify_url,
+      </if>
+      <if test="status != null" >
+        `status`,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -158,8 +172,14 @@
       <if test="id != null" >
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="orgNo != null" >
-        #{orgNo,jdbcType=VARCHAR},
+      <if test="orgAppNo != null" >
+        #{orgAppNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orgAppName != null" >
+        #{orgAppName,jdbcType=VARCHAR},
+      </if>
+      <if test="orgId != null" >
+        #{orgId,jdbcType=BIGINT},
       </if>
       <if test="orgPrivateKey != null" >
         #{orgPrivateKey,jdbcType=VARCHAR},
@@ -175,6 +195,9 @@
       </if>
       <if test="payNotifyUrl != null" >
         #{payNotifyUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -202,8 +225,14 @@
       <if test="record.id != null" >
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.orgNo != null" >
-        org_no = #{record.orgNo,jdbcType=VARCHAR},
+      <if test="record.orgAppNo != null" >
+        org_app_no = #{record.orgAppNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orgAppName != null" >
+        org_app_name = #{record.orgAppName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orgId != null" >
+        org_id = #{record.orgId,jdbcType=BIGINT},
       </if>
       <if test="record.orgPrivateKey != null" >
         org_private_key = #{record.orgPrivateKey,jdbcType=VARCHAR},
@@ -219,6 +248,9 @@
       </if>
       <if test="record.payNotifyUrl != null" >
         pay_notify_url = #{record.payNotifyUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        `status` = #{record.status,jdbcType=CHAR},
       </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -240,12 +272,15 @@
   <update id="updateByExample" parameterType="map" >
     update org_interfce_key
     set id = #{record.id,jdbcType=BIGINT},
-      org_no = #{record.orgNo,jdbcType=VARCHAR},
+      org_app_no = #{record.orgAppNo,jdbcType=VARCHAR},
+      org_app_name = #{record.orgAppName,jdbcType=VARCHAR},
+      org_id = #{record.orgId,jdbcType=BIGINT},
       org_private_key = #{record.orgPrivateKey,jdbcType=VARCHAR},
       org_public_key = #{record.orgPublicKey,jdbcType=VARCHAR},
       plat_private_key = #{record.platPrivateKey,jdbcType=VARCHAR},
       plat_public_key = #{record.platPublicKey,jdbcType=VARCHAR},
       pay_notify_url = #{record.payNotifyUrl,jdbcType=VARCHAR},
+      `status` = #{record.status,jdbcType=CHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_id = #{record.createId,jdbcType=BIGINT},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -257,8 +292,14 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jkf.channel.gateway.entity.OrgInterfceKey" >
     update org_interfce_key
     <set >
-      <if test="orgNo != null" >
-        org_no = #{orgNo,jdbcType=VARCHAR},
+      <if test="orgAppNo != null" >
+        org_app_no = #{orgAppNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orgAppName != null" >
+        org_app_name = #{orgAppName,jdbcType=VARCHAR},
+      </if>
+      <if test="orgId != null" >
+        org_id = #{orgId,jdbcType=BIGINT},
       </if>
       <if test="orgPrivateKey != null" >
         org_private_key = #{orgPrivateKey,jdbcType=VARCHAR},
@@ -274,6 +315,9 @@
       </if>
       <if test="payNotifyUrl != null" >
         pay_notify_url = #{payNotifyUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        `status` = #{status,jdbcType=CHAR},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -292,12 +336,15 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jkf.channel.gateway.entity.OrgInterfceKey" >
     update org_interfce_key
-    set org_no = #{orgNo,jdbcType=VARCHAR},
+    set org_app_no = #{orgAppNo,jdbcType=VARCHAR},
+      org_app_name = #{orgAppName,jdbcType=VARCHAR},
+      org_id = #{orgId,jdbcType=BIGINT},
       org_private_key = #{orgPrivateKey,jdbcType=VARCHAR},
       org_public_key = #{orgPublicKey,jdbcType=VARCHAR},
       plat_private_key = #{platPrivateKey,jdbcType=VARCHAR},
       plat_public_key = #{platPublicKey,jdbcType=VARCHAR},
       pay_notify_url = #{payNotifyUrl,jdbcType=VARCHAR},
+      `status` = #{status,jdbcType=CHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_id = #{createId,jdbcType=BIGINT},
       update_time = #{updateTime,jdbcType=TIMESTAMP},

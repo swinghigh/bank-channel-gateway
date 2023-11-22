@@ -13,6 +13,10 @@ public enum ErrorCode {
     NO_PERMISSION("0005","无接口权限"),
     HAS_EXIT("0006","已存在"),
     PHONE_HAS_EXIT("0007","手机号已注册"),
+    HAS_NOT_EXIT("0008","不存在"),
+
+    BING_CARD_FAIL("0097","绑卡失败"),
+    OPEN_FAIL("0098","开户失败"),
     ;
 
     private String errorCode;

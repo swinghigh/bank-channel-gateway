@@ -15,8 +15,8 @@ public class RsaKeyServiceImpl implements KeyService {
     @Autowired
     private OrgInterfceKeyService orgInterfceKeyService;
     @Override
-    public String getOrgPublicKey(String orgNo) {
-        OrgInterfceKey orgInterfceKey=orgInterfceKeyService.getFromCache(orgNo);
+    public String getOrgPublicKey(String orgAppNo) {
+        OrgInterfceKey orgInterfceKey=orgInterfceKeyService.getFromCache(orgAppNo);
         if(orgInterfceKey!=null){
             return orgInterfceKey.getOrgPublicKey();
         }
@@ -24,8 +24,8 @@ public class RsaKeyServiceImpl implements KeyService {
     }
 
     @Override
-    public String getPlatPrivateKey(String orgNo) {
-        OrgInterfceKey orgInterfceKey=orgInterfceKeyService.getFromCache(orgNo);
+    public String getPlatPrivateKey(String orgAppNo) {
+        OrgInterfceKey orgInterfceKey=orgInterfceKeyService.getFromCache(orgAppNo);
         if(orgInterfceKey!=null){
             return orgInterfceKey.getPlatPrivateKey();
         }

@@ -164,63 +164,73 @@ public class OrgInterfacePermissionExample {
             return (Criteria) this;
         }
 
-        public Criteria andOrgNoIsNull() {
-            addCriterion("org_no is null");
+        public Criteria andOrgAppNoIsNull() {
+            addCriterion("org_app_no is null");
             return (Criteria) this;
         }
 
-        public Criteria andOrgNoIsNotNull() {
-            addCriterion("org_no is not null");
+        public Criteria andOrgAppNoIsNotNull() {
+            addCriterion("org_app_no is not null");
             return (Criteria) this;
         }
 
-        public Criteria andOrgNoEqualTo(Long value) {
-            addCriterion("org_no =", value, "orgNo");
+        public Criteria andOrgAppNoEqualTo(String value) {
+            addCriterion("org_app_no =", value, "orgAppNo");
             return (Criteria) this;
         }
 
-        public Criteria andOrgNoNotEqualTo(Long value) {
-            addCriterion("org_no <>", value, "orgNo");
+        public Criteria andOrgAppNoNotEqualTo(String value) {
+            addCriterion("org_app_no <>", value, "orgAppNo");
             return (Criteria) this;
         }
 
-        public Criteria andOrgNoGreaterThan(Long value) {
-            addCriterion("org_no >", value, "orgNo");
+        public Criteria andOrgAppNoGreaterThan(String value) {
+            addCriterion("org_app_no >", value, "orgAppNo");
             return (Criteria) this;
         }
 
-        public Criteria andOrgNoGreaterThanOrEqualTo(Long value) {
-            addCriterion("org_no >=", value, "orgNo");
+        public Criteria andOrgAppNoGreaterThanOrEqualTo(String value) {
+            addCriterion("org_app_no >=", value, "orgAppNo");
             return (Criteria) this;
         }
 
-        public Criteria andOrgNoLessThan(Long value) {
-            addCriterion("org_no <", value, "orgNo");
+        public Criteria andOrgAppNoLessThan(String value) {
+            addCriterion("org_app_no <", value, "orgAppNo");
             return (Criteria) this;
         }
 
-        public Criteria andOrgNoLessThanOrEqualTo(Long value) {
-            addCriterion("org_no <=", value, "orgNo");
+        public Criteria andOrgAppNoLessThanOrEqualTo(String value) {
+            addCriterion("org_app_no <=", value, "orgAppNo");
             return (Criteria) this;
         }
 
-        public Criteria andOrgNoIn(List<Long> values) {
-            addCriterion("org_no in", values, "orgNo");
+        public Criteria andOrgAppNoLike(String value) {
+            addCriterion("org_app_no like", value, "orgAppNo");
             return (Criteria) this;
         }
 
-        public Criteria andOrgNoNotIn(List<Long> values) {
-            addCriterion("org_no not in", values, "orgNo");
+        public Criteria andOrgAppNoNotLike(String value) {
+            addCriterion("org_app_no not like", value, "orgAppNo");
             return (Criteria) this;
         }
 
-        public Criteria andOrgNoBetween(Long value1, Long value2) {
-            addCriterion("org_no between", value1, value2, "orgNo");
+        public Criteria andOrgAppNoIn(List<String> values) {
+            addCriterion("org_app_no in", values, "orgAppNo");
             return (Criteria) this;
         }
 
-        public Criteria andOrgNoNotBetween(Long value1, Long value2) {
-            addCriterion("org_no not between", value1, value2, "orgNo");
+        public Criteria andOrgAppNoNotIn(List<String> values) {
+            addCriterion("org_app_no not in", values, "orgAppNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgAppNoBetween(String value1, String value2) {
+            addCriterion("org_app_no between", value1, value2, "orgAppNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgAppNoNotBetween(String value1, String value2) {
+            addCriterion("org_app_no not between", value1, value2, "orgAppNo");
             return (Criteria) this;
         }
 
@@ -281,6 +291,11 @@ public class OrgInterfacePermissionExample {
 
         public Criteria andInterfaceIdNotBetween(Long value1, Long value2) {
             addCriterion("interface_id not between", value1, value2, "interfaceId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgAppNoLikeInsensitive(String value) {
+            addCriterion("upper(org_app_no) like", value.toUpperCase(), "orgAppNo");
             return (Criteria) this;
         }
     }

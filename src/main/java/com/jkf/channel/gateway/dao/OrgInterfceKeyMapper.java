@@ -3,8 +3,10 @@ package com.jkf.channel.gateway.dao;
 import com.jkf.channel.gateway.entity.OrgInterfceKey;
 import com.jkf.channel.gateway.entity.OrgInterfceKeyExample;
 import java.util.List;
-import org.apache.ibatis.annotations.Param;
 
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+@Mapper
 public interface OrgInterfceKeyMapper {
     int countByExample(OrgInterfceKeyExample example);
 

@@ -13,6 +13,9 @@ public enum OpenMethodEnum {
     FQ_MCHT_EDIT("FQ_MCHT_EDIT","分期商户修改"),
     FQ_MCHT_QUERY("FQ_MCHT_QUERY","分期商户信息查询"),
     FQ_MCHT_BIND_CARD("FQ_MCHT_BIND_CARD","分期商户绑银行卡"),
+    FQ_MCHT_ADDRESS("FQ_MCHT_ADDRESS","分期商户地址添加"),
+    FQ_MCHT_FACE_AUTH("FQ_MCHT_FACE_AUTH","分期商户人脸认证"),
+    FQ_MCHT_FACE_AUTH_QUERY("FQ_MCHT_FACE_AUTH_QUERY","分期商户人脸认证查询"),
     ;
 
     private String method;

@@ -27,4 +27,11 @@ public interface SysConfigMapper {
     int updateByPrimaryKeySelective(SysConfig record);
 
     int updateByPrimaryKey(SysConfig record);
+
+    /**
+     * 获取序列自增值
+     * @param seqName
+     * @return
+     */
+    int getSeq(String seqName);
 }
