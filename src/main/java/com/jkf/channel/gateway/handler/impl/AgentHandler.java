@@ -134,7 +134,7 @@ public class AgentHandler implements IOpenHandler {
         agentInfo.setAgentNature("2");
         agentInfo.setAgentLevel("0");
         agentInfoMapper.insertSelective(agentInfo);
-        agentInfo.setAgentNo("A"+(100000+agentInfo.getId()));
+        agentInfo.setAgentNo("DL"+(100000000000L+agentInfo.getId()));
         agentInfoMapper.updateByPrimaryKey(agentInfo);
         //插入图片关联
         if(fileMap!=null&&fileMap.size()>0){
