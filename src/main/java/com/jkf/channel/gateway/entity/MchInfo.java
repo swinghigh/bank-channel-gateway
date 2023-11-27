@@ -103,6 +103,7 @@ public class MchInfo implements Serializable {
 
     private Long updateId;
 
+    private Long channelId;
     private static final long serialVersionUID = 1L;
 
     @Override

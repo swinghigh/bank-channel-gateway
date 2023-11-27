@@ -197,6 +197,7 @@ public class FqMchtAddHandler implements IOpenHandler {
             mchInfoUpdate.setUpdateTime(new Date());
             mchInfoUpdate.setId(oldMchtInfo.getId());
             mchInfoUpdate.setMchStatus("0");
+            mchInfoUpdate.setChannelId((Long )result.get("channelId"));
             mchInfoMapper.updateByPrimaryKeySelective(mchInfoUpdate);
         }
         //调用火眼的分期接口
