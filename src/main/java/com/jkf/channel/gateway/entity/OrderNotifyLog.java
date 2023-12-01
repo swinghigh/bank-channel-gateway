@@ -20,7 +20,9 @@ public class OrderNotifyLog implements Serializable {
     private String retryFlag;
 
     private Date retryTime;
-
+    /**
+     * 通知状态0未通知 1通知成功 2通知失败 3通知中
+     */
     private String notifyStatus;
 
     private String failReason;

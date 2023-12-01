@@ -30,6 +30,18 @@ public class OrderInfoService {
         }else {
             return null;
         }
+    }
 
+    public OrderInfo selectBySerial(String serial){
+        OrderInfoExample example=new OrderInfoExample();
+        OrderInfoExample.Criteria criteria = example.createCriteria();
+        criteria.andSerialEqualTo(serial);
+
+        List<OrderInfo> orderInfos = orderInfoMapper.selectByExample(example);
+        if (CollUtil.isNotEmpty(orderInfos)){
+            return orderInfos.get(0);
+        }else {
+            return null;
+        }
     }
 }
