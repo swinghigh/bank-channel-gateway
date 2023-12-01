@@ -120,6 +120,8 @@ public class NotifyService {
                         Map<String, Object> result = new HashMap<>();
                         result.put(KeyConstants.CODE, ErrorCode.SUCCESS.getErrorCode());
                         result.put(KeyConstants.MSG, "操作成功");
+                        result.put("version","1.0");
+                        result.put("signType","RSA");
                         //使用机构的公钥加密
                         JSONObject respJson = new JSONObject(map);
                         result.put("respData", RSAUtil.publicEncrypt(respJson.toJSONString(), orgPublicKey));
