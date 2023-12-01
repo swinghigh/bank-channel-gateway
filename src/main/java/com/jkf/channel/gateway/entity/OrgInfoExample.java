@@ -305,6 +305,76 @@ public class OrgInfoExample {
             return (Criteria) this;
         }
 
+        public Criteria andOrgShortNameIsNull() {
+            addCriterion("org_short_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgShortNameIsNotNull() {
+            addCriterion("org_short_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgShortNameEqualTo(String value) {
+            addCriterion("org_short_name =", value, "orgShortName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgShortNameNotEqualTo(String value) {
+            addCriterion("org_short_name <>", value, "orgShortName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgShortNameGreaterThan(String value) {
+            addCriterion("org_short_name >", value, "orgShortName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgShortNameGreaterThanOrEqualTo(String value) {
+            addCriterion("org_short_name >=", value, "orgShortName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgShortNameLessThan(String value) {
+            addCriterion("org_short_name <", value, "orgShortName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgShortNameLessThanOrEqualTo(String value) {
+            addCriterion("org_short_name <=", value, "orgShortName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgShortNameLike(String value) {
+            addCriterion("org_short_name like", value, "orgShortName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgShortNameNotLike(String value) {
+            addCriterion("org_short_name not like", value, "orgShortName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgShortNameIn(List<String> values) {
+            addCriterion("org_short_name in", values, "orgShortName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgShortNameNotIn(List<String> values) {
+            addCriterion("org_short_name not in", values, "orgShortName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgShortNameBetween(String value1, String value2) {
+            addCriterion("org_short_name between", value1, value2, "orgShortName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgShortNameNotBetween(String value1, String value2) {
+            addCriterion("org_short_name not between", value1, value2, "orgShortName");
+            return (Criteria) this;
+        }
+
         public Criteria andContactNameIsNull() {
             addCriterion("contact_name is null");
             return (Criteria) this;
@@ -446,72 +516,72 @@ public class OrgInfoExample {
         }
 
         public Criteria andStatusIsNull() {
-            addCriterion("`status` is null");
+            addCriterion("\"status\" is null");
             return (Criteria) this;
         }
 
         public Criteria andStatusIsNotNull() {
-            addCriterion("`status` is not null");
+            addCriterion("\"status\" is not null");
             return (Criteria) this;
         }
 
         public Criteria andStatusEqualTo(String value) {
-            addCriterion("`status` =", value, "status");
+            addCriterion("\"status\" =", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusNotEqualTo(String value) {
-            addCriterion("`status` <>", value, "status");
+            addCriterion("\"status\" <>", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusGreaterThan(String value) {
-            addCriterion("`status` >", value, "status");
+            addCriterion("\"status\" >", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusGreaterThanOrEqualTo(String value) {
-            addCriterion("`status` >=", value, "status");
+            addCriterion("\"status\" >=", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusLessThan(String value) {
-            addCriterion("`status` <", value, "status");
+            addCriterion("\"status\" <", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusLessThanOrEqualTo(String value) {
-            addCriterion("`status` <=", value, "status");
+            addCriterion("\"status\" <=", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusLike(String value) {
-            addCriterion("`status` like", value, "status");
+            addCriterion("\"status\" like", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusNotLike(String value) {
-            addCriterion("`status` not like", value, "status");
+            addCriterion("\"status\" not like", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusIn(List<String> values) {
-            addCriterion("`status` in", values, "status");
+            addCriterion("\"status\" in", values, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusNotIn(List<String> values) {
-            addCriterion("`status` not in", values, "status");
+            addCriterion("\"status\" not in", values, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusBetween(String value1, String value2) {
-            addCriterion("`status` between", value1, value2, "status");
+            addCriterion("\"status\" between", value1, value2, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusNotBetween(String value1, String value2) {
-            addCriterion("`status` not between", value1, value2, "status");
+            addCriterion("\"status\" not between", value1, value2, "status");
             return (Criteria) this;
         }
 
@@ -825,6 +895,76 @@ public class OrgInfoExample {
             return (Criteria) this;
         }
 
+        public Criteria andVirtualNoIsNull() {
+            addCriterion("virtual_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVirtualNoIsNotNull() {
+            addCriterion("virtual_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andVirtualNoEqualTo(String value) {
+            addCriterion("virtual_no =", value, "virtualNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andVirtualNoNotEqualTo(String value) {
+            addCriterion("virtual_no <>", value, "virtualNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andVirtualNoGreaterThan(String value) {
+            addCriterion("virtual_no >", value, "virtualNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andVirtualNoGreaterThanOrEqualTo(String value) {
+            addCriterion("virtual_no >=", value, "virtualNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andVirtualNoLessThan(String value) {
+            addCriterion("virtual_no <", value, "virtualNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andVirtualNoLessThanOrEqualTo(String value) {
+            addCriterion("virtual_no <=", value, "virtualNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andVirtualNoLike(String value) {
+            addCriterion("virtual_no like", value, "virtualNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andVirtualNoNotLike(String value) {
+            addCriterion("virtual_no not like", value, "virtualNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andVirtualNoIn(List<String> values) {
+            addCriterion("virtual_no in", values, "virtualNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andVirtualNoNotIn(List<String> values) {
+            addCriterion("virtual_no not in", values, "virtualNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andVirtualNoBetween(String value1, String value2) {
+            addCriterion("virtual_no between", value1, value2, "virtualNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andVirtualNoNotBetween(String value1, String value2) {
+            addCriterion("virtual_no not between", value1, value2, "virtualNo");
+            return (Criteria) this;
+        }
+
         public Criteria andOrgNoLikeInsensitive(String value) {
             addCriterion("upper(org_no) like", value.toUpperCase(), "orgNo");
             return (Criteria) this;
@@ -832,6 +972,11 @@ public class OrgInfoExample {
 
         public Criteria andOrgNameLikeInsensitive(String value) {
             addCriterion("upper(org_name) like", value.toUpperCase(), "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgShortNameLikeInsensitive(String value) {
+            addCriterion("upper(org_short_name) like", value.toUpperCase(), "orgShortName");
             return (Criteria) this;
         }
 
@@ -846,12 +991,17 @@ public class OrgInfoExample {
         }
 
         public Criteria andStatusLikeInsensitive(String value) {
-            addCriterion("upper(`status`) like", value.toUpperCase(), "status");
+            addCriterion("upper(\"status\") like", value.toUpperCase(), "status");
             return (Criteria) this;
         }
 
         public Criteria andOrgTypeLikeInsensitive(String value) {
             addCriterion("upper(org_type) like", value.toUpperCase(), "orgType");
+            return (Criteria) this;
+        }
+
+        public Criteria andVirtualNoLikeInsensitive(String value) {
+            addCriterion("upper(virtual_no) like", value.toUpperCase(), "virtualNo");
             return (Criteria) this;
         }
     }

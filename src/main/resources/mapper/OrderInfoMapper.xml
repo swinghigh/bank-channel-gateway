@@ -8,7 +8,8 @@
     <result column="out_mch_id" property="outMchId" jdbcType="VARCHAR" />
     <result column="mch_id" property="mchId" jdbcType="BIGINT" />
     <result column="org_id" property="orgId" jdbcType="BIGINT" />
-    <result column="trade_org_id" property="tradeOrgId" jdbcType="BIGINT" />
+    <result column="org_app_no" property="orgAppNo" jdbcType="VARCHAR" />
+    <result column="agent_id" property="agentId" jdbcType="BIGINT" />
     <result column="user_id" property="userId" jdbcType="BIGINT" />
     <result column="shop_id" property="shopId" jdbcType="BIGINT" />
     <result column="mch_name" property="mchName" jdbcType="VARCHAR" />
@@ -40,6 +41,8 @@
     <result column="limit_pay" property="limitPay" jdbcType="VARCHAR" />
     <result column="order_ext" property="orderExt" jdbcType="VARCHAR" />
     <result column="trade_status" property="tradeStatus" jdbcType="VARCHAR" />
+    <result column="refund_status" property="refundStatus" jdbcType="VARCHAR" />
+    <result column="split_status" property="splitStatus" jdbcType="VARCHAR" />
     <result column="bill_status" property="billStatus" jdbcType="CHAR" />
     <result column="settle_status" property="settleStatus" jdbcType="CHAR" />
     <result column="finish_time" property="finishTime" jdbcType="VARCHAR" />
@@ -48,6 +51,7 @@
     <result column="charge_rate" property="chargeRate" jdbcType="VARCHAR" />
     <result column="add_fee_amount" property="addFeeAmount" jdbcType="BIGINT" />
     <result column="advance_flag" property="advanceFlag" jdbcType="CHAR" />
+    <result column="settle_cycle" property="settleCycle" jdbcType="CHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="order_source" property="orderSource" jdbcType="VARCHAR" />
     <result column="source_app" property="sourceApp" jdbcType="VARCHAR" />
@@ -115,14 +119,14 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, serial, out_serial, out_mch_id, mch_id, org_id, trade_org_id, user_id, shop_id, 
-    mch_name, sn, term_sn, channel_id, channel_mch_no, channel_term_no, channel_order_no, 
+    id, serial, out_serial, out_mch_id, mch_id, org_id, org_app_no, agent_id, user_id, 
+    shop_id, mch_name, sn, term_sn, channel_id, channel_mch_no, channel_term_no, channel_order_no, 
     trade_no, out_trade_no, orig_serial, order_type, product, sub_product, order_date, 
     notify_url, front_url, order_amount, coupon_amount, subject, sub_appid, sub_openid, 
     auth_code, client_ip, longitude, latitude, expire_time, limit_pay, order_ext, trade_status, 
-    bill_status, settle_status, finish_time, card_type, charge_amount, charge_rate, add_fee_amount, 
-    advance_flag, remark, order_source, source_app, create_time, create_id, update_time, 
-    update_id
+    refund_status, split_status, bill_status, settle_status, finish_time, card_type, 
+    charge_amount, charge_rate, add_fee_amount, advance_flag, settle_cycle, remark, order_source, 
+    source_app, create_time, create_id, update_time, update_id
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jkf.channel.gateway.entity.OrderInfoExample" >
     select
@@ -158,40 +162,44 @@
   <insert id="insert" parameterType="com.jkf.channel.gateway.entity.OrderInfo" >
     insert into order_info (id, serial, out_serial, 
       out_mch_id, mch_id, org_id, 
-      trade_org_id, user_id, shop_id, 
-      mch_name, sn, term_sn, 
-      channel_id, channel_mch_no, channel_term_no, 
-      channel_order_no, trade_no, out_trade_no, 
-      orig_serial, order_type, product, 
-      sub_product, order_date, notify_url, 
-      front_url, order_amount, coupon_amount, 
-      subject, sub_appid, sub_openid, 
-      auth_code, client_ip, longitude, 
-      latitude, expire_time, limit_pay, 
-      order_ext, trade_status, bill_status, 
+      org_app_no, agent_id, user_id, 
+      shop_id, mch_name, sn, 
+      term_sn, channel_id, channel_mch_no, 
+      channel_term_no, channel_order_no, trade_no, 
+      out_trade_no, orig_serial, order_type, 
+      product, sub_product, order_date, 
+      notify_url, front_url, order_amount, 
+      coupon_amount, subject, sub_appid, 
+      sub_openid, auth_code, client_ip, 
+      longitude, latitude, expire_time, 
+      limit_pay, order_ext, trade_status, 
+      refund_status, split_status, bill_status, 
       settle_status, finish_time, card_type, 
       charge_amount, charge_rate, add_fee_amount, 
-      advance_flag, remark, order_source, 
-      source_app, create_time, create_id, 
-      update_time, update_id)
+      advance_flag, settle_cycle, remark, 
+      order_source, source_app, create_time, 
+      create_id, update_time, update_id
+      )
     values (#{id,jdbcType=BIGINT}, #{serial,jdbcType=VARCHAR}, #{outSerial,jdbcType=VARCHAR}, 
       #{outMchId,jdbcType=VARCHAR}, #{mchId,jdbcType=BIGINT}, #{orgId,jdbcType=BIGINT}, 
-      #{tradeOrgId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{shopId,jdbcType=BIGINT}, 
-      #{mchName,jdbcType=VARCHAR}, #{sn,jdbcType=VARCHAR}, #{termSn,jdbcType=VARCHAR}, 
-      #{channelId,jdbcType=BIGINT}, #{channelMchNo,jdbcType=VARCHAR}, #{channelTermNo,jdbcType=VARCHAR}, 
-      #{channelOrderNo,jdbcType=VARCHAR}, #{tradeNo,jdbcType=VARCHAR}, #{outTradeNo,jdbcType=VARCHAR}, 
-      #{origSerial,jdbcType=VARCHAR}, #{orderType,jdbcType=CHAR}, #{product,jdbcType=VARCHAR}, 
-      #{subProduct,jdbcType=VARCHAR}, #{orderDate,jdbcType=VARCHAR}, #{notifyUrl,jdbcType=VARCHAR}, 
-      #{frontUrl,jdbcType=VARCHAR}, #{orderAmount,jdbcType=BIGINT}, #{couponAmount,jdbcType=BIGINT}, 
-      #{subject,jdbcType=VARCHAR}, #{subAppid,jdbcType=VARCHAR}, #{subOpenid,jdbcType=VARCHAR}, 
-      #{authCode,jdbcType=VARCHAR}, #{clientIp,jdbcType=VARCHAR}, #{longitude,jdbcType=VARCHAR}, 
-      #{latitude,jdbcType=VARCHAR}, #{expireTime,jdbcType=BIGINT}, #{limitPay,jdbcType=VARCHAR}, 
-      #{orderExt,jdbcType=VARCHAR}, #{tradeStatus,jdbcType=VARCHAR}, #{billStatus,jdbcType=CHAR}, 
+      #{orgAppNo,jdbcType=VARCHAR}, #{agentId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, 
+      #{shopId,jdbcType=BIGINT}, #{mchName,jdbcType=VARCHAR}, #{sn,jdbcType=VARCHAR}, 
+      #{termSn,jdbcType=VARCHAR}, #{channelId,jdbcType=BIGINT}, #{channelMchNo,jdbcType=VARCHAR}, 
+      #{channelTermNo,jdbcType=VARCHAR}, #{channelOrderNo,jdbcType=VARCHAR}, #{tradeNo,jdbcType=VARCHAR}, 
+      #{outTradeNo,jdbcType=VARCHAR}, #{origSerial,jdbcType=VARCHAR}, #{orderType,jdbcType=CHAR}, 
+      #{product,jdbcType=VARCHAR}, #{subProduct,jdbcType=VARCHAR}, #{orderDate,jdbcType=VARCHAR}, 
+      #{notifyUrl,jdbcType=VARCHAR}, #{frontUrl,jdbcType=VARCHAR}, #{orderAmount,jdbcType=BIGINT}, 
+      #{couponAmount,jdbcType=BIGINT}, #{subject,jdbcType=VARCHAR}, #{subAppid,jdbcType=VARCHAR}, 
+      #{subOpenid,jdbcType=VARCHAR}, #{authCode,jdbcType=VARCHAR}, #{clientIp,jdbcType=VARCHAR}, 
+      #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, #{expireTime,jdbcType=BIGINT}, 
+      #{limitPay,jdbcType=VARCHAR}, #{orderExt,jdbcType=VARCHAR}, #{tradeStatus,jdbcType=VARCHAR}, 
+      #{refundStatus,jdbcType=VARCHAR}, #{splitStatus,jdbcType=VARCHAR}, #{billStatus,jdbcType=CHAR}, 
       #{settleStatus,jdbcType=CHAR}, #{finishTime,jdbcType=VARCHAR}, #{cardType,jdbcType=VARCHAR}, 
       #{chargeAmount,jdbcType=BIGINT}, #{chargeRate,jdbcType=VARCHAR}, #{addFeeAmount,jdbcType=BIGINT}, 
-      #{advanceFlag,jdbcType=CHAR}, #{remark,jdbcType=VARCHAR}, #{orderSource,jdbcType=VARCHAR}, 
-      #{sourceApp,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createId,jdbcType=BIGINT}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT})
+      #{advanceFlag,jdbcType=CHAR}, #{settleCycle,jdbcType=CHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{orderSource,jdbcType=VARCHAR}, #{sourceApp,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createId,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jkf.channel.gateway.entity.OrderInfo" >
     insert into order_info
@@ -214,8 +222,11 @@
       <if test="orgId != null" >
         org_id,
       </if>
-      <if test="tradeOrgId != null" >
-        trade_org_id,
+      <if test="orgAppNo != null" >
+        org_app_no,
+      </if>
+      <if test="agentId != null" >
+        agent_id,
       </if>
       <if test="userId != null" >
         user_id,
@@ -310,6 +321,12 @@
       <if test="tradeStatus != null" >
         trade_status,
       </if>
+      <if test="refundStatus != null" >
+        refund_status,
+      </if>
+      <if test="splitStatus != null" >
+        split_status,
+      </if>
       <if test="billStatus != null" >
         bill_status,
       </if>
@@ -333,6 +350,9 @@
       </if>
       <if test="advanceFlag != null" >
         advance_flag,
+      </if>
+      <if test="settleCycle != null" >
+        settle_cycle,
       </if>
       <if test="remark != null" >
         remark,
@@ -375,8 +395,11 @@
       <if test="orgId != null" >
         #{orgId,jdbcType=BIGINT},
       </if>
-      <if test="tradeOrgId != null" >
-        #{tradeOrgId,jdbcType=BIGINT},
+      <if test="orgAppNo != null" >
+        #{orgAppNo,jdbcType=VARCHAR},
+      </if>
+      <if test="agentId != null" >
+        #{agentId,jdbcType=BIGINT},
       </if>
       <if test="userId != null" >
         #{userId,jdbcType=BIGINT},
@@ -471,6 +494,12 @@
       <if test="tradeStatus != null" >
         #{tradeStatus,jdbcType=VARCHAR},
       </if>
+      <if test="refundStatus != null" >
+        #{refundStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="splitStatus != null" >
+        #{splitStatus,jdbcType=VARCHAR},
+      </if>
       <if test="billStatus != null" >
         #{billStatus,jdbcType=CHAR},
       </if>
@@ -494,6 +523,9 @@
       </if>
       <if test="advanceFlag != null" >
         #{advanceFlag,jdbcType=CHAR},
+      </if>
+      <if test="settleCycle != null" >
+        #{settleCycle,jdbcType=CHAR},
       </if>
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
@@ -545,8 +577,11 @@
       <if test="record.orgId != null" >
         org_id = #{record.orgId,jdbcType=BIGINT},
       </if>
-      <if test="record.tradeOrgId != null" >
-        trade_org_id = #{record.tradeOrgId,jdbcType=BIGINT},
+      <if test="record.orgAppNo != null" >
+        org_app_no = #{record.orgAppNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.agentId != null" >
+        agent_id = #{record.agentId,jdbcType=BIGINT},
       </if>
       <if test="record.userId != null" >
         user_id = #{record.userId,jdbcType=BIGINT},
@@ -641,6 +676,12 @@
       <if test="record.tradeStatus != null" >
         trade_status = #{record.tradeStatus,jdbcType=VARCHAR},
       </if>
+      <if test="record.refundStatus != null" >
+        refund_status = #{record.refundStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.splitStatus != null" >
+        split_status = #{record.splitStatus,jdbcType=VARCHAR},
+      </if>
       <if test="record.billStatus != null" >
         bill_status = #{record.billStatus,jdbcType=CHAR},
       </if>
@@ -664,6 +705,9 @@
       </if>
       <if test="record.advanceFlag != null" >
         advance_flag = #{record.advanceFlag,jdbcType=CHAR},
+      </if>
+      <if test="record.settleCycle != null" >
+        settle_cycle = #{record.settleCycle,jdbcType=CHAR},
       </if>
       <if test="record.remark != null" >
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -699,7 +743,8 @@
       out_mch_id = #{record.outMchId,jdbcType=VARCHAR},
       mch_id = #{record.mchId,jdbcType=BIGINT},
       org_id = #{record.orgId,jdbcType=BIGINT},
-      trade_org_id = #{record.tradeOrgId,jdbcType=BIGINT},
+      org_app_no = #{record.orgAppNo,jdbcType=VARCHAR},
+      agent_id = #{record.agentId,jdbcType=BIGINT},
       user_id = #{record.userId,jdbcType=BIGINT},
       shop_id = #{record.shopId,jdbcType=BIGINT},
       mch_name = #{record.mchName,jdbcType=VARCHAR},
@@ -731,6 +776,8 @@
       limit_pay = #{record.limitPay,jdbcType=VARCHAR},
       order_ext = #{record.orderExt,jdbcType=VARCHAR},
       trade_status = #{record.tradeStatus,jdbcType=VARCHAR},
+      refund_status = #{record.refundStatus,jdbcType=VARCHAR},
+      split_status = #{record.splitStatus,jdbcType=VARCHAR},
       bill_status = #{record.billStatus,jdbcType=CHAR},
       settle_status = #{record.settleStatus,jdbcType=CHAR},
       finish_time = #{record.finishTime,jdbcType=VARCHAR},
@@ -739,6 +786,7 @@
       charge_rate = #{record.chargeRate,jdbcType=VARCHAR},
       add_fee_amount = #{record.addFeeAmount,jdbcType=BIGINT},
       advance_flag = #{record.advanceFlag,jdbcType=CHAR},
+      settle_cycle = #{record.settleCycle,jdbcType=CHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
       order_source = #{record.orderSource,jdbcType=VARCHAR},
       source_app = #{record.sourceApp,jdbcType=VARCHAR},
@@ -768,8 +816,11 @@
       <if test="orgId != null" >
         org_id = #{orgId,jdbcType=BIGINT},
       </if>
-      <if test="tradeOrgId != null" >
-        trade_org_id = #{tradeOrgId,jdbcType=BIGINT},
+      <if test="orgAppNo != null" >
+        org_app_no = #{orgAppNo,jdbcType=VARCHAR},
+      </if>
+      <if test="agentId != null" >
+        agent_id = #{agentId,jdbcType=BIGINT},
       </if>
       <if test="userId != null" >
         user_id = #{userId,jdbcType=BIGINT},
@@ -864,6 +915,12 @@
       <if test="tradeStatus != null" >
         trade_status = #{tradeStatus,jdbcType=VARCHAR},
       </if>
+      <if test="refundStatus != null" >
+        refund_status = #{refundStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="splitStatus != null" >
+        split_status = #{splitStatus,jdbcType=VARCHAR},
+      </if>
       <if test="billStatus != null" >
         bill_status = #{billStatus,jdbcType=CHAR},
       </if>
@@ -887,6 +944,9 @@
       </if>
       <if test="advanceFlag != null" >
         advance_flag = #{advanceFlag,jdbcType=CHAR},
+      </if>
+      <if test="settleCycle != null" >
+        settle_cycle = #{settleCycle,jdbcType=CHAR},
       </if>
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
@@ -919,7 +979,8 @@
       out_mch_id = #{outMchId,jdbcType=VARCHAR},
       mch_id = #{mchId,jdbcType=BIGINT},
       org_id = #{orgId,jdbcType=BIGINT},
-      trade_org_id = #{tradeOrgId,jdbcType=BIGINT},
+      org_app_no = #{orgAppNo,jdbcType=VARCHAR},
+      agent_id = #{agentId,jdbcType=BIGINT},
       user_id = #{userId,jdbcType=BIGINT},
       shop_id = #{shopId,jdbcType=BIGINT},
       mch_name = #{mchName,jdbcType=VARCHAR},
@@ -951,6 +1012,8 @@
       limit_pay = #{limitPay,jdbcType=VARCHAR},
       order_ext = #{orderExt,jdbcType=VARCHAR},
       trade_status = #{tradeStatus,jdbcType=VARCHAR},
+      refund_status = #{refundStatus,jdbcType=VARCHAR},
+      split_status = #{splitStatus,jdbcType=VARCHAR},
       bill_status = #{billStatus,jdbcType=CHAR},
       settle_status = #{settleStatus,jdbcType=CHAR},
       finish_time = #{finishTime,jdbcType=VARCHAR},
@@ -959,6 +1022,7 @@
       charge_rate = #{chargeRate,jdbcType=VARCHAR},
       add_fee_amount = #{addFeeAmount,jdbcType=BIGINT},
       advance_flag = #{advanceFlag,jdbcType=CHAR},
+      settle_cycle = #{settleCycle,jdbcType=CHAR},
       remark = #{remark,jdbcType=VARCHAR},
       order_source = #{orderSource,jdbcType=VARCHAR},
       source_app = #{sourceApp,jdbcType=VARCHAR},

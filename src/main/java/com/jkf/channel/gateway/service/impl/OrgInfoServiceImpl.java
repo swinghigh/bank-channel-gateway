@@ -48,4 +48,9 @@ public class OrgInfoServiceImpl implements OrgInfoService {
         OrgInfoExample example=new OrgInfoExample();
         return  orgInfoMapper.selectByExample(example);
     }
+
+    @Override
+    public OrgInfo selectByPrimaryKey(Long id) {
+        return orgInfoMapper.selectByPrimaryKey(id);
+    }
 }

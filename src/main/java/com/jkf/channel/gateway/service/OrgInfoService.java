@@ -29,4 +29,11 @@ public interface OrgInfoService {
      * @return
      */
     public List<OrgInfo> findAll();
+
+    /**
+     * 获取机构信息
+     * @param id
+     * @return
+     */
+    public OrgInfo selectByPrimaryKey(Long id);
 }
