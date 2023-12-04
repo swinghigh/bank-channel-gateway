@@ -14,6 +14,7 @@ public enum ErrorCode {
     HAS_EXIT("0006","已存在"),
     PHONE_HAS_EXIT("0007","手机号已注册"),
     HAS_NOT_EXIT("0008","不存在"),
+    HAS_OPEN_SUCCESS("0009","渠道已经开户成功"),
 
     BING_CARD_FAIL("0097","绑卡失败"),
     OPEN_FAIL("0098","开户失败"),

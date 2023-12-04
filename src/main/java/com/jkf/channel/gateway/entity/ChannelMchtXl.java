@@ -5,15 +5,11 @@ import java.util.Date;
 
 public class ChannelMchtXl implements Serializable {
     private Long id;
-    /**
-     * 系统商户号 此系统
-     */
+
     private Long mchId;
 
     private Long channelId;
-    /**
-     * 渠道商户号 比如信联，就是对应信联的partnerId
-     */
+
     private String channelMchtNo;
 
     private String channelMchtName;
@@ -25,6 +21,8 @@ public class ChannelMchtXl implements Serializable {
     private String userName;
 
     private String notifyUrl;
+
+    private String notifyFlag;
 
     private String checkStatus;
 
@@ -39,6 +37,8 @@ public class ChannelMchtXl implements Serializable {
     private Date updateTime;
 
     private Long updateId;
+
+    private String outApplyId;
 
     private static final long serialVersionUID = 1L;
 
@@ -114,6 +114,14 @@ public class ChannelMchtXl implements Serializable {
         this.notifyUrl = notifyUrl == null ? null : notifyUrl.trim();
     }
 
+    public String getNotifyFlag() {
+        return notifyFlag;
+    }
+
+    public void setNotifyFlag(String notifyFlag) {
+        this.notifyFlag = notifyFlag == null ? null : notifyFlag.trim();
+    }
+
     public String getCheckStatus() {
         return checkStatus;
     }
@@ -170,6 +178,14 @@ public class ChannelMchtXl implements Serializable {
         this.updateId = updateId;
     }
 
+    public String getOutApplyId() {
+        return outApplyId;
+    }
+
+    public void setOutApplyId(String outApplyId) {
+        this.outApplyId = outApplyId == null ? null : outApplyId.trim();
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -185,6 +201,7 @@ public class ChannelMchtXl implements Serializable {
         sb.append(", loginPassword=").append(loginPassword);
         sb.append(", userName=").append(userName);
         sb.append(", notifyUrl=").append(notifyUrl);
+        sb.append(", notifyFlag=").append(notifyFlag);
         sb.append(", checkStatus=").append(checkStatus);
         sb.append(", checkMessage=").append(checkMessage);
         sb.append(", checkTime=").append(checkTime);
@@ -192,6 +209,7 @@ public class ChannelMchtXl implements Serializable {
         sb.append(", createId=").append(createId);
         sb.append(", updateTime=").append(updateTime);
         sb.append(", updateId=").append(updateId);
+        sb.append(", outApplyId=").append(outApplyId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

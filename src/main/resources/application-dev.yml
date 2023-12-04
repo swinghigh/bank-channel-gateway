@@ -48,4 +48,5 @@ file:
   temp: /home/file/
 
 buss:
-  phonePrefix: 175
+  phonePrefix: 172
+  xinlianRegisterNotifyUrl: https://willcard.com.cn:7000/xinlianNotify/register

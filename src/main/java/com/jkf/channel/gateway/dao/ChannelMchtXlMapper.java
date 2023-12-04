@@ -3,8 +3,11 @@ package com.jkf.channel.gateway.dao;
 import com.jkf.channel.gateway.entity.ChannelMchtXl;
 import com.jkf.channel.gateway.entity.ChannelMchtXlExample;
 import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+@Mapper
 public interface ChannelMchtXlMapper {
     int countByExample(ChannelMchtXlExample example);
 

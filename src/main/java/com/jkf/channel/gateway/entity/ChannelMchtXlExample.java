@@ -705,6 +705,76 @@ public class ChannelMchtXlExample {
             return (Criteria) this;
         }
 
+        public Criteria andNotifyFlagIsNull() {
+            addCriterion("notify_flag is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyFlagIsNotNull() {
+            addCriterion("notify_flag is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyFlagEqualTo(String value) {
+            addCriterion("notify_flag =", value, "notifyFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyFlagNotEqualTo(String value) {
+            addCriterion("notify_flag <>", value, "notifyFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyFlagGreaterThan(String value) {
+            addCriterion("notify_flag >", value, "notifyFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyFlagGreaterThanOrEqualTo(String value) {
+            addCriterion("notify_flag >=", value, "notifyFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyFlagLessThan(String value) {
+            addCriterion("notify_flag <", value, "notifyFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyFlagLessThanOrEqualTo(String value) {
+            addCriterion("notify_flag <=", value, "notifyFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyFlagLike(String value) {
+            addCriterion("notify_flag like", value, "notifyFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyFlagNotLike(String value) {
+            addCriterion("notify_flag not like", value, "notifyFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyFlagIn(List<String> values) {
+            addCriterion("notify_flag in", values, "notifyFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyFlagNotIn(List<String> values) {
+            addCriterion("notify_flag not in", values, "notifyFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyFlagBetween(String value1, String value2) {
+            addCriterion("notify_flag between", value1, value2, "notifyFlag");
+            return (Criteria) this;
+        }
+
+        public Criteria andNotifyFlagNotBetween(String value1, String value2) {
+            addCriterion("notify_flag not between", value1, value2, "notifyFlag");
+            return (Criteria) this;
+        }
+
         public Criteria andCheckStatusIsNull() {
             addCriterion("check_status is null");
             return (Criteria) this;
@@ -1145,6 +1215,76 @@ public class ChannelMchtXlExample {
             return (Criteria) this;
         }
 
+        public Criteria andOutApplyIdIsNull() {
+            addCriterion("out_apply_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutApplyIdIsNotNull() {
+            addCriterion("out_apply_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutApplyIdEqualTo(String value) {
+            addCriterion("out_apply_id =", value, "outApplyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutApplyIdNotEqualTo(String value) {
+            addCriterion("out_apply_id <>", value, "outApplyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutApplyIdGreaterThan(String value) {
+            addCriterion("out_apply_id >", value, "outApplyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutApplyIdGreaterThanOrEqualTo(String value) {
+            addCriterion("out_apply_id >=", value, "outApplyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutApplyIdLessThan(String value) {
+            addCriterion("out_apply_id <", value, "outApplyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutApplyIdLessThanOrEqualTo(String value) {
+            addCriterion("out_apply_id <=", value, "outApplyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutApplyIdLike(String value) {
+            addCriterion("out_apply_id like", value, "outApplyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutApplyIdNotLike(String value) {
+            addCriterion("out_apply_id not like", value, "outApplyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutApplyIdIn(List<String> values) {
+            addCriterion("out_apply_id in", values, "outApplyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutApplyIdNotIn(List<String> values) {
+            addCriterion("out_apply_id not in", values, "outApplyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutApplyIdBetween(String value1, String value2) {
+            addCriterion("out_apply_id between", value1, value2, "outApplyId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutApplyIdNotBetween(String value1, String value2) {
+            addCriterion("out_apply_id not between", value1, value2, "outApplyId");
+            return (Criteria) this;
+        }
+
         public Criteria andChannelMchtNoLikeInsensitive(String value) {
             addCriterion("upper(channel_mcht_no) like", value.toUpperCase(), "channelMchtNo");
             return (Criteria) this;
@@ -1175,6 +1315,11 @@ public class ChannelMchtXlExample {
             return (Criteria) this;
         }
 
+        public Criteria andNotifyFlagLikeInsensitive(String value) {
+            addCriterion("upper(notify_flag) like", value.toUpperCase(), "notifyFlag");
+            return (Criteria) this;
+        }
+
         public Criteria andCheckStatusLikeInsensitive(String value) {
             addCriterion("upper(check_status) like", value.toUpperCase(), "checkStatus");
             return (Criteria) this;
@@ -1182,6 +1327,11 @@ public class ChannelMchtXlExample {
 
         public Criteria andCheckMessageLikeInsensitive(String value) {
             addCriterion("upper(check_message) like", value.toUpperCase(), "checkMessage");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutApplyIdLikeInsensitive(String value) {
+            addCriterion("upper(out_apply_id) like", value.toUpperCase(), "outApplyId");
             return (Criteria) this;
         }
     }

@@ -14,6 +14,7 @@ import com.jkf.channel.gateway.exception.BusinessException;
 import com.jkf.channel.gateway.handler.IOpenHandler;
 import com.jkf.channel.gateway.utils.AESUtil;
 import com.jkf.channel.gateway.utils.AssertUtils;
+import com.jkf.channel.gateway.utils.DateUtil;
 import com.jkf.channel.gateway.utils.MchtUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -198,6 +199,7 @@ public class FqMchtAddHandler implements IOpenHandler {
             mchInfoUpdate.setId(oldMchtInfo.getId());
             mchInfoUpdate.setMchStatus("0");
             mchInfoUpdate.setChannelId((Long )result.get("channelId"));
+            mchInfoUpdate.setPassTime(DateUtil.getTime(new Date(),"yyyy-MM-dd HH:mm:ss"));
             mchInfoMapper.updateByPrimaryKeySelective(mchInfoUpdate);
         }
         //调用火眼的分期接口

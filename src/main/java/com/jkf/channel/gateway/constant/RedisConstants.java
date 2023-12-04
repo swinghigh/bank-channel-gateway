@@ -7,4 +7,5 @@ package com.jkf.channel.gateway.constant;
 public class RedisConstants {
 
     public final static String REDIS_KEY_LOG="request:log:";
+    public final static String REDIS_NOTIFY_SET="notify:buss:";
 }

@@ -11,6 +11,7 @@
     <result column="login_password" property="loginPassword" jdbcType="VARCHAR" />
     <result column="user_name" property="userName" jdbcType="VARCHAR" />
     <result column="notify_url" property="notifyUrl" jdbcType="VARCHAR" />
+    <result column="notify_flag" property="notifyFlag" jdbcType="CHAR" />
     <result column="check_status" property="checkStatus" jdbcType="VARCHAR" />
     <result column="check_message" property="checkMessage" jdbcType="VARCHAR" />
     <result column="check_time" property="checkTime" jdbcType="TIMESTAMP" />
@@ -18,6 +19,7 @@
     <result column="create_id" property="createId" jdbcType="BIGINT" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="update_id" property="updateId" jdbcType="BIGINT" />
+    <result column="out_apply_id" property="outApplyId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -79,8 +81,8 @@
   </sql>
   <sql id="Base_Column_List" >
     id, mch_id, channel_id, channel_mcht_no, channel_mcht_name, order_id, login_password, 
-    user_name, notify_url, check_status, check_message, check_time, create_time, create_id, 
-    update_time, update_id
+    user_name, notify_url, notify_flag, check_status, check_message, check_time, create_time, 
+    create_id, update_time, update_id, out_apply_id
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jkf.channel.gateway.entity.ChannelMchtXlExample" >
     select
@@ -117,15 +119,17 @@
     insert into channel_mcht_xl (id, mch_id, channel_id, 
       channel_mcht_no, channel_mcht_name, order_id, 
       login_password, user_name, notify_url, 
-      check_status, check_message, check_time, 
-      create_time, create_id, update_time, 
-      update_id)
+      notify_flag, check_status, check_message, 
+      check_time, create_time, create_id, 
+      update_time, update_id, out_apply_id
+      )
     values (#{id,jdbcType=BIGINT}, #{mchId,jdbcType=BIGINT}, #{channelId,jdbcType=BIGINT}, 
       #{channelMchtNo,jdbcType=VARCHAR}, #{channelMchtName,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, 
       #{loginPassword,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{notifyUrl,jdbcType=VARCHAR}, 
-      #{checkStatus,jdbcType=VARCHAR}, #{checkMessage,jdbcType=VARCHAR}, #{checkTime,jdbcType=TIMESTAMP}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{createId,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{updateId,jdbcType=BIGINT})
+      #{notifyFlag,jdbcType=CHAR}, #{checkStatus,jdbcType=VARCHAR}, #{checkMessage,jdbcType=VARCHAR}, 
+      #{checkTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{createId,jdbcType=BIGINT}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}, #{outApplyId,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jkf.channel.gateway.entity.ChannelMchtXl" >
     insert into channel_mcht_xl
@@ -157,6 +161,9 @@
       <if test="notifyUrl != null" >
         notify_url,
       </if>
+      <if test="notifyFlag != null" >
+        notify_flag,
+      </if>
       <if test="checkStatus != null" >
         check_status,
       </if>
@@ -177,6 +184,9 @@
       </if>
       <if test="updateId != null" >
         update_id,
+      </if>
+      <if test="outApplyId != null" >
+        out_apply_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -207,6 +217,9 @@
       <if test="notifyUrl != null" >
         #{notifyUrl,jdbcType=VARCHAR},
       </if>
+      <if test="notifyFlag != null" >
+        #{notifyFlag,jdbcType=CHAR},
+      </if>
       <if test="checkStatus != null" >
         #{checkStatus,jdbcType=VARCHAR},
       </if>
@@ -227,6 +240,9 @@
       </if>
       <if test="updateId != null" >
         #{updateId,jdbcType=BIGINT},
+      </if>
+      <if test="outApplyId != null" >
+        #{outApplyId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -266,6 +282,9 @@
       <if test="record.notifyUrl != null" >
         notify_url = #{record.notifyUrl,jdbcType=VARCHAR},
       </if>
+      <if test="record.notifyFlag != null" >
+        notify_flag = #{record.notifyFlag,jdbcType=CHAR},
+      </if>
       <if test="record.checkStatus != null" >
         check_status = #{record.checkStatus,jdbcType=VARCHAR},
       </if>
@@ -287,6 +306,9 @@
       <if test="record.updateId != null" >
         update_id = #{record.updateId,jdbcType=BIGINT},
       </if>
+      <if test="record.outApplyId != null" >
+        out_apply_id = #{record.outApplyId,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -303,13 +325,15 @@
       login_password = #{record.loginPassword,jdbcType=VARCHAR},
       user_name = #{record.userName,jdbcType=VARCHAR},
       notify_url = #{record.notifyUrl,jdbcType=VARCHAR},
+      notify_flag = #{record.notifyFlag,jdbcType=CHAR},
       check_status = #{record.checkStatus,jdbcType=VARCHAR},
       check_message = #{record.checkMessage,jdbcType=VARCHAR},
       check_time = #{record.checkTime,jdbcType=TIMESTAMP},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_id = #{record.createId,jdbcType=BIGINT},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      update_id = #{record.updateId,jdbcType=BIGINT}
+      update_id = #{record.updateId,jdbcType=BIGINT},
+      out_apply_id = #{record.outApplyId,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -341,6 +365,9 @@
       <if test="notifyUrl != null" >
         notify_url = #{notifyUrl,jdbcType=VARCHAR},
       </if>
+      <if test="notifyFlag != null" >
+        notify_flag = #{notifyFlag,jdbcType=CHAR},
+      </if>
       <if test="checkStatus != null" >
         check_status = #{checkStatus,jdbcType=VARCHAR},
       </if>
@@ -362,6 +389,9 @@
       <if test="updateId != null" >
         update_id = #{updateId,jdbcType=BIGINT},
       </if>
+      <if test="outApplyId != null" >
+        out_apply_id = #{outApplyId,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -375,13 +405,15 @@
       login_password = #{loginPassword,jdbcType=VARCHAR},
       user_name = #{userName,jdbcType=VARCHAR},
       notify_url = #{notifyUrl,jdbcType=VARCHAR},
+      notify_flag = #{notifyFlag,jdbcType=CHAR},
       check_status = #{checkStatus,jdbcType=VARCHAR},
       check_message = #{checkMessage,jdbcType=VARCHAR},
       check_time = #{checkTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_id = #{createId,jdbcType=BIGINT},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      update_id = #{updateId,jdbcType=BIGINT}
+      update_id = #{updateId,jdbcType=BIGINT},
+      out_apply_id = #{outApplyId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

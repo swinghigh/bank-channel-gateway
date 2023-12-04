@@ -16,6 +16,8 @@ public enum OpenMethodEnum {
     FQ_MCHT_ADDRESS("FQ_MCHT_ADDRESS","分期商户地址添加"),
     FQ_MCHT_FACE_AUTH("FQ_MCHT_FACE_AUTH","分期商户人脸认证"),
     FQ_MCHT_FACE_AUTH_QUERY("FQ_MCHT_FACE_AUTH_QUERY","分期商户人脸认证查询"),
+    XL_MCHT_ADD("XL_MCHT_ADD","信联商户开通"),
+    XL_MCHT_QUERY("XL_MCHT_QUERY","信联商户查询"),
     ;
 
     private String method;
