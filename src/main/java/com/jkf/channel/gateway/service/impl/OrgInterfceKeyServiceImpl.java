@@ -35,7 +35,10 @@ public class OrgInterfceKeyServiceImpl implements OrgInterfceKeyService {
     @Override
     public OrgInterfceKey getFromDb(String orgAppNo) {
         OrgInterfceKeyExample example=new OrgInterfceKeyExample();
-        example.createCriteria().andOrgAppNoEqualTo(orgAppNo);
+        OrgInterfceKeyExample.Criteria criteria = example.createCriteria();
+        criteria.andOrgAppNoEqualTo(orgAppNo);
+        //1正常 0禁用
+        criteria.andStatusEqualTo("1");
         List<OrgInterfceKey> orgInterfceKeys=orgInterfceKeyMapper.selectByExample(example);
         if(!CollectionUtils.isEmpty(orgInterfceKeys)){
             return orgInterfceKeys.get(0);
