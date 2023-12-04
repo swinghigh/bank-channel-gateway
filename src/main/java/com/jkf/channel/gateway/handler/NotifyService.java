@@ -134,6 +134,7 @@ public class NotifyService {
                         if (StringUtils.isNotEmpty(response)) {
                             //还需要判断是否是处理成功
                             if (SUCCES.equalsIgnoreCase(response)){
+                                log.info("通知serial：{}，业务方返回成功",serial);
                                 //通知成功
                                 dealSucces=true;
                             }

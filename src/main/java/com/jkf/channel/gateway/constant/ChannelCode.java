@@ -5,7 +5,8 @@ package com.jkf.channel.gateway.constant;
  * @date 2023/10/30 15:53
  */
 public enum ChannelCode {
-    HUOYAN("hychannel","火眼")
+    HUOYAN("hychannel","火眼"),
+    XINLIAN("xlchannel","信联支付")
     ;
 
     private String channelCompanyCode;
