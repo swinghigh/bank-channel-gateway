@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xml>
+    <appid>wx2421b1c4370ec43b</appid>
+    <sub_appid>wx5b1a502a957b2959</sub_appid>
+    <mch_id>1900009211</mch_id>
+    <sub_mch_id>543904530</sub_mch_id>
+    <channel_id>24006513</channel_id>
+    <channel_name>极易净水科技（上海）有限公司</channel_name>
+    <device_info>WEB</device_info>
+    <nonce_str>1550926666410688523</nonce_str>
+    <sign>jPxthqlQiIQ4enCkVaM9dOw3s3Qy6NrLQ4581W5+RcOGAb5A5fP6wIRsU2ZW7X9sWCFtzoaKUM061jFO9TBcNQ==</sign>
+    <sign_type>SM2</sign_type>
+    <cert_id>4038858104</cert_id>
+    <body>黄河大桥-通行费</body>
+    <out_trade_no>Q1550926666410688521</out_trade_no>
+    <total_fee>1</total_fee>
+    <spbill_create_ip>10.0.3.1</spbill_create_ip>
+    <time_start>20230223102734</time_start>
+    <time_expire>20230223104234</time_expire>
+    <notify_url>https://testrans.xlpayment.com/api/chl/pay/result/notice/2006</notify_url>
+    <trade_type>JSAPI</trade_type>
+    <limit_pay/>
+    <sub_openid>oLAlg6DSRLvKFgT2wzbzV6LWOaxI</sub_openid>
+    <need_receipt>false</need_receipt>
+    <terminal_info>{"deviceType":"14"}</terminal_info>
+    <area_info>310101</area_info>
+</xml>

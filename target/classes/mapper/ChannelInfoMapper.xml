@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jkf.channel.gateway.dao.ChannelInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.jkf.channel.gateway.entity.ChannelInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="channel_no" property="channelNo" jdbcType="VARCHAR" />
+    <result column="channel_name" property="channelName" jdbcType="VARCHAR" />
+    <result column="channelcompany_no" property="channelcompanyNo" jdbcType="VARCHAR" />
+    <result column="channel_company_name" property="channelCompanyName" jdbcType="VARCHAR" />
+    <result column="channel_contact" property="channelContact" jdbcType="VARCHAR" />
+    <result column="channel_private_key" property="channelPrivateKey" jdbcType="VARCHAR" />
+    <result column="channel_public_key" property="channelPublicKey" jdbcType="VARCHAR" />
+    <result column="channel_company_public_key" property="channelCompanyPublicKey" jdbcType="VARCHAR" />
+    <result column="channel_salt_key" property="channelSaltKey" jdbcType="VARCHAR" />
+    <result column="channel_status" property="channelStatus" jdbcType="CHAR" />
+    <result column="channel_order" property="channelOrder" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_id" property="createId" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_id" property="updateId" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, channel_no, channel_name, channelcompany_no, channel_company_name, channel_contact, 
+    channel_private_key, channel_public_key, channel_company_public_key, channel_salt_key, 
+    channel_status, channel_order, create_time, create_id, update_time, update_id
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jkf.channel.gateway.entity.ChannelInfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from channel_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from channel_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from channel_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jkf.channel.gateway.entity.ChannelInfoExample" >
+    delete from channel_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jkf.channel.gateway.entity.ChannelInfo" >
+    insert into channel_info (id, channel_no, channel_name, 
+      channelcompany_no, channel_company_name, channel_contact, 
+      channel_private_key, channel_public_key, channel_company_public_key, 
+      channel_salt_key, channel_status, channel_order, 
+      create_time, create_id, update_time, 
+      update_id)
+    values (#{id,jdbcType=BIGINT}, #{channelNo,jdbcType=VARCHAR}, #{channelName,jdbcType=VARCHAR}, 
+      #{channelcompanyNo,jdbcType=VARCHAR}, #{channelCompanyName,jdbcType=VARCHAR}, #{channelContact,jdbcType=VARCHAR}, 
+      #{channelPrivateKey,jdbcType=VARCHAR}, #{channelPublicKey,jdbcType=VARCHAR}, #{channelCompanyPublicKey,jdbcType=VARCHAR}, 
+      #{channelSaltKey,jdbcType=VARCHAR}, #{channelStatus,jdbcType=CHAR}, #{channelOrder,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createId,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jkf.channel.gateway.entity.ChannelInfo" >
+    insert into channel_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="channelNo != null" >
+        channel_no,
+      </if>
+      <if test="channelName != null" >
+        channel_name,
+      </if>
+      <if test="channelcompanyNo != null" >
+        channelcompany_no,
+      </if>
+      <if test="channelCompanyName != null" >
+        channel_company_name,
+      </if>
+      <if test="channelContact != null" >
+        channel_contact,
+      </if>
+      <if test="channelPrivateKey != null" >
+        channel_private_key,
+      </if>
+      <if test="channelPublicKey != null" >
+        channel_public_key,
+      </if>
+      <if test="channelCompanyPublicKey != null" >
+        channel_company_public_key,
+      </if>
+      <if test="channelSaltKey != null" >
+        channel_salt_key,
+      </if>
+      <if test="channelStatus != null" >
+        channel_status,
+      </if>
+      <if test="channelOrder != null" >
+        channel_order,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createId != null" >
+        create_id,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateId != null" >
+        update_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="channelNo != null" >
+        #{channelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelName != null" >
+        #{channelName,jdbcType=VARCHAR},
+      </if>
+      <if test="channelcompanyNo != null" >
+        #{channelcompanyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelCompanyName != null" >
+        #{channelCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="channelContact != null" >
+        #{channelContact,jdbcType=VARCHAR},
+      </if>
+      <if test="channelPrivateKey != null" >
+        #{channelPrivateKey,jdbcType=VARCHAR},
+      </if>
+      <if test="channelPublicKey != null" >
+        #{channelPublicKey,jdbcType=VARCHAR},
+      </if>
+      <if test="channelCompanyPublicKey != null" >
+        #{channelCompanyPublicKey,jdbcType=VARCHAR},
+      </if>
+      <if test="channelSaltKey != null" >
+        #{channelSaltKey,jdbcType=VARCHAR},
+      </if>
+      <if test="channelStatus != null" >
+        #{channelStatus,jdbcType=CHAR},
+      </if>
+      <if test="channelOrder != null" >
+        #{channelOrder,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateId != null" >
+        #{updateId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jkf.channel.gateway.entity.ChannelInfoExample" resultType="java.lang.Integer" >
+    select count(*) from channel_info
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update channel_info
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.channelNo != null" >
+        channel_no = #{record.channelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.channelName != null" >
+        channel_name = #{record.channelName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.channelcompanyNo != null" >
+        channelcompany_no = #{record.channelcompanyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.channelCompanyName != null" >
+        channel_company_name = #{record.channelCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.channelContact != null" >
+        channel_contact = #{record.channelContact,jdbcType=VARCHAR},
+      </if>
+      <if test="record.channelPrivateKey != null" >
+        channel_private_key = #{record.channelPrivateKey,jdbcType=VARCHAR},
+      </if>
+      <if test="record.channelPublicKey != null" >
+        channel_public_key = #{record.channelPublicKey,jdbcType=VARCHAR},
+      </if>
+      <if test="record.channelCompanyPublicKey != null" >
+        channel_company_public_key = #{record.channelCompanyPublicKey,jdbcType=VARCHAR},
+      </if>
+      <if test="record.channelSaltKey != null" >
+        channel_salt_key = #{record.channelSaltKey,jdbcType=VARCHAR},
+      </if>
+      <if test="record.channelStatus != null" >
+        channel_status = #{record.channelStatus,jdbcType=CHAR},
+      </if>
+      <if test="record.channelOrder != null" >
+        channel_order = #{record.channelOrder,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createId != null" >
+        create_id = #{record.createId,jdbcType=BIGINT},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateId != null" >
+        update_id = #{record.updateId,jdbcType=BIGINT},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update channel_info
+    set id = #{record.id,jdbcType=BIGINT},
+      channel_no = #{record.channelNo,jdbcType=VARCHAR},
+      channel_name = #{record.channelName,jdbcType=VARCHAR},
+      channelcompany_no = #{record.channelcompanyNo,jdbcType=VARCHAR},
+      channel_company_name = #{record.channelCompanyName,jdbcType=VARCHAR},
+      channel_contact = #{record.channelContact,jdbcType=VARCHAR},
+      channel_private_key = #{record.channelPrivateKey,jdbcType=VARCHAR},
+      channel_public_key = #{record.channelPublicKey,jdbcType=VARCHAR},
+      channel_company_public_key = #{record.channelCompanyPublicKey,jdbcType=VARCHAR},
+      channel_salt_key = #{record.channelSaltKey,jdbcType=VARCHAR},
+      channel_status = #{record.channelStatus,jdbcType=CHAR},
+      channel_order = #{record.channelOrder,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_id = #{record.createId,jdbcType=BIGINT},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      update_id = #{record.updateId,jdbcType=BIGINT}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jkf.channel.gateway.entity.ChannelInfo" >
+    update channel_info
+    <set >
+      <if test="channelNo != null" >
+        channel_no = #{channelNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelName != null" >
+        channel_name = #{channelName,jdbcType=VARCHAR},
+      </if>
+      <if test="channelcompanyNo != null" >
+        channelcompany_no = #{channelcompanyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelCompanyName != null" >
+        channel_company_name = #{channelCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="channelContact != null" >
+        channel_contact = #{channelContact,jdbcType=VARCHAR},
+      </if>
+      <if test="channelPrivateKey != null" >
+        channel_private_key = #{channelPrivateKey,jdbcType=VARCHAR},
+      </if>
+      <if test="channelPublicKey != null" >
+        channel_public_key = #{channelPublicKey,jdbcType=VARCHAR},
+      </if>
+      <if test="channelCompanyPublicKey != null" >
+        channel_company_public_key = #{channelCompanyPublicKey,jdbcType=VARCHAR},
+      </if>
+      <if test="channelSaltKey != null" >
+        channel_salt_key = #{channelSaltKey,jdbcType=VARCHAR},
+      </if>
+      <if test="channelStatus != null" >
+        channel_status = #{channelStatus,jdbcType=CHAR},
+      </if>
+      <if test="channelOrder != null" >
+        channel_order = #{channelOrder,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createId != null" >
+        create_id = #{createId,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateId != null" >
+        update_id = #{updateId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jkf.channel.gateway.entity.ChannelInfo" >
+    update channel_info
+    set channel_no = #{channelNo,jdbcType=VARCHAR},
+      channel_name = #{channelName,jdbcType=VARCHAR},
+      channelcompany_no = #{channelcompanyNo,jdbcType=VARCHAR},
+      channel_company_name = #{channelCompanyName,jdbcType=VARCHAR},
+      channel_contact = #{channelContact,jdbcType=VARCHAR},
+      channel_private_key = #{channelPrivateKey,jdbcType=VARCHAR},
+      channel_public_key = #{channelPublicKey,jdbcType=VARCHAR},
+      channel_company_public_key = #{channelCompanyPublicKey,jdbcType=VARCHAR},
+      channel_salt_key = #{channelSaltKey,jdbcType=VARCHAR},
+      channel_status = #{channelStatus,jdbcType=CHAR},
+      channel_order = #{channelOrder,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_id = #{createId,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_id = #{updateId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectChannelByOrgIdAndChannelCompanyNo" resultMap="BaseResultMap"  >
+    select
+     ci.*
+    from channel_info ci left join org_channel_permission cp
+    on ci.id=cp.channel_id
+    where
+     cp.org_id=#{orgId}
+     and
+     ci.channelcompany_no = #{channelCompanyNo,jdbcType=VARCHAR}
+  </select>
+</mapper>

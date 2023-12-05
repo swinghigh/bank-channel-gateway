@@ -12,11 +12,13 @@ import com.jkf.channel.gateway.dao.FileInfoRelationMapper;
 import com.jkf.channel.gateway.entity.*;
 import com.jkf.channel.gateway.exception.BusinessException;
 import com.jkf.channel.gateway.handler.IOpenHandler;
+import com.jkf.channel.gateway.service.IVirtualAccountService;
 import com.jkf.channel.gateway.utils.AgentUtils;
 import com.jkf.channel.gateway.utils.AssertUtils;
 import com.jkf.channel.gateway.utils.FileContentUtils;
 import com.jkf.channel.gateway.utils.ResultUtils;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +41,8 @@ public class AgentHandler implements IOpenHandler {
     private FileInfoMapper fileInfoMapper;
     @Resource
     private AreaUnionMapper areaUnionMapper;
+    @Autowired
+    private IVirtualAccountService virtualAccountService;
     @Override
     public String getMethod() {
         return OpenMethodEnum.AGENT_ADD.getMethod();
@@ -130,11 +134,13 @@ public class AgentHandler implements IOpenHandler {
         AgentInfo agentInfo=AgentUtils.buildAgentInfo(jsonObject);
         agentInfo.setCreateTime(new Date());
         agentInfo.setCreateId(0L);
-        agentInfo.setStatus("0");
+        agentInfo.setStatus("1");
         agentInfo.setAgentNature("2");
         agentInfo.setAgentLevel("0");
         agentInfoMapper.insertSelective(agentInfo);
         agentInfo.setAgentNo("DL"+(100000000000L+agentInfo.getId()));
+        //创建虚户
+        agentInfo.setVirtualNo(virtualAccountService.createAccount("1"));
         agentInfoMapper.updateByPrimaryKey(agentInfo);
         //插入图片关联
         if(fileMap!=null&&fileMap.size()>0){
