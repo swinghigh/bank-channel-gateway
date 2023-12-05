@@ -189,10 +189,10 @@ public class XlServiceImpl implements IXlService {
             String respBody = common(business, "PosMerApiQuery", "/api/wc/payTransaction", proMap);
             JSONObject respData = JSONObject.parseObject(respBody);
             JSONObject data = respData.getJSONObject("data");
-            if (data != null && !StringUtils.isEmpty(data.getString("merStatus"))) {
+            if (data != null && !StringUtils.isEmpty(data.getString("regMerAuditStatus"))) {
                 String merStatus = data.getString("merStatus");//目前查询接口返回的10 是审核中和审核拒绝是同一个状态，无法区分，所以我们就当审核中了
                 //商户注册审核状态 00-待录入 10-待审核，20-审核拒绝，30-审核通过
-                String regMerAuditStatus = respData.getString("regMerAuditStatus");//
+                String regMerAuditStatus = data.getString("regMerAuditStatus");//
                 if ("20".equals(regMerAuditStatus) || "30".equals(regMerAuditStatus)) {
                     //修改状态
                     channelMchtXl.setCheckStatus("30".equals(regMerAuditStatus) ? "0" : "5");
