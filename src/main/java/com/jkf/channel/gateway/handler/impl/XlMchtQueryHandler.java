@@ -46,6 +46,9 @@ public class XlMchtQueryHandler implements IOpenHandler {
         if(mchInfos==null||mchInfos.size()==0){
             throw new BusinessException(ErrorCode.HAS_NOT_EXIT.getErrorCode(),"商户不存在");
         }
+        MchInfo mchInfo=mchInfos.get(0);
+        jsonObject.put("mchNo", mchInfo.getMchNo());
+        jsonObject.put("mchId", mchInfo.getId());
         Map<String, Object> result=xlService.queryStatus(jsonObject);
         return result;
     }

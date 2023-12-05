@@ -129,7 +129,7 @@ public class OpenSignAspect {
             map.remove("orgId");
             String orgAppNo = (String) map.get("orgAppNo");
             String publicKey = keyService.getOrgPublicKey(orgAppNo);
-//            log.info("公钥:{}",publicKey);
+            log.info("公钥:{}",publicKey);
             if (StringUtils.isEmpty(publicKey)) {
                 return ResultUtils.publicResult(ErrorCode.SIGN_FAIL.getErrorCode(), "获取密钥失败");
             }

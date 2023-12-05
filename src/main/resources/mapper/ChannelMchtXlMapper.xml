@@ -115,7 +115,8 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jkf.channel.gateway.entity.ChannelMchtXl" >
+  <insert id="insert" parameterType="com.jkf.channel.gateway.entity.ChannelMchtXl"  useGeneratedKeys="true"
+          keyProperty="id">
     insert into channel_mcht_xl (id, mch_id, channel_id, 
       channel_mcht_no, channel_mcht_name, order_id, 
       login_password, user_name, notify_url, 
@@ -131,7 +132,8 @@
       #{updateTime,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}, #{outApplyId,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.jkf.channel.gateway.entity.ChannelMchtXl" >
+  <insert id="insertSelective" parameterType="com.jkf.channel.gateway.entity.ChannelMchtXl"  useGeneratedKeys="true"
+          keyProperty="id">
     insert into channel_mcht_xl
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >

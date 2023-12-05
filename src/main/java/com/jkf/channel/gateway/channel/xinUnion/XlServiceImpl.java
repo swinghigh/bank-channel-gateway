@@ -112,7 +112,7 @@ public class XlServiceImpl implements IXlService {
             throw new BusinessException(ErrorCode.PARAM_ERROR.getErrorCode(), "敏感信息加密失败");
         }
         business.put("merName", param.getString("mchName"));//商户名称
-        business.put("informUrl", registerNotifyUrl+"/"+orderId);//通知地址
+        business.put("informUrl", registerNotifyUrl + "/" + orderId);//通知地址
         business.put("keyId", keyId);
         try {
             String respBody = common(business, "PosMerApiRegist", "/api/wc/payTransaction", proMap);
@@ -126,14 +126,20 @@ public class XlServiceImpl implements IXlService {
                 channelMchtXl.setChannelMchtNo(data.getString("merCstNo"));
                 channelMchtXlMapper.updateByPrimaryKeySelective(channelMchtXl);
                 //存入路由
-                ChannelMchRoute route = new ChannelMchRoute();
-                route.setMchId(param.getLong("mchId"));
-                route.setChannelId(channelInfo.getId());
-                route.setChannelMchtNo(data.getString("merCstNo"));
-                route.setChannelOrder(channelInfo.getChannelOrder());
-                route.setCreateTime(new Date());
-                route.setCreateId(0L);
-                channelMchRouteMapper.insertSelective(route);
+                ChannelMchRouteExample routeExample = new ChannelMchRouteExample();
+                routeExample.createCriteria().andMchIdEqualTo(channelMchtXl.getMchId())
+                        .andChannelMchtNoEqualTo(channelMchtXl.getChannelMchtNo());
+                List<ChannelMchRoute> channelMchRoutes = channelMchRouteMapper.selectByExample(routeExample);
+                if(channelMchRoutes==null||channelMchRoutes.size()==0) {
+                    ChannelMchRoute route = new ChannelMchRoute();
+                    route.setMchId(param.getLong("mchId"));
+                    route.setChannelId(channelInfo.getId());
+                    route.setChannelMchtNo(data.getString("merCstNo"));
+                    route.setChannelOrder(channelInfo.getChannelOrder());
+                    route.setCreateTime(new Date());
+                    route.setCreateId(0L);
+                    channelMchRouteMapper.insertSelective(route);
+                }
                 //插入路由
                 Map<String, Object> result = ResultUtils.businessResult(ErrorCode.SUCCESS.getErrorCode(), "通道审核中");
                 result.put("channelMchtNo", channelMchtXl.getChannelMchtNo());
@@ -171,7 +177,7 @@ public class XlServiceImpl implements IXlService {
             return ResultUtils.businessResult(ErrorCode.FAIL.getErrorCode(), "商户不存在");
         }
         ChannelMchtXl channelMchtXl = channelMchtXls.get(0);
-        if("3".equals(channelMchtXl.getCheckStatus())){
+        if ("3".equals(channelMchtXl.getCheckStatus())) {
             //通道审核中,查询通道的状态
             //组建请求参数:
             //查询渠道的参数
@@ -184,15 +190,19 @@ public class XlServiceImpl implements IXlService {
             JSONObject respData = JSONObject.parseObject(respBody);
             JSONObject data = respData.getJSONObject("data");
             if (data != null && !StringUtils.isEmpty(data.getString("merStatus"))) {
-                String merStatus=data.getString("merStatus");//目前查询接口返回的10 是审核中和审核拒绝是同一个状态，无法区分，所以我们就当审核中了
-                if("30".equals(merStatus)){
+                String merStatus = data.getString("merStatus");//目前查询接口返回的10 是审核中和审核拒绝是同一个状态，无法区分，所以我们就当审核中了
+                //商户注册审核状态 00-待录入 10-待审核，20-审核拒绝，30-审核通过
+                String regMerAuditStatus = respData.getString("regMerAuditStatus");//
+                if ("20".equals(regMerAuditStatus) || "30".equals(regMerAuditStatus)) {
                     //修改状态
-                    channelMchtXl.setCheckStatus("0");
-                    channelMchtXl.setCheckTime(new Date());
+                    channelMchtXl.setCheckStatus("30".equals(regMerAuditStatus) ? "0" : "5");
+                    if ("30".equals(regMerAuditStatus)) {
+                        channelMchtXl.setCheckTime(new Date());
+                    }
 //                    channelMchtXlMapper.updateByPrimaryKey(channelMchtXl);
                     //修改商户资料的状态
                     //通知前置系统,做成异步的
-                    if("0".equals(channelMchtXl.getNotifyFlag())){
+                    if ("0".equals(channelMchtXl.getNotifyFlag())) {
                         channelMchtXl.setNotifyFlag("3");
                     }
                     ztDeal(channelMchtXl);
@@ -200,28 +210,29 @@ public class XlServiceImpl implements IXlService {
             }
         }
         Map<String, Object> result = ResultUtils.businessResult(ErrorCode.SUCCESS.getErrorCode(), "查询成功");
-        result.put("channelMchtNo",channelMchtXl.getChannelMchtNo());
-        result.put("mchName",channelMchtXl.getChannelMchtName());
-        result.put("status",channelMchtXl.getCheckStatus());
-        result.put("reason",channelMchtXl.getCheckMessage());
+        result.put("channelMchtNo", channelMchtXl.getChannelMchtNo());
+        result.put("mchName", channelMchtXl.getChannelMchtName());
+        result.put("status", channelMchtXl.getCheckStatus());
+        result.put("reason", channelMchtXl.getCheckMessage());
         return result;
     }
 
     /**
      * 处理终态
+     *
      * @param channelMchtXl
      */
-    public void  ztDeal(ChannelMchtXl channelMchtXl){
-        if("0".equals(channelMchtXl.getCheckStatus())||"5".equals(channelMchtXl.getCheckStatus())){
+    public void ztDeal(ChannelMchtXl channelMchtXl) {
+        if ("0".equals(channelMchtXl.getCheckStatus()) || "5".equals(channelMchtXl.getCheckStatus())) {
             //
             channelMchtXlMapper.updateByPrimaryKey(channelMchtXl);
             //插入路由
-            ChannelMchRouteExample routeExample=new ChannelMchRouteExample();
+            ChannelMchRouteExample routeExample = new ChannelMchRouteExample();
             routeExample.createCriteria().andMchIdEqualTo(channelMchtXl.getMchId())
                     .andChannelMchtNoEqualTo(channelMchtXl.getChannelMchtNo());
-            List<ChannelMchRoute> channelMchRoutes=channelMchRouteMapper.selectByExample(routeExample);
-            if(channelMchRoutes==null||channelMchRoutes.size()==0){
-                ChannelInfo channelInfo= channelInfoMapper.selectByPrimaryKey(channelMchtXl.getChannelId());
+            List<ChannelMchRoute> channelMchRoutes = channelMchRouteMapper.selectByExample(routeExample);
+            if (channelMchRoutes == null || channelMchRoutes.size() == 0) {
+                ChannelInfo channelInfo = channelInfoMapper.selectByPrimaryKey(channelMchtXl.getChannelId());
                 //存入路由
                 ChannelMchRoute route = new ChannelMchRoute();
                 route.setMchId(channelMchtXl.getMchId());
@@ -233,88 +244,69 @@ public class XlServiceImpl implements IXlService {
                 channelMchRouteMapper.insertSelective(route);
             }
             //修改主商户状态
-            MchInfo mchInfo= mchInfoMapper.selectByPrimaryKey(channelMchtXl.getMchId());
-            if(mchInfo!=null&&!"0".equals(mchInfo.getMchStatus())){
+            MchInfo mchInfo = mchInfoMapper.selectByPrimaryKey(channelMchtXl.getMchId());
+            if (mchInfo != null && !"0".equals(mchInfo.getMchStatus())) {
                 mchInfo.setMchStatus(channelMchtXl.getCheckStatus());
-                if("0".equals(channelMchtXl.getCheckStatus())){
-                    mchInfo.setPassTime(DateUtil.getFormat(new Date(),"yyyy-MM-dd HH:mm:ss"));
+                if ("0".equals(channelMchtXl.getCheckStatus())) {
+                    mchInfo.setPassTime(DateUtil.getFormat(new Date(), "yyyy-MM-dd HH:mm:ss"));
                 }
                 mchInfoMapper.updateByPrimaryKeySelective(mchInfo);
             }
             //进件通知
-            if(!StringUtils.isEmpty(channelMchtXl.getNotifyUrl())&&"3".equals(channelMchtXl.getNotifyFlag())){
+            if (!StringUtils.isEmpty(channelMchtXl.getNotifyUrl()) && "3".equals(channelMchtXl.getNotifyFlag())) {
                 //通知给业务方
-                Map<String, Object> bussMap=new HashMap<>();
-                bussMap.put("outMchtNo",mchInfo.getOutMchNo());
-                bussMap.put("mchNo",mchInfo.getMchNo());
-                bussMap.put("mchId",channelMchtXl.getMchId());
-                bussMap.put("channelMchtNo",channelMchtXl.getChannelMchtNo());
-                bussMap.put("mchName",channelMchtXl.getChannelMchtName());
-                bussMap.put("status",channelMchtXl.getCheckStatus());
-                bussMap.put("reason",channelMchtXl.getCheckMessage());
-                bussMap.put("outApplyId",channelMchtXl.getOutApplyId());
+                Map<String, Object> bussMap = new HashMap<>();
+                bussMap.put("outMchtNo", mchInfo.getOutMchNo());
+                bussMap.put("mchNo", mchInfo.getMchNo());
+                bussMap.put("mchId", channelMchtXl.getMchId());
+                bussMap.put("channelMchtNo", channelMchtXl.getChannelMchtNo());
+                bussMap.put("mchName", channelMchtXl.getChannelMchtName());
+                bussMap.put("status", channelMchtXl.getCheckStatus());
+                bussMap.put("reason", channelMchtXl.getCheckMessage());
+                bussMap.put("outApplyId", channelMchtXl.getOutApplyId());
                 //这里添加异步
-                bussinessNotifyService.busNotify(bussMap,mchInfo.getOrgId(),channelMchtXl.getNotifyUrl(),
-                        "1","10", BusNotifyEnum.XL_REGISTER.getBussType());
-            }else{
-                log.info("{}不满足通知条件",channelMchtXl.getChannelMchtNo());
+                bussinessNotifyService.busNotify(bussMap, mchInfo.getOrgId(), channelMchtXl.getNotifyUrl(),
+                        "1", "10", BusNotifyEnum.XL_REGISTER.getBussType());
+            } else {
+                log.info("{}不满足通知条件", channelMchtXl.getChannelMchtNo());
             }
         }
     }
 
 
-
-
-
     @Override
-    public Map<String, Object> registerNotify(String bodyParam,String orderId) {
-        Map<String,Object> result=new HashMap<>();
-        result.put("resultCode",ErrorCode.SUCCESS.getErrorCode());
-        ChannelMchtXlExample xlexample=new ChannelMchtXlExample();
+    public Map<String, Object> registerNotify(String bodyParam, String orderId) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("resultCode", ErrorCode.SUCCESS.getErrorCode());
+        ChannelMchtXlExample xlexample = new ChannelMchtXlExample();
         xlexample.createCriteria().andOrderIdEqualTo(orderId);
-        List<ChannelMchtXl>  channelMchtXls=channelMchtXlMapper.selectByExample(xlexample);
-        if(channelMchtXls==null||channelMchtXls.size()==0){
-            result.put("resultCode",ErrorCode.PARAM_ERROR.getErrorCode());
-            result.put("resultMsg","orderId非法");
+        List<ChannelMchtXl> channelMchtXls = channelMchtXlMapper.selectByExample(xlexample);
+        if (channelMchtXls == null || channelMchtXls.size() == 0) {
+            result.put("resultCode", ErrorCode.PARAM_ERROR.getErrorCode());
+            result.put("resultMsg", "orderId非法");
             return result;
         }
-        ChannelMchtXl channelMchtXl=channelMchtXls.get(0);
-        Map<String,String> proMap=channelProService.findProByChannelId(channelMchtXl.getChannelId());
-        //解密
-        //验签
-//用商户的私钥解密
-        String resBodyDecrypt = "";
-        try {
-            resBodyDecrypt = GuoMiCryptoUtils.sm2AndSm4Decrypt(proMap.get("merSm2DecKeyFile"), bodyParam, proMap.get("sm2Pass"));
-            log.info("响应数据解密后：{}", resBodyDecrypt);
-        } catch (Exception e) {
-            log.error("出现异常", e);
-            throw new BusinessException(ErrorCode.PARAM_ERROR.getErrorCode(), "响应报文解密失败");
-        }
-        //验签,使用平台公钥验证签名
-        try {
-            if (GuoMISignUtils.validateSign(resBodyDecrypt)) {
-                log.info("验签通过");
-            } else {
-                log.info("验签失败");
-            }
-        } catch (Exception e) {
-            log.error("验签异常", e);
-        }
-        JSONObject respData = JSONObject.parseObject(resBodyDecrypt);
+        ChannelMchtXl channelMchtXl = channelMchtXls.get(0);
+        JSONObject respData = JSONObject.parseObject(bodyParam);
 //        商户状态：10 代表审核未通过，需要商户登录万贯收银 APP 修改资料再次提交，并联系运营人员审核，新的审核也触发新的通知；
 //        商户状态：30 表示审核成功且商户正常可用；
-        String merStatus=respData.getString("merStatus");//
-        if(!("10".equals(merStatus)||"30".equals(merStatus))){
+        String merStatus = respData.getString("merStatus");//
+        //商户注册审核状态 00-待录入 10-待审核，20-审核拒绝，30-审核通过
+        String regMerAuditStatus = respData.getString("regMerAuditStatus");//
+        if (!("10".equals(regMerAuditStatus) || "20".equals(regMerAuditStatus) || "30".equals(merStatus))) {
             log.error("其他的状态暂时先不处理");
-            result.put("resultMsg","未知状态");
+            result.put("resultMsg", "未知状态");
             return result;
         }
-        if("10".equals(merStatus)){//拒绝
+        if ("10".equals(regMerAuditStatus)) {//待审核
+            channelMchtXl.setCheckStatus("3");
+            channelMchtXl.setCheckMessage("通道审核拒绝");
+        }
+        if ("20".equals(regMerAuditStatus)) {//拒绝
             channelMchtXl.setCheckStatus("5");
             channelMchtXl.setCheckMessage("通道审核拒绝");
         }
-        if("30".equals(merStatus)){//拒绝
+        if ("30".equals(regMerAuditStatus)) {//拒绝
             //修改状态
             channelMchtXl.setCheckStatus("0");
             channelMchtXl.setCheckTime(new Date());

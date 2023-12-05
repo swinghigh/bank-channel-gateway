@@ -41,7 +41,7 @@
     <logger name="com.education.app" level="DEBUG" />
 
     <!-- root -->
-    <root level="DEBUG">
+    <root level="info">
         <appender-ref ref="console" />
         <appender-ref ref="systemLog" />
     </root>
