@@ -23,7 +23,7 @@ public class NotifyTask {
     /**
      * 每隔30秒执行一次
      */
-    @Scheduled(cron = "0/30 * * * * ？")
+    @Scheduled(cron = "0/30 * * * * ?")
     public void task() {
         notifyService.noticeOrderNotifyLog();
     }

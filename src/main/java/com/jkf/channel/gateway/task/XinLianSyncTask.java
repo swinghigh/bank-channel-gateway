@@ -28,7 +28,7 @@ public class XinLianSyncTask {
      * 同步信联对账文件
      * 每天1点执行一次
      */
-    @Scheduled(cron = "0 0 1 * * ？")
+    @Scheduled(cron = "0 0 1 * * ?")
     public void downloadXinLianCheckFileTask() {
         //昨天
         DateTime dateTime = DateUtil.offsetDay(new Date(), -1);
@@ -46,7 +46,7 @@ public class XinLianSyncTask {
      * 依据信联对账文件 进行对账
      * 每天1点30执行一次
      */
-    @Scheduled(cron = "0 30 1 * * ？")
+    @Scheduled(cron = "0 30 1 * * ?")
     public void xinLianReconcileTask() {
         //昨天
         DateTime dateTime = DateUtil.offsetDay(new Date(), -1);
