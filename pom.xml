@@ -288,6 +288,11 @@
             <artifactId>logback</artifactId>
             <version>4.1.1.0</version>
         </dependency>
+        <dependency>
+            <groupId>cfca.sadk.tls</groupId>
+            <artifactId>DeviceTLS</artifactId>
+            <version>3.4.2.0</version>
+        </dependency>
         <!-- 国密算法 end-->
 
     </dependencies>

@@ -49,4 +49,4 @@ file:
 
 buss:
   phonePrefix: 172
-  xinlianRegisterNotifyUrl: https://willcard.com.cn:7000/xinlianNotify/register
+  xinlianRegisterNotifyUrl: http://willcard.com.cn:7000/xinlianNotify/commonNotify
