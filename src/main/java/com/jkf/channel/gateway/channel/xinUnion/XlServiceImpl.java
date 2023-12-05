@@ -293,7 +293,7 @@ public class XlServiceImpl implements IXlService {
         String merStatus = respData.getString("merStatus");//
         //商户注册审核状态 00-待录入 10-待审核，20-审核拒绝，30-审核通过
         String regMerAuditStatus = respData.getString("regMerAuditStatus");//
-        if (!("10".equals(regMerAuditStatus) || "20".equals(regMerAuditStatus) || "30".equals(merStatus))) {
+        if (!("10".equals(regMerAuditStatus) || "20".equals(regMerAuditStatus) || "30".equals(regMerAuditStatus))) {
             log.error("其他的状态暂时先不处理");
             result.put("resultMsg", "未知状态");
             return result;

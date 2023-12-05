@@ -170,7 +170,7 @@ public class XlMchtAddHandler implements IOpenHandler {
         record.setOrgId(jsonObject.getLong("orgId"));
         record.setUserName(jsonObject.getString("username"));
         record.setUserNick(jsonObject.getString("username"));
-        record.setUserPhone(jsonObject.getString("username"));
+        record.setUserPhone(AESUtil.encrypt(jsonObject.getString("username"), AESUtil.key));
         record.setUserLogin(mchInfo.getMchNo());
         record.setUserPassword(AESUtil.encrypt(jsonObject.getString("loginPwd"), AESUtil.key));
 //        record.setUserEmail(jsonObject.getString("contactEmail"));

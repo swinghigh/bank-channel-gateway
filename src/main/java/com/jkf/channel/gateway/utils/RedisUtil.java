@@ -80,7 +80,8 @@ public class RedisUtil {
     }
 
     public static void zset(String key, double score, String value){
-        redisTemplate.boundZSetOps(key).add(value,score);
+//        redisTemplate.boundZSetOps(key).add(value,score);
+        redisTemplate.opsForZSet().add(key,value,score);
     }
 
     public static Set<String> getZSet(String key){
