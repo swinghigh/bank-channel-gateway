@@ -61,6 +61,7 @@ public class NotifyService {
                         String serial = orderNotifyLog.getSerial();
                         OrderInfo orderInfo = orderInfoService.selectBySerial(serial);
                         String orderType = orderInfo.getOrderType();
+                        log.info("通知信息orderInfo:{},orderType:{}", orderInfo, orderType);
                         Map<String,Object> map=new HashMap<>();
                         if (OrderTypeEnum.PAY.getCode().equals(orderType)){
                             //交易订单
@@ -127,9 +128,10 @@ public class NotifyService {
                         result.put("respData", RSAUtil.publicEncrypt(respJson.toJSONString(), orgPublicKey));
                         //加签,平台的私钥生成签名
                         result.put("sign", RSAUtil.sign(result, platPrivateKey));
+                        log.info("通知地址：{}，请求数据:{}",orderNotifyLog.getNotifyUrl(),result.toString());
                         //请求业务方
                         String response = HttpUtil.sendPost(orderNotifyLog.getNotifyUrl(), result.toString());
-                        log.info("response:{}",response);
+                        log.info("响应response:{}",response);
                         boolean dealSucces=false;
                         if (StringUtils.isNotEmpty(response)) {
                             //还需要判断是否是处理成功

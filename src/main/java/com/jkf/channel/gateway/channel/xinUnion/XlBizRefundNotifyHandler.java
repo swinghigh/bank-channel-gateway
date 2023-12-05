@@ -6,6 +6,7 @@ import cn.hutool.json.JSONUtil;
 import com.jkf.channel.gateway.constant.XlBizTypeNotifyEnum;
 import com.jkf.channel.gateway.entity.*;
 import com.jkf.channel.gateway.service.*;
+import com.jkf.channel.gateway.utils.xinwang.XinWangSignUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ import java.util.Date;
  */
 @Service
 @Slf4j
-public class XlBizPayNotifyHandler implements IXlBizNotifyHandler{
+public class XlBizRefundNotifyHandler implements IXlBizNotifyHandler{
     @Autowired
     private OrgInfoService orgInfoService;
     @Autowired
@@ -36,55 +37,49 @@ public class XlBizPayNotifyHandler implements IXlBizNotifyHandler{
 
     @Override
     public String getBizType() {
-        return XlBizTypeNotifyEnum.PayNotify.getBizType();
+        return XlBizTypeNotifyEnum.RefundNotify.getBizType();
     }
 
     /**
-     * {"oriTrxDtTm":"20231205150343","bizType":"PayNotify","settlemtDt":"20231205","signature":"MIID/wYKKoEcz1UGAQQCAqCCA+8wggPrAgEBMQ4wDAYIKoEcz1UBgxEFADARBgoqgRzPVQYBBAIBoAMEAWKgggLrMIIC5zCCAougAwIBAgIFEEgICCYwDAYIKoEcz1UBg3UFADBcMQswCQYDVQQGEwJDTjEwMC4GA1UECgwnQ2hpbmEgRmluYW5jaWFsIENlcnRpZmljYXRpb24gQXV0aG9yaXR5MRswGQYDVQQDDBJDRkNBIFRFU1QgU00yIE9DQTEwHhcNMjIwMjA4MDgwODQ0WhcNMjIwODA4MDgwODQ0WjCBizELMAkGA1UEBhMCQ04xDDAKBgNVBAoMA0JPQzETMBEGA1UECwwKQ0ZDQVRlY2hURTEZMBcGA1UECwwQT3JnYW5pemF0aW9uYWwtMjE+MDwGA1UEAww1Q0ZDQVRlY2hURUDkv6HogZTmlK/ku5jlm73lr4blj4zor4HmtYvor5VAWjExMTExMTExQDEwWTATBgcqhkjOPQIBBggqgRzPVQGCLQNCAAR3CJx7gJheFkuIyrd9MkDU+fYXa2p/GX6+S3bwfzVR1T5NhpJzo9NKt0AjuGKUnJ5/2pMA6RqpvX79EiO2MQSoo4IBBjCCAQIwHwYDVR0jBBgwFoAUa/4Y2o9COqa4bbMuiIM6NKLBMOEwDAYDVR0TAQH/BAIwADBIBgNVHSAEQTA/MD0GCGCBHIbvKgEBMDEwLwYIKwYBBQUHAgEWI2h0dHA6Ly93d3cuY2ZjYS5jb20uY24vdXMvdXMtMTQuaHRtMDkGA1UdHwQyMDAwLqAsoCqGKGh0dHA6Ly91Y3JsLmNmY2EuY29tLmNuL1NNMi9jcmwyOTkxNS5jcmwwDgYDVR0PAQH/BAQDAgbAMB0GA1UdDgQWBBSZQYQ90WdD82Dt3CiE1anENsJQGjAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwDAYIKoEcz1UBg3UFAANIADBFAiEArrWzDB2I+z6jHswZJx6z3q7cgavXs4aq1K2mu+fV3doCIFskV5SJho4H7r8ub32dOryrpX4UR30m1Ul8mkXTCXhvMYHTMIHQAgEBMGUwXDELMAkGA1UEBhMCQ04xMDAuBgNVBAoMJ0NoaW5hIEZpbmFuY2lhbCBDZXJ0aWZpY2F0aW9uIEF1dGhvcml0eTEbMBkGA1UEAwwSQ0ZDQSBURVNUIFNNMiBPQ0ExAgUQSAgIJjAMBggqgRzPVQGDEQUAMA0GCSqBHM9VAYItAQUABEcwRQIgUhsszWzBZA7ntVXnnUup87TypHRZkPtb6zQzORzUVggCIQDIxvFxCPA24xZusr0+jk8ldiu6kR6QHARzAhc4dPUPTQ==","trxStatus":"90","trxCtgy":"22","oriOrderId":"1701759798184000","messageDesc":"TRADE_SUCCESS","signType":"SM2","partnerId":"1656438344850440193","trxAmt":"10"}
+     * {"bizType":"RefundNotify","orderId":"1656770131074416649","signature":"MIID/wYKKoEcz1UGAQQCAqCCA+8wggPrAgEBMQ4wDAYIKoEcz1UBgxEFADARBgoqgRzPVQYBBAIBoAMEAWKgggLrMIIC5zCCAougAwIBAgIFEEgICCYwDAYIKoEcz1UBg3UFADBcMQswCQYDVQQGEwJDTjEwMC4GA1UECgwnQ2hpbmEgRmluYW5jaWFsIENlcnRpZmljYXRpb24gQXV0aG9yaXR5MRswGQYDVQQDDBJDRkNBIFRFU1QgU00yIE9DQTEwHhcNMjIwMjA4MDgwODQ0WhcNMjIwODA4MDgwODQ0WjCBizELMAkGA1UEBhMCQ04xDDAKBgNVBAoMA0JPQzETMBEGA1UECwwKQ0ZDQVRlY2hURTEZMBcGA1UECwwQT3JnYW5pemF0aW9uYWwtMjE+MDwGA1UEAww1Q0ZDQVRlY2hURUDkv6HogZTmlK/ku5jlm73lr4blj4zor4HmtYvor5VAWjExMTExMTExQDEwWTATBgcqhkjOPQIBBggqgRzPVQGCLQNCAAR3CJx7gJheFkuIyrd9MkDU+fYXa2p/GX6+S3bwfzVR1T5NhpJzo9NKt0AjuGKUnJ5/2pMA6RqpvX79EiO2MQSoo4IBBjCCAQIwHwYDVR0jBBgwFoAUa/4Y2o9COqa4bbMuiIM6NKLBMOEwDAYDVR0TAQH/BAIwADBIBgNVHSAEQTA/MD0GCGCBHIbvKgEBMDEwLwYIKwYBBQUHAgEWI2h0dHA6Ly93d3cuY2ZjYS5jb20uY24vdXMvdXMtMTQuaHRtMDkGA1UdHwQyMDAwLqAsoCqGKGh0dHA6Ly91Y3JsLmNmY2EuY29tLmNuL1NNMi9jcmwyOTkxNS5jcmwwDgYDVR0PAQH/BAQDAgbAMB0GA1UdDgQWBBSZQYQ90WdD82Dt3CiE1anENsJQGjAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwDAYIKoEcz1UBg3UFAANIADBFAiEArrWzDB2I+z6jHswZJx6z3q7cgavXs4aq1K2mu+fV3doCIFskV5SJho4H7r8ub32dOryrpX4UR30m1Ul8mkXTCXhvMYHTMIHQAgEBMGUwXDELMAkGA1UEBhMCQ04xMDAuBgNVBAoMJ0NoaW5hIEZpbmFuY2lhbCBDZXJ0aWZpY2F0aW9uIEF1dGhvcml0eTEbMBkGA1UEAwwSQ0ZDQSBURVNUIFNNMiBPQ0ExAgUQSAgIJjAMBggqgRzPVQGDEQUAMA0GCSqBHM9VAYItAQUABEcwRQIgfGOV783NeGSzfY9CjY8WU0wl+wkb2QB6zV5g46AXOqECIQDKL0ldHYZcjUKlTn2xzXzXlq4E4c9yhVBbVAUou7GxxQ==","orderStatus":"90","refundSuccTime":"20231205155418","messageDesc":"Success","signType":"SM2","partnerId":"1656438344850440193","refundAmount":"10"}
      * @param bodyParam 通知的参数
      * @param orderId 商户申请id
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void notifyHandler(String bodyParam, String orderId) {
-        log.info("收到支付通知bodyParam:{}，合作伙伴申请单号orderId：{}",bodyParam,orderId);
+        log.info("收到退款通知bodyParam:{}，合作伙伴申请单号orderId：{}",bodyParam,orderId);
+        /*------ start:验签 ------*/
         //  拼接响应参数字符串
         cn.hutool.json.JSONObject bussRespDataObj = JSONUtil.parseObj(bodyParam);
         String signType = bussRespDataObj.getStr("signType");
-        //业务类型，PayNotify-支付通知
+        //业务类型，RefundNotify-退款结果通知
         String bizType = bussRespDataObj.getStr("bizType");
-        //交易类别13-微信用户被扫，15-微信用户主扫，22-支付宝用户主扫，23-支付宝被扫，53-银联用户主扫
-        String trxCtgy = bussRespDataObj.getStr("trxCtgy");
         //进件的时候是服务商编号 这里是商户号 通过此商户号查相关信息
         //商户编号信联支付给合作商户分配的唯一标识
         String partnerId = bussRespDataObj.getStr("partnerId");
-        //原商户订单号 我们系统的订单id
-        String oriOrderId = bussRespDataObj.getStr("oriOrderId");
-        String trxAmt = bussRespDataObj.getStr("trxAmt");
+        //商户退款订单号
+        String refundOrderId = bussRespDataObj.getStr("orderId");
+        String refundAmount = bussRespDataObj.getStr("refundAmount");
         //交易状态 70:交易失败，90:交易成功
-        String trxStatus = bussRespDataObj.getStr("trxStatus");
-        //清算时间，交易成功时有值，格式 yyyyMMdd
-        String settlemtDt = bussRespDataObj.getStr("settlemtDt");
-        //交易时间，交易成功时有值 ， 格式 yyyyMMddHHmmss
-        String oriTrxDtTm = bussRespDataObj.getStr("oriTrxDtTm");
+        String orderStatus = bussRespDataObj.getStr("orderStatus");
+
+        //交易成功时间，交易成功时有值，格式yyyyMMddHHmmss
+        String refundSuccTime = bussRespDataObj.getStr("refundSuccTime");
         //交易结果描述
         String messageDesc = bussRespDataObj.getStr("messageDesc");
 
         //查商户信息
         ChannelMchtXl channelMchtXl = channelMchtXlService.getByChannelMchtNo(partnerId);
-        if (channelMchtXl == null) {
-            log.info("商户信息不存在,商户号partnerId：{}", partnerId);
+        //重复通知
+        OrderInfo oriOrderInfo = orderInfoService.selectByOutSerial(refundOrderId);
+        if (ObjectUtil.isNotEmpty(oriOrderInfo)){
+            log.info("已处理outSerial：{}",refundOrderId);
             return;
         }
 
         Long mchId = channelMchtXl.getMchId();
         MchInfo mchInfo = mchInfoService.selectByPrimaryKey(mchId);
-        //重复通知
-        OrderInfo oriOrderInfo = orderInfoService.selectByOutSerial(oriOrderId);
-        if (ObjectUtil.isNotEmpty(oriOrderInfo)) {
-            log.info("已处理outSerial：{}", oriOrderId);
-            return;
-        }
 
         OrderInfo orderInfo = new OrderInfo();
 //        orderInfo.setId(1234L); //自动递增
@@ -92,7 +87,7 @@ public class XlBizPayNotifyHandler implements IXlBizNotifyHandler{
         String uuid = UUID.randomUUID().toString().replace("-", "");
         orderInfo.setSerial(uuid);
         //系统外部单号 == 服务商或代理
-        orderInfo.setOutSerial(oriOrderId);
+        orderInfo.setOutSerial(refundOrderId);
         //外部商户号 == 服务商或代理
         orderInfo.setOutMchId(mchInfo.getOutMchNo());
         //系统商户号
@@ -109,29 +104,10 @@ public class XlBizPayNotifyHandler implements IXlBizNotifyHandler{
         orderInfo.setMchName(mchInfo.getMchName());
         orderInfo.setChannelId(channelMchtXl.getChannelId());
         orderInfo.setChannelMchNo(channelMchtXl.getChannelMchtNo());
-//        //退款订单的原系统单号
-//        orderInfo.setOrigSerial("ORIGSERIAL456");
+        //退款订单的原系统单号
+        orderInfo.setOrigSerial(refundOrderId);
         //订单类型 1交易订单 2退款订单3预授权4分账订单
-        orderInfo.setOrderType("1");
-        //信联 交易类别13-微信用户被扫，15-微信用户主扫，22-支付宝用户主扫，23-支付宝被扫，53-银联用户主扫
-        if ("13".equals(trxCtgy)) {
-            //本系统 产品类型:A支付宝 W微信U银联C刷卡B银行卡在线支付
-            orderInfo.setProduct("W");
-            //本系统 子产品类型: W01-微信扫码支付W02-微信公众号支付W03-微信刷卡（反扫）W04-微信H5支付W05-微信APP支付W06-微信小程序A01-支付宝扫码支付A02-支付宝刷卡支付A03-支付窗支付A04-支付宝APP支付U01-银联二维码扫码支付U03-银联二维码被扫U05-银联云闪付(ApplePay)U06-银联行业码
-            orderInfo.setSubProduct("W03");
-        } else if ("15".equals(trxCtgy)) {
-            orderInfo.setProduct("W");
-            orderInfo.setSubProduct("W01");
-        } else if ("22".equals(trxCtgy)) {
-            orderInfo.setProduct("A");
-            orderInfo.setSubProduct("A01");
-        } else if ("23".equals(trxCtgy)) {
-            orderInfo.setProduct("A");
-            orderInfo.setSubProduct("A02");
-        } else if ("53".equals(trxCtgy)) {
-            orderInfo.setProduct("U");
-            orderInfo.setSubProduct("U03");
-        }
+        orderInfo.setOrderType("2");
 
         OrgInfo orgInfo = orgInfoService.selectByPrimaryKey(mchInfo.getOrgId());
         String orgNo = orgInfo.getOrgNo();
@@ -140,23 +116,21 @@ public class XlBizPayNotifyHandler implements IXlBizNotifyHandler{
         //订单通知地址   配置
         orderInfo.setNotifyUrl(payNotifyUrl);
         //交易金额,分
-        orderInfo.setOrderAmount(Long.parseLong(trxAmt));
+        orderInfo.setOrderAmount(Long.parseLong(refundAmount));
         boolean tradeSuccess = false;
-        //交易状态映射
-        if ("70".equals(trxStatus)) {
+        //交易状态映射   交易状态 70:交易失败，90:交易成功
+        if ("70".equals(orderStatus)) {
             //本系统 交易状态-1 聚合码未扫码 0：未支付/处理中  1 成功 2 失败 3 申请退款 4退款成功（全部） 5退款失败 6交易关闭 7退款成功（部分）
             //交易失败 不通知
             orderInfo.setTradeStatus("2");
-        } else if ("90".equals(trxStatus)) {
+        } else if ("90".equals(orderStatus)) {
             //订单日期yyyyMMdd 交易时间截取前8位
-            orderInfo.setOrderDate(oriTrxDtTm.substring(0, 8));
-            //订单完成时间  未传入 这里存 传入的清算时间的yyMMdd
-            orderInfo.setFinishTime(settlemtDt);
+            orderInfo.setOrderDate(refundSuccTime.substring(0, 8));
             orderInfo.setTradeStatus("1");
             tradeSuccess = true;
         }
-
-//        orderInfo.setRefundStatus("");
+        //退款状态:0未发起 1部分退款成功 2全额退款成功
+        orderInfo.setRefundStatus("2");
         orderInfo.setRemark(messageDesc);
         //订单来源 api 接口 notify 推送
         orderInfo.setOrderSource("notify");
@@ -187,4 +161,6 @@ public class XlBizPayNotifyHandler implements IXlBizNotifyHandler{
             orderNotifyLogService.insert(orderNotifyLog);
         }
     }
+
+
 }

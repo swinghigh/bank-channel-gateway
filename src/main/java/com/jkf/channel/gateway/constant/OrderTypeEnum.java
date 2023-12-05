@@ -7,14 +7,14 @@ import lombok.Getter;
  */
 @Getter
 public enum OrderTypeEnum {
-    PAY(1, "交易订单"),
-    REFUND(2, "退款订单");
+    PAY("1", "交易订单"),
+    REFUND("2", "退款订单");
 
-    private Integer code;
+    private String code;
 
     private String name;
 
-    OrderTypeEnum(Integer code, String name) {
+    OrderTypeEnum(String code, String name) {
         this.code = code;
         this.name = name;
     }

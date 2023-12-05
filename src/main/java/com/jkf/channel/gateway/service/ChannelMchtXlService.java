@@ -19,8 +19,8 @@ public class ChannelMchtXlService {
         ChannelMchtXlExample example = new ChannelMchtXlExample();
         ChannelMchtXlExample.Criteria criteria = example.createCriteria();
         criteria.andChannelMchtNoEqualTo(channelMchtNo);
-        //商户状态 10-入网中，30-正常  20审核失败
-        criteria.andCheckStatusEqualTo("30");
+        //商户状态 商户状态0-正式、1-停用、2-待提交资质、3-审核中 4进件失败 5审核失败
+        criteria.andCheckStatusEqualTo("0");
         List<ChannelMchtXl> channelMchtXls = channelMchtXlMapper.selectByExample(example);
         if (CollUtil.isNotEmpty(channelMchtXls)){
             return  channelMchtXls.get(0);
