@@ -1,9 +1,0 @@
-com\jkf\channel\gateway\entity\VirtualAccountExample.class
-com\jkf\channel\gateway\entity\VirtualAccountExample$GeneratedCriteria.class
-com\jkf\channel\gateway\channel\xinUnion\XlBizRefundNotifyHandler.class
-com\jkf\channel\gateway\entity\VirtualAccount.class
-com\jkf\channel\gateway\dao\VirtualAccountMapper.class
-com\jkf\channel\gateway\entity\VirtualAccountExample$Criterion.class
-com\jkf\channel\gateway\service\IVirtualAccountService.class
-com\jkf\channel\gateway\entity\VirtualAccountExample$Criteria.class
-com\jkf\channel\gateway\service\impl\VirtualAccountServiceImpl.class

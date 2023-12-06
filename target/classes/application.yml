@@ -1,7 +1,0 @@
-# Spring配置
-spring:
-  profiles:
-    active: 'dev'
-mybatis:
-  type-aliases-package: com.jkf.channel.gateway.entity
-  mapper-locations: classpath:mapper/*.xml
