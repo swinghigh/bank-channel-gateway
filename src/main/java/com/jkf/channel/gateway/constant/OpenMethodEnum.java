@@ -18,6 +18,7 @@ public enum OpenMethodEnum {
     FQ_MCHT_FACE_AUTH_QUERY("FQ_MCHT_FACE_AUTH_QUERY","分期商户人脸认证查询"),
     XL_MCHT_ADD("XL_MCHT_ADD","信联商户开通"),
     XL_MCHT_QUERY("XL_MCHT_QUERY","信联商户查询"),
+    AGENT_PROFIT_SYNC("AGENT_PROFIT_SYNC","代理商分润同步"),
     ;
 
     private String method;
