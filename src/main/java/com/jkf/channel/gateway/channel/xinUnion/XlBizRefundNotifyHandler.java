@@ -139,6 +139,7 @@ public class XlBizRefundNotifyHandler implements IXlBizNotifyHandler{
         } else if ("90".equals(orderStatus)) {
             //订单日期yyyyMMdd 交易时间截取前8位
             orderInfo.setOrderDate(refundSuccTime.substring(0, 8));
+            orderInfo.setFinishTime(refundSuccTime);
             orderInfo.setTradeStatus("1");
             tradeSuccess = true;
         }
