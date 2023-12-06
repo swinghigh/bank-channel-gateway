@@ -134,6 +134,8 @@ public class XlBizPayNotifyHandler implements IXlBizNotifyHandler{
             orderInfo.setProduct("U");
             orderInfo.setSubProduct("U03");
         }
+        //交易卡类型   1：借记卡   2：贷记卡 0未知
+        orderInfo.setCardType("0");
 
         OrgInfo orgInfo = orgInfoService.selectByPrimaryKey(mchInfo.getOrgId());
         String orgNo = orgInfo.getOrgNo();

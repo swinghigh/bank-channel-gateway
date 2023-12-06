@@ -83,6 +83,8 @@ public class NotifyService {
                             // A01-支付宝扫码支付A02-支付宝刷卡支付A03-支付窗支付A04-支付宝APP支付
                             // U01-银联二维码扫码支付
                             map.put("subProduct",orderInfo.getSubProduct());
+                            //交易卡类型   1：借记卡   2：贷记卡 0未知
+                            map.put("cardType",orderInfo.getCardType());
 
                             //交易金额 单位分 orderAmount
                             map.put("orderAmount",orderInfo.getOrderAmount());
