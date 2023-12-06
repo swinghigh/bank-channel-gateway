@@ -28,4 +28,14 @@ public class ChannelMchtXlService {
             return null;
         }
     }
+
+    public List<ChannelMchtXl> getAll() {
+        ChannelMchtXlExample example = new ChannelMchtXlExample();
+        ChannelMchtXlExample.Criteria criteria = example.createCriteria();
+        //商户状态 商户状态0-正式、1-停用、2-待提交资质、3-审核中 4进件失败 5审核失败
+        criteria.andCheckStatusEqualTo("0");
+        List<ChannelMchtXl> channelMchtXlList = channelMchtXlMapper.selectByExample(example);
+        return  channelMchtXlList;
+
+    }
 }

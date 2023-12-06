@@ -39,6 +39,30 @@ public class ExecutorConfig {
         return executor;
     }
 
+    /**
+     * 下载线程池
+     * @return
+     */
+    @Bean("downloadExecutor")
+    public Executor downloadExecutor() {
+        log.info("start downloadExecutor");
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        //配置核心线程数
+        executor.setCorePoolSize(2);
+        //配置最大线程数
+        executor.setMaxPoolSize(8);
+        //配置队列大小
+        executor.setQueueCapacity(2000);
+        //配置线程池中的线程的名称前缀
+        executor.setThreadNamePrefix("notify-executor-");
+
+        // rejection-policy：当pool已经达到max size的时候，如何处理新任务
+        // DiscardPolicy：拒绝新的任务
+        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy());
+        //执行初始化
+        executor.initialize();
+        return executor;
+    }
 
     //其他任务默认使用此线程池
     @Bean("taskExecutor")

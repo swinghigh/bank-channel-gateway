@@ -241,13 +241,14 @@ public class XinUnionTest {
             business.put("partnerId", "1656438344850440193");
 
             business.put("checkDt","2023-12-05");//
+            //文件类型 01-收单类 03-付款
             business.put("billType", "01");//
             //CheckPayOrder-收单对账文件
             String  respBody=common(business, "CheckPayOrder", "/api/wc/payTransaction",keyId);
             JSONObject respData=JSONObject.parseObject(respBody);
             JSONObject data=respData.getJSONObject("data");
             //{"downloadUrl":"https://testrans.xlpayment.com/api/oss/merBill/2023-12-05/1656438344850440193_20231205013009_01.txt","downloadToken":"b7a652d5c8b252b0324915abd67f98267c7180db226fcbaff6ee50bf4d5a105b","fileMac":"aa912de994c493926faf2b5059de5e67","partnerId":"1656438344850440193"}
-            if(data!=null&& !StringUtils.isEmpty(data.getString("data"))){
+            if(data!=null&& !StringUtils.isEmpty(data.getString("downloadUrl"))){
                 log.info("申请成功,downloadUrl:{}",data.getString("downloadUrl"));
                 log.info("downloadToken:{}",data.getString("downloadToken"));
             }else{
@@ -259,14 +260,45 @@ public class XinUnionTest {
         }
     }
 
+    /**
+     * 付款对账文件申请
+     */
+    @Test
+    public void applyPayTest() {
+        try {
+            String keyId="ae06b5c8ffa73bc3bdb83c193082010a";
+            Map<String, String> business = new HashMap<>();
+//            business.put("partnerId", "1643703350196977666");//之前用的
+            business.put("partnerId", "1656438344850440193");
+
+            business.put("checkDt","2023-12-04");//
+            //文件类型 01-收单类 03-付款
+            business.put("billType", "03");
+            //CheckPayOrder-收单对账文件
+            String  respBody=common(business, "CheckPaymentOrder", "/api/wc/payTransaction",keyId);
+            JSONObject respData=JSONObject.parseObject(respBody);
+            JSONObject data=respData.getJSONObject("data");
+            //{"downloadUrl":"https://testrans.xlpayment.com/api/oss/merBill/2023-12-05/1656438344850440193_20231205013009_01.txt","downloadToken":"b7a652d5c8b252b0324915abd67f98267c7180db226fcbaff6ee50bf4d5a105b","fileMac":"aa912de994c493926faf2b5059de5e67","partnerId":"1656438344850440193"}
+            if(data!=null&& !StringUtils.isEmpty(data.getString("downloadUrl"))){
+                log.info("申请成功,downloadUrl:{}",data.getString("downloadUrl"));
+                log.info("downloadToken:{}",data.getString("downloadToken"));
+            }else{
+                log.info("申请失败:");
+            }
+            //{"code":200,"signature":"MIID/wYKKoEcz1UGAQQCAqCCA+8wggPrAgEBMQ4wDAYIKoEcz1UBgxEFADARBgoqgRzPVQYBBAIBoAMEAWOgggLrMIIC5zCCAougAwIBAgIFEEgICCYwDAYIKoEcz1UBg3UFADBcMQswCQYDVQQGEwJDTjEwMC4GA1UECgwnQ2hpbmEgRmluYW5jaWFsIENlcnRpZmljYXRpb24gQXV0aG9yaXR5MRswGQYDVQQDDBJDRkNBIFRFU1QgU00yIE9DQTEwHhcNMjIwMjA4MDgwODQ0WhcNMjIwODA4MDgwODQ0WjCBizELMAkGA1UEBhMCQ04xDDAKBgNVBAoMA0JPQzETMBEGA1UECwwKQ0ZDQVRlY2hURTEZMBcGA1UECwwQT3JnYW5pemF0aW9uYWwtMjE+MDwGA1UEAww1Q0ZDQVRlY2hURUDkv6HogZTmlK/ku5jlm73lr4blj4zor4HmtYvor5VAWjExMTExMTExQDEwWTATBgcqhkjOPQIBBggqgRzPVQGCLQNCAAR3CJx7gJheFkuIyrd9MkDU+fYXa2p/GX6+S3bwfzVR1T5NhpJzo9NKt0AjuGKUnJ5/2pMA6RqpvX79EiO2MQSoo4IBBjCCAQIwHwYDVR0jBBgwFoAUa/4Y2o9COqa4bbMuiIM6NKLBMOEwDAYDVR0TAQH/BAIwADBIBgNVHSAEQTA/MD0GCGCBHIbvKgEBMDEwLwYIKwYBBQUHAgEWI2h0dHA6Ly93d3cuY2ZjYS5jb20uY24vdXMvdXMtMTQuaHRtMDkGA1UdHwQyMDAwLqAsoCqGKGh0dHA6Ly91Y3JsLmNmY2EuY29tLmNuL1NNMi9jcmwyOTkxNS5jcmwwDgYDVR0PAQH/BAQDAgbAMB0GA1UdDgQWBBSZQYQ90WdD82Dt3CiE1anENsJQGjAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwDAYIKoEcz1UBg3UFAANIADBFAiEArrWzDB2I+z6jHswZJx6z3q7cgavXs4aq1K2mu+fV3doCIFskV5SJho4H7r8ub32dOryrpX4UR30m1Ul8mkXTCXhvMYHTMIHQAgEBMGUwXDELMAkGA1UEBhMCQ04xMDAuBgNVBAoMJ0NoaW5hIEZpbmFuY2lhbCBDZXJ0aWZpY2F0aW9uIEF1dGhvcml0eTEbMBkGA1UEAwwSQ0ZDQSBURVNUIFNNMiBPQ0ExAgUQSAgIJjAMBggqgRzPVQGDEQUAMA0GCSqBHM9VAYItAQUABEcwRQIgbMJa5LFAho1FzlN+24nfTubfVu1STuxlhwzd6GZ9PjYCIQDwkwMFB388ifjC83yGy5yQnj4aDKcNCeR64ywneEFshg==","message":"无可下载项","success":false,"signType":"SM2","status":"RRB-08000057"}
+            //{"code":200,"data":{"merCstNo":"1656319357076471813"}}
+        } catch (Exception e) {
+            log.error("出现异常", e);
+        }
+    }
 
     /**
      * 文件下载
      */
     @Test
     public void downloadFileTest() throws Exception{
-        String url = "https://testrans.xlpayment.com/api/oss/merBill/2023-12-05/1656438344850440193_20231205013009_01.txt";
-        downloadFile(url, "b7a652d5c8b252b0324915abd67f98267c7180db226fcbaff6ee50bf4d5a105b", "temp2", "1656438344850440193_20231205013009_01.txt");
+        String url = "https://testrans.xlpayment.com/api/oss/merBill/2023-12-06/1656438344850440193_20231206013010_01.txt";
+        downloadFile(url, "2a9ab1eecdac9f497026761bb7fe0d69798868efdfd9ad0fe7541578b4dd9700", "temp2", "1656438344850440193_20231206013010_01.txt");
     }
 
 

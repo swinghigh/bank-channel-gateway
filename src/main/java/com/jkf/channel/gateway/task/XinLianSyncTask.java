@@ -25,21 +25,27 @@ public class XinLianSyncTask {
     private ReconcileService reconcileService;
 
     /**
-     * 同步信联对账文件
+     * 同步信联对账文件 付款和结算
      * 每天1点执行一次
      */
     @Scheduled(cron = "0 0 1 * * ?")
-    public void downloadXinLianCheckFileTask() {
-        //昨天
-        DateTime dateTime = DateUtil.offsetDay(new Date(), -1);
-        String yestday = DateUtil.format(dateTime, "yyyyMMdd");
-        String key= "downloadXinLianCheckFileTask" + "-" + yestday;
-        boolean checkPayOrder = RedisUtil.setNx(key, "1", 10, TimeUnit.MINUTES);
-        if (checkPayOrder){
-            reconcileService.downloadXinLianCheckFile(yestday);
-        }else {
-            log.info("已有服务再执行");
+    public void downloadXinLianFileTask() {
+        String taskName = "downloadXinLianFileTask";
+        try {
+            //昨天
+            DateTime dateTime = DateUtil.offsetDay(new Date(), -1);
+            String yestday = DateUtil.format(dateTime, "yyyyMMdd");
+            String key = taskName + ":" + yestday;
+            boolean checkPayOrder = RedisUtil.setNx(key, "1", 10, TimeUnit.MINUTES);
+            if (checkPayOrder) {
+                reconcileService.downloadXinLianFile(yestday);
+            } else {
+                log.info("已有服务再执行");
+            }
+        } catch (Exception e) {
+            log.error(taskName + "同步对账文件（下载）任务异常", e);
         }
+
     }
 
     /**
@@ -48,15 +54,21 @@ public class XinLianSyncTask {
      */
     @Scheduled(cron = "0 30 1 * * ?")
     public void xinLianReconcileTask() {
-        //昨天
-        DateTime dateTime = DateUtil.offsetDay(new Date(), -1);
-        String yestday = DateUtil.format(dateTime, "yyyyMMdd");
-        String key= "xinLianReconcileTask" + "-" + yestday;
-        boolean reconcile = RedisUtil.setNx(key, "1", 10, TimeUnit.MINUTES);
-        if (reconcile){
-            reconcileService.xinLianReconcile(yestday);
-        }else {
-            log.info("已有服务再执行");
+        String taskName = "xinLianReconcileTask";
+        try {
+            //昨天
+            DateTime dateTime = DateUtil.offsetDay(new Date(), -1);
+            String yestday = DateUtil.format(dateTime, "yyyyMMdd");
+            String key = taskName + ":" + yestday;
+            boolean reconcile = RedisUtil.setNx(key, "1", 10, TimeUnit.MINUTES);
+            if (reconcile) {
+                reconcileService.xinLianReconcile(yestday);
+            } else {
+                log.info("已有服务再执行");
+            }
+        } catch (Exception e) {
+            log.error(taskName + "对账任务异常", e);
         }
+
     }
 }
