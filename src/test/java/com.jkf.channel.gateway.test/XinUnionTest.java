@@ -4,16 +4,23 @@ import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.http.ContentType;
 import cn.hutool.http.HttpResponse;
-import cn.hutool.json.JSONUtil;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jkf.channel.gateway.constant.ErrorCode;
 import com.jkf.channel.gateway.exception.BusinessException;
-import com.jkf.channel.gateway.utils.*;
+import com.jkf.channel.gateway.utils.GuoMIEncryptUtil;
+import com.jkf.channel.gateway.utils.GuoMISignUtils;
+import com.jkf.channel.gateway.utils.GuoMiCryptoUtils;
+import com.jkf.channel.gateway.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 
+import javax.net.ssl.*;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -222,4 +229,190 @@ public class XinUnionTest {
     }
 
 
+    /**
+     * 文件申请
+     */
+    @Test
+    public void applyTest() {
+        try {
+            String keyId="ae06b5c8ffa73bc3bdb83c193082010a";
+            Map<String, String> business = new HashMap<>();
+//            business.put("partnerId", "1643703350196977666");//之前用的
+            business.put("partnerId", "1656438344850440193");
+
+            business.put("checkDt","2023-12-05");//
+            business.put("billType", "01");//
+            //CheckPayOrder-收单对账文件
+            String  respBody=common(business, "CheckPayOrder", "/api/wc/payTransaction",keyId);
+            JSONObject respData=JSONObject.parseObject(respBody);
+            JSONObject data=respData.getJSONObject("data");
+            //{"downloadUrl":"https://testrans.xlpayment.com/api/oss/merBill/2023-12-05/1656438344850440193_20231205013009_01.txt","downloadToken":"b7a652d5c8b252b0324915abd67f98267c7180db226fcbaff6ee50bf4d5a105b","fileMac":"aa912de994c493926faf2b5059de5e67","partnerId":"1656438344850440193"}
+            if(data!=null&& !StringUtils.isEmpty(data.getString("data"))){
+                log.info("申请成功,downloadUrl:{}",data.getString("downloadUrl"));
+                log.info("downloadToken:{}",data.getString("downloadToken"));
+            }else{
+                log.info("申请失败:");
+            }
+            //{"code":200,"data":{"merCstNo":"1656319357076471813"}}
+        } catch (Exception e) {
+            log.error("出现异常", e);
+        }
+    }
+
+
+    /**
+     * 文件下载
+     */
+    @Test
+    public void downloadFileTest() throws Exception{
+        String url = "https://testrans.xlpayment.com/api/oss/merBill/2023-12-05/1656438344850440193_20231205013009_01.txt";
+        downloadFile(url, "b7a652d5c8b252b0324915abd67f98267c7180db226fcbaff6ee50bf4d5a105b", "temp2", "1656438344850440193_20231205013009_01.txt");
+    }
+
+
+
+    /**
+     * 下载信联文件
+     *
+     * @param fileURL
+     * @param downloadToken
+     * @param saveDir
+     * @param fileName
+     * @throws Exception
+     */
+    public static void downloadFile(String fileURL, String downloadToken, String saveDir, String fileName) throws Exception {
+
+        // 创建信任所有SSL证书的TrustManager
+        TrustManager[] trustAllCerts = new TrustManager[] {
+                new X509TrustManager() {
+                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                        return null;
+                    }
+                    public void checkClientTrusted(
+                            java.security.cert.X509Certificate[] certs, String authType) {
+                    }
+                    public void checkServerTrusted(
+                            java.security.cert.X509Certificate[] certs, String authType) {
+                    }
+                }
+        };
+
+        // 设置信任所有SSL证书的SSLContext
+        SSLContext sc = SSLContext.getInstance("TLS");
+        sc.init(null, trustAllCerts, new java.security.SecureRandom());
+
+        // 应用自定义的SSLContext
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+
+        // 创建URL对象
+        URL url = new URL(fileURL);
+
+        // 打开连接
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+        // 忽略SSL证书验证
+        if (conn instanceof HttpsURLConnection) {
+            ((HttpsURLConnection) conn).setHostnameVerifier(new HostnameVerifier() {
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            });
+        }
+
+        HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
+        httpConn.setRequestMethod("GET");
+
+        // 在header里面加downloadToken参数
+        httpConn.setRequestProperty("DownloadToken", downloadToken);
+        int responseCode = httpConn.getResponseCode();
+        // 检查服务器响应
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            //如果不存在,创建目录
+            File saveDirFile = new File(saveDir);
+            if (!saveDirFile.exists()) {
+                //可以创建多级目录
+                saveDirFile.mkdirs();
+//                log.info("The directory will be created at: " + saveDirFile.getAbsolutePath());
+            }
+            // 打开输入流
+            InputStream inputStream = httpConn.getInputStream();
+            String saveFilePath = saveDir + "/" + fileName;
+            // 打开输出流
+            FileOutputStream outputStream = new FileOutputStream(saveFilePath);
+            int bytesRead = -1;
+            byte[] buffer = new byte[4096];
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+
+            outputStream.close();
+            inputStream.close();
+            log.info("文件下载成功,fileName：{}", fileName);
+        } else {
+            log.info("文件下载失败.响应码 HTTP code: {}", responseCode);
+        }
+        httpConn.disconnect();
+    }
+
+
+    /**
+     * 解析文件
+     */
+    @Test
+    public void parseTextTest() {
+        String filePath = "temp2/1656438344850440193_20231205013009_01.txt";
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            String[] firstHeaders = null;
+            String[] secondHeaders = null;
+            int lineNum=1;
+            //第一种标题格式
+            ArrayList<String> firstHeaderList=new ArrayList<>();
+            ArrayList<String> firstHeaderValueList=new ArrayList<>();
+            Map<String,String> firstHeaderMap=new HashMap<>();
+            //第二种标题格式
+            ArrayList<String> secondHeaderList=new ArrayList<>();
+            ArrayList<ArrayList> secondHeaderValueListList=new ArrayList<>();
+            while ((line = br.readLine()) != null) {
+                if (lineNum==1) {
+                    // 处理第一种标题行
+                    firstHeaders = line.split("\\|",-1);
+                    firstHeaderList=new ArrayList(Arrays.asList(firstHeaders));
+                }else if (lineNum==2){
+                    //处理第一种标题行数据行
+                    String[] firstFields = line.split("\\|");
+                    firstHeaderValueList=new ArrayList(Arrays.asList(firstFields));
+                    for (int i = 0; i < firstHeaderList.size(); i++) {
+                        //标题行和数据对应
+                        firstHeaderMap.put(firstHeaderList.get(i),firstHeaderValueList.get(i));
+                    }
+                }else if (lineNum==3){
+                    // 处理第2种标题行
+                    secondHeaders = line.split("\\|");
+                    secondHeaderList=new ArrayList(Arrays.asList(secondHeaders));
+                    secondHeaderValueListList=new ArrayList<>(secondHeaderList.size());
+                    // 创建 secondHeaders.length 个空的 ArrayList
+                    for (int i = 0; i < secondHeaders.length; i++) {
+                        secondHeaderValueListList.add(new ArrayList<>());
+                    }
+                }else {
+                    // 处理第2种标题行和数据
+                    String[] secondFields = line.split("\\|",-1);
+                    // 将标题行的数据和数据行的数据对应起来
+                    Map<String, String> dataMap = new HashMap<>();
+                    for (int i = 0; i < secondHeaders.length; i++) {
+                        secondHeaderValueListList.get(i).add(secondFields[i]);
+                       log.info("secondHeaders:{},secondFields:{}", secondHeaders[i],secondFields[i]);
+                    }
+                }
+                lineNum++;
+            }
+
+            log.info("firstHeaderMap:{}，secondHeaderValueListList：{}",firstHeaderMap,secondHeaderValueListList);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

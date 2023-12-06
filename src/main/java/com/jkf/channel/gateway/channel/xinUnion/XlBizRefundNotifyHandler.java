@@ -6,7 +6,6 @@ import cn.hutool.json.JSONUtil;
 import com.jkf.channel.gateway.constant.XlBizTypeNotifyEnum;
 import com.jkf.channel.gateway.entity.*;
 import com.jkf.channel.gateway.service.*;
-import com.jkf.channel.gateway.utils.xinwang.XinWangSignUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,13 +67,14 @@ public class XlBizRefundNotifyHandler implements IXlBizNotifyHandler{
         String refundSuccTime = bussRespDataObj.getStr("refundSuccTime");
         //交易结果描述
         String messageDesc = bussRespDataObj.getStr("messageDesc");
-
+        //交易订单号，商户退款对应的原订单号（信联唯一，对应我们系统的channelOrderNo）
+        String oriOrderId = bussRespDataObj.getStr("oriOrderId");
         //查商户信息
         ChannelMchtXl channelMchtXl = channelMchtXlService.getByChannelMchtNo(partnerId);
         //重复通知
-        OrderInfo oriOrderInfo = orderInfoService.selectByOutSerial(refundOrderId);
+        OrderInfo oriOrderInfo = orderInfoService.selectByChannelOrderNo(refundOrderId);
         if (ObjectUtil.isNotEmpty(oriOrderInfo)){
-            log.info("已处理outSerial：{}",refundOrderId);
+            log.info("已处理channelOrderNo：{}",refundOrderId);
             return;
         }
 
@@ -88,6 +88,8 @@ public class XlBizRefundNotifyHandler implements IXlBizNotifyHandler{
         orderInfo.setSerial(uuid);
         //系统外部单号 == 服务商或代理
         orderInfo.setOutSerial(refundOrderId);
+        //渠道订单号，信联唯一
+        orderInfo.setChannelOrderNo(refundOrderId);
         //外部商户号 == 服务商或代理
         orderInfo.setOutMchId(mchInfo.getOutMchNo());
         //系统商户号
@@ -104,8 +106,19 @@ public class XlBizRefundNotifyHandler implements IXlBizNotifyHandler{
         orderInfo.setMchName(mchInfo.getMchName());
         orderInfo.setChannelId(channelMchtXl.getChannelId());
         orderInfo.setChannelMchNo(channelMchtXl.getChannelMchtNo());
-        //退款订单的原系统单号
-        orderInfo.setOrigSerial(refundOrderId);
+        //TODO 查到原来的交易订单，然后把serial 存到 origSerial字段里面，做关联
+        OrderInfo tradeOrderInfo = orderInfoService.selectByChannelOrderNo(oriOrderId);
+        if (tradeOrderInfo!=null){
+            //退款订单的原系统单号
+            orderInfo.setOrigSerial(tradeOrderInfo.getSerial());
+            orderInfo.setProduct(tradeOrderInfo.getProduct());
+            orderInfo.setSubProduct(tradeOrderInfo.getSubProduct());
+            //原交易的退款状态也修改为 全额退款成功  或者新增字段，表示交易已退款
+            OrderInfo updateOrderInfo=new OrderInfo();
+            updateOrderInfo.setId(tradeOrderInfo.getId());
+            updateOrderInfo.setRefundStatus("2");
+            orderInfoService.updateByPrimaryKeySelective(updateOrderInfo);
+        }
         //订单类型 1交易订单 2退款订单3预授权4分账订单
         orderInfo.setOrderType("2");
 
@@ -129,8 +142,9 @@ public class XlBizRefundNotifyHandler implements IXlBizNotifyHandler{
             orderInfo.setTradeStatus("1");
             tradeSuccess = true;
         }
-        //退款状态:0未发起 1部分退款成功 2全额退款成功
-        orderInfo.setRefundStatus("2");
+//        //退款状态 在退款订单里面不体现
+//        //退款状态:0未发起 1部分退款成功 2全额退款成功
+//        orderInfo.setRefundStatus("2");
         orderInfo.setRemark(messageDesc);
         //订单来源 api 接口 notify 推送
         orderInfo.setOrderSource("notify");

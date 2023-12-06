@@ -58,7 +58,7 @@ public class XlBizPayNotifyHandler implements IXlBizNotifyHandler{
         //进件的时候是服务商编号 这里是商户号 通过此商户号查相关信息
         //商户编号信联支付给合作商户分配的唯一标识
         String partnerId = bussRespDataObj.getStr("partnerId");
-        //原商户订单号 我们系统的订单id
+        //原商户订单号 信联的订单号(我们系统对应channelOrderNo和outSerial)
         String oriOrderId = bussRespDataObj.getStr("oriOrderId");
         String trxAmt = bussRespDataObj.getStr("trxAmt");
         //交易状态 70:交易失败，90:交易成功
@@ -80,9 +80,9 @@ public class XlBizPayNotifyHandler implements IXlBizNotifyHandler{
         Long mchId = channelMchtXl.getMchId();
         MchInfo mchInfo = mchInfoService.selectByPrimaryKey(mchId);
         //重复通知
-        OrderInfo oriOrderInfo = orderInfoService.selectByOutSerial(oriOrderId);
+        OrderInfo oriOrderInfo = orderInfoService.selectByChannelOrderNo(oriOrderId);
         if (ObjectUtil.isNotEmpty(oriOrderInfo)) {
-            log.info("已处理outSerial：{}", oriOrderId);
+            log.info("已处理channelOrderNo：{}", oriOrderId);
             return;
         }
 
@@ -91,8 +91,10 @@ public class XlBizPayNotifyHandler implements IXlBizNotifyHandler{
         //系统订单号(订单唯一标识) 32位
         String uuid = UUID.randomUUID().toString().replace("-", "");
         orderInfo.setSerial(uuid);
-        //系统外部单号 == 服务商或代理
+        //系统外部单号 == 服务商或代理  对接我们的商户请求我们的订单
         orderInfo.setOutSerial(oriOrderId);
+        //信联的唯一订单号 我们请求别人（如信联）对应他们的唯一订单号
+        orderInfo.setChannelOrderNo(oriOrderId);
         //外部商户号 == 服务商或代理
         orderInfo.setOutMchId(mchInfo.getOutMchNo());
         //系统商户号
@@ -150,8 +152,8 @@ public class XlBizPayNotifyHandler implements IXlBizNotifyHandler{
         } else if ("90".equals(trxStatus)) {
             //订单日期yyyyMMdd 交易时间截取前8位
             orderInfo.setOrderDate(oriTrxDtTm.substring(0, 8));
-            //订单完成时间  未传入 这里存 传入的清算时间的yyMMdd
-            orderInfo.setFinishTime(settlemtDt);
+            //订单完成时间  未传入 这里存 传入交易成功时间
+            orderInfo.setFinishTime(oriTrxDtTm);
             orderInfo.setTradeStatus("1");
             tradeSuccess = true;
         }

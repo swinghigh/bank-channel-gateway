@@ -69,8 +69,12 @@ public class NotifyService {
                             //外部商户号，业务方的商户号
                             map.put("outMchId",orderInfo.getOutMchId());
 
-                            //oriOrderId 外部订单号
-                            map.put("oriOrderId",orderInfo.getOutSerial());
+                            //平台订单号（科旅）
+                            map.put("serial",orderInfo.getSerial());
+                            //机构订单号（如首付）
+                            map.put("outSerial",orderInfo.getOutSerial());
+                            //渠道订单号（如信联）
+                            map.put("channelOrderNo",orderInfo.getChannelOrderNo());
 
                             //本系统 产品类型:A支付宝,W微信,U银联
                             map.put("product",orderInfo.getProduct());
@@ -93,8 +97,22 @@ public class NotifyService {
                             //外部商户号，业务方的商户号
                             map.put("outMchId",orderInfo.getOutMchId());
 
-                            //商户退款订单号
-                            map.put("orderId",orderInfo.getOutSerial());
+                            //平台订单号（科旅）
+                            map.put("serial",orderInfo.getSerial());
+                            //机构订单号（如首付）
+                            map.put("outSerial",orderInfo.getOutSerial());
+                            //渠道订单号（如信联）
+                            map.put("channelOrderNo",orderInfo.getChannelOrderNo());
+                            //原交易订单号
+                            map.put("origSerial",orderInfo.getOrigSerial());
+                            //本系统 产品类型:A支付宝,W微信,U银联
+                            map.put("product",orderInfo.getProduct());
+                            //本系统 子产品类型:
+                            // W01-微信扫码支付W02-微信公众号支付W03-微信刷卡（反扫）W04-微信H5支付W05-微信APP支付W06-微信小程序
+                            // A01-支付宝扫码支付A02-支付宝刷卡支付A03-支付窗支付A04-支付宝APP支付
+                            // U01-银联二维码扫码支付
+                            map.put("subProduct",orderInfo.getSubProduct());
+
                             // 交易金额 单位分
                             map.put("refundAmount",orderInfo.getOrderAmount());
                             // 交易日期 交易成功时有值 格式yyyyMMdd

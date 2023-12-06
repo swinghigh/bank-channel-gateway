@@ -44,4 +44,32 @@ public class OrderInfoService {
             return null;
         }
     }
+
+    /**
+     * 通过渠道订单号（在信联唯一），查订单
+     * @param channelOrderNo
+     * @return
+     */
+    public OrderInfo selectByChannelOrderNo(String channelOrderNo){
+        OrderInfoExample example=new OrderInfoExample();
+        OrderInfoExample.Criteria criteria = example.createCriteria();
+        criteria.andChannelOrderNoEqualTo(channelOrderNo);
+
+        List<OrderInfo> orderInfos = orderInfoMapper.selectByExample(example);
+        if (CollUtil.isNotEmpty(orderInfos)){
+            return orderInfos.get(0);
+        }else {
+            return null;
+        }
+    }
+
+    /**
+     * 根据
+     * @param orderInfo
+     * @return
+     */
+    public int updateByPrimaryKeySelective(OrderInfo orderInfo){
+        return orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+    }
+
 }
