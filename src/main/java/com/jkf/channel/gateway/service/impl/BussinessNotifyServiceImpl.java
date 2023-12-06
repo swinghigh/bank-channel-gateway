@@ -135,8 +135,13 @@ public class BussinessNotifyServiceImpl implements IBussinessNotifyService {
         }else{
             if(Integer.parseInt(notifyVo.getCurrentCount())<Integer.parseInt(notifyVo.getMaxCount())){
                 notifyVo.setCurrentCount(Integer.parseInt(notifyVo.getCurrentCount())+1+"");
+                log.info("加入redis重新处理{}",notifyVo.getNotifyUrl());
                 //将信息加入redis,
-                RedisUtil.zset(RedisConstants.REDIS_NOTIFY_SET,getNextTime(notifyVo.getCurrentCount()),JsonUtils.toJson(notifyVo));
+                long time=getNextTime(notifyVo.getCurrentCount());
+                log.info("下一次的次数:{}下次的执行时间:{}",notifyVo.getCurrentCount(),time);
+                RedisUtil.zset(RedisConstants.REDIS_NOTIFY_SET,time,JsonUtils.toJson(notifyVo));
+            }else{
+                log.info("达到处理的上线");
             }
         }
     }
@@ -149,13 +154,16 @@ public class BussinessNotifyServiceImpl implements IBussinessNotifyService {
     private Long getNextTime(String nextCount){
         if(Integer.parseInt(nextCount)<=3){
             //当前时间加30秒
-            return DateUtil.getDateByCutDayAfterSecond(30).getTime();
+//            return DateUtil.getDateByCutDayAfterSecond(30).getTime();
+            return System.currentTimeMillis()+10*1000;
         }else if(Integer.parseInt(nextCount)<=5){
             //当前时间加2分钟
-           return DateUtil.getDateByCutDayAfterMinute(2).getTime();
+//           return DateUtil.getDateByCutDayAfterMinute(2).getTime();
+            return System.currentTimeMillis()+60*1000*2;
         }else{
             //当前时间加10分钟
-            return DateUtil.getDateByCutDayAfterMinute(10).getTime();
+//            return DateUtil.getDateByCutDayAfterMinute(10).getTime();
+            return System.currentTimeMillis()+60*1000*10;
         }
     }
 }

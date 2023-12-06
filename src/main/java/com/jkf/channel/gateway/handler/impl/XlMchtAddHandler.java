@@ -11,6 +11,7 @@ import com.jkf.channel.gateway.dao.MchUserInfoMapper;
 import com.jkf.channel.gateway.entity.*;
 import com.jkf.channel.gateway.exception.BusinessException;
 import com.jkf.channel.gateway.handler.IOpenHandler;
+import com.jkf.channel.gateway.service.IVirtualAccountService;
 import com.jkf.channel.gateway.utils.AESUtil;
 import com.jkf.channel.gateway.utils.AssertUtils;
 import com.jkf.channel.gateway.utils.MchtUtils;
@@ -41,6 +42,8 @@ public class XlMchtAddHandler implements IOpenHandler {
     private AgentInfoMapper agentInfoMapper;
     @Autowired
     private IXlService xlService;
+    @Autowired
+    private IVirtualAccountService virtualAccountService;
     @Override
     public String getMethod() {
         return OpenMethodEnum.XL_MCHT_ADD.getMethod();
@@ -117,6 +120,7 @@ public class XlMchtAddHandler implements IOpenHandler {
             mchInfo.setCreateId(0L);
             mchInfo.setCreateTime(new Date());
             mchInfoMapper.insertSelective(mchInfo);
+            mchInfo.setVirtualNo(virtualAccountService.createAccount("1"));
             mchInfo.setMchNo("M" + (10000000 + mchInfo.getId()));
             //创建一个默认的用户
             //创建一个默认的商户登录用户
@@ -170,7 +174,7 @@ public class XlMchtAddHandler implements IOpenHandler {
         record.setOrgId(jsonObject.getLong("orgId"));
         record.setUserName(jsonObject.getString("username"));
         record.setUserNick(jsonObject.getString("username"));
-        record.setUserPhone(jsonObject.getString("username"));
+        record.setUserPhone(AESUtil.encrypt(jsonObject.getString("username"), AESUtil.key));
         record.setUserLogin(mchInfo.getMchNo());
         record.setUserPassword(AESUtil.encrypt(jsonObject.getString("loginPwd"), AESUtil.key));
 //        record.setUserEmail(jsonObject.getString("contactEmail"));

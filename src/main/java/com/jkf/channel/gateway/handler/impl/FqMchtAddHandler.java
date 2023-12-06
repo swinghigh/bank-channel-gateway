@@ -146,7 +146,7 @@ public class FqMchtAddHandler implements IOpenHandler {
         record.setOrgId(jsonObject.getLong("orgId"));
         record.setUserName(jsonObject.getString("contactName"));
         record.setUserNick(jsonObject.getString("contactName"));
-        record.setUserPhone(jsonObject.getString("contactPhone"));
+        record.setUserPhone(AESUtil.encrypt(jsonObject.getString("contactPhone"), AESUtil.key));
         record.setUserLogin(mchInfo.getMchNo());
         record.setUserPassword(AESUtil.encrypt("123456", AESUtil.key));
         record.setUserEmail(jsonObject.getString("contactEmail"));

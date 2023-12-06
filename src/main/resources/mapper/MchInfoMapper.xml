@@ -51,6 +51,7 @@
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="update_id" property="updateId" jdbcType="BIGINT" />
     <result column="channel_id" property="channelId" jdbcType="BIGINT" />
+    <result column="virtual_no" property="virtualNo" jdbcType="VARCHAR"/>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -119,7 +120,7 @@
     legal_cert_address, contact_name, contact_cert_type, contact_cert_no, contact_phone, 
     contact_expire_start, contact_expire_end, contact_address, contact_email, remark, 
     check_remark, pass_time, mch_source, settle_cycle, create_time, create_id, update_time, 
-    update_id,channel_id
+    update_id,channel_id, virtual_no
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jkf.channel.gateway.entity.MchInfoExample" >
     select
@@ -170,7 +171,7 @@
       contact_email, remark, check_remark, 
       pass_time, mch_source, settle_cycle, 
       create_time, create_id, update_time, 
-      update_id,channel_id)
+      update_id,channel_id, virtual_no)
     values (#{id,jdbcType=BIGINT}, #{outMchNo,jdbcType=VARCHAR}, #{mchNo,jdbcType=VARCHAR}, 
       #{orgId,jdbcType=BIGINT}, #{agentId,jdbcType=BIGINT}, #{mchName,jdbcType=VARCHAR}, 
       #{userAdminId,jdbcType=BIGINT}, #{mchStatus,jdbcType=CHAR}, #{mchType,jdbcType=CHAR}, 
@@ -187,7 +188,7 @@
       #{contactEmail,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{checkRemark,jdbcType=VARCHAR}, 
       #{passTime,jdbcType=VARCHAR}, #{mchSource,jdbcType=VARCHAR}, #{settleCycle,jdbcType=CHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{createId,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{updateId,jdbcType=BIGINT},#{channelId,jdbcType=BIGINT})
+      #{updateId,jdbcType=BIGINT},#{channelId,jdbcType=BIGINT}, #{virtualNo,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jkf.channel.gateway.entity.MchInfo" useGeneratedKeys="true"
           keyProperty="id">
@@ -340,6 +341,9 @@
       <if test="channelId != null" >
         channel_id,
       </if>
+      <if test="virtualNo != null">
+        virtual_no,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -488,6 +492,9 @@
       </if>
       <if test="channelId != null" >
         #{channelId,jdbcType=BIGINT},
+      </if>
+      <if test="virtualNo != null">
+        #{virtualNo,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -647,6 +654,9 @@
       <if test="record.channelId != null" >
         channel_id = #{record.channelId,jdbcType=BIGINT},
       </if>
+      <if test="record.virtualNo != null">
+        virtual_no = #{record.virtualNo,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -702,7 +712,8 @@
       create_id = #{record.createId,jdbcType=BIGINT},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       update_id = #{record.updateId,jdbcType=BIGINT},
-      channel_id=#{record.channelId,jdbcType=BIGINT}
+      channel_id=#{record.channelId,jdbcType=BIGINT},
+      virtual_no = #{record.virtualNo,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -854,6 +865,9 @@
       <if test="channelId != null" >
         channel_id = #{channelId,jdbcType=BIGINT},
       </if>
+      <if test="virtualNo != null">
+        virtual_no = #{virtualNo,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -906,7 +920,8 @@
       create_id = #{createId,jdbcType=BIGINT},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       update_id = #{updateId,jdbcType=BIGINT},
-      channel_id = #{channelId,jdbcType=BIGINT}
+      channel_id = #{channelId,jdbcType=BIGINT},
+      virtual_no = #{virtualNo,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
