@@ -35,3 +35,8 @@ mvc:
 logging:
   config: classpath:logback.xml
 
+file:
+  #文件访问地址
+  imgUrl: http://192.168.1.111:9888/
+  #文件下载缓存目录
+  temp: /home/file/

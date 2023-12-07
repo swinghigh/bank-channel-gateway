@@ -140,7 +140,7 @@ public class XlBizPayNotifyHandler implements IXlBizNotifyHandler{
         OrgInfo orgInfo = orgInfoService.selectByPrimaryKey(mchInfo.getOrgId());
         String orgNo = orgInfo.getOrgNo();
         OrgInterfceKey orgInterfceKey = orgInterfceKeyService.getFromCache(orgNo);
-        String payNotifyUrl = orgInterfceKey.getPayNotifyUrl();
+        String payNotifyUrl = channelMchtXl.getNotifyUrl();
         //订单通知地址   配置
         orderInfo.setNotifyUrl(payNotifyUrl);
         //交易金额,分
@@ -177,6 +177,7 @@ public class XlBizPayNotifyHandler implements IXlBizNotifyHandler{
             orderNotifyLog.setOrgId(mchInfo.getOrgId());
             orderNotifyLog.setNotifyUrl(payNotifyUrl);
             orderNotifyLog.setNotifyCount(0);
+            orderNotifyLog.setRetryTime(new Date());
             //定时任务重试标识 0未重试1重试
             orderNotifyLog.setRetryFlag("0");
 ////            重试时间

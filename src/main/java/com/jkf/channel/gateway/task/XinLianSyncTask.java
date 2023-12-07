@@ -70,5 +70,7 @@ public class XinLianSyncTask {
             log.error(taskName + "对账任务异常", e);
         }
 
+        log.info(taskName+"任务执行完毕");
+
     }
 }

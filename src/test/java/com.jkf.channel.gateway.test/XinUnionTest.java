@@ -2,6 +2,7 @@ package com.jkf.channel.gateway.test;
 
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.ContentType;
 import cn.hutool.http.HttpResponse;
 import com.alibaba.fastjson.JSONObject;
@@ -136,6 +137,9 @@ public class XinUnionTest {
     static String PAY_CENTER_GATEWAY = "https://testrans.xlpayment.com/";
     //敏感信息使用sm4加密
 
+    //合作伙伴id 通过注册后获得的
+    static String partnerId="1656438344850440193";
+
     private String common(Map<String, String> business, String bizType, String path,String keyId) {
         business.put("timestamp", System.currentTimeMillis() + "");
         business.put("random", UUID.fastUUID().toString(true));
@@ -261,17 +265,17 @@ public class XinUnionTest {
     }
 
     /**
-     * 付款对账文件申请
+     * 付款对账文件申请 D0 调用的是1.52接口 billType传03，bizType传CheckPaymentOrder
+     * @param date  2023-12-04
+     * @param partnerId  合作伙伴id 信联唯一商户号 channelMchtNo
      */
-    @Test
-    public void applyPayTest() {
+    public Map<String,String> applyCheckPaymentOrderTest(String date,String partnerId) {
+        Map<String,String> map=new HashMap<>();
         try {
             String keyId="ae06b5c8ffa73bc3bdb83c193082010a";
             Map<String, String> business = new HashMap<>();
-//            business.put("partnerId", "1643703350196977666");//之前用的
-            business.put("partnerId", "1656438344850440193");
-
-            business.put("checkDt","2023-12-04");//
+            business.put("partnerId", partnerId);
+            business.put("checkDt",date);//yyyy-MM-dd
             //文件类型 01-收单类 03-付款
             business.put("billType", "03");
             //CheckPayOrder-收单对账文件
@@ -282,6 +286,45 @@ public class XinUnionTest {
             if(data!=null&& !StringUtils.isEmpty(data.getString("downloadUrl"))){
                 log.info("申请成功,downloadUrl:{}",data.getString("downloadUrl"));
                 log.info("downloadToken:{}",data.getString("downloadToken"));
+                map.put("downloadUrl",data.getString("downloadUrl"));
+                map.put("downloadToken",data.getString("downloadToken"));
+                return map;
+            }else{
+                log.info("申请失败:{}",data);
+            }
+            //{"code":200,"signature":"MIID/wYKKoEcz1UGAQQCAqCCA+8wggPrAgEBMQ4wDAYIKoEcz1UBgxEFADARBgoqgRzPVQYBBAIBoAMEAWOgggLrMIIC5zCCAougAwIBAgIFEEgICCYwDAYIKoEcz1UBg3UFADBcMQswCQYDVQQGEwJDTjEwMC4GA1UECgwnQ2hpbmEgRmluYW5jaWFsIENlcnRpZmljYXRpb24gQXV0aG9yaXR5MRswGQYDVQQDDBJDRkNBIFRFU1QgU00yIE9DQTEwHhcNMjIwMjA4MDgwODQ0WhcNMjIwODA4MDgwODQ0WjCBizELMAkGA1UEBhMCQ04xDDAKBgNVBAoMA0JPQzETMBEGA1UECwwKQ0ZDQVRlY2hURTEZMBcGA1UECwwQT3JnYW5pemF0aW9uYWwtMjE+MDwGA1UEAww1Q0ZDQVRlY2hURUDkv6HogZTmlK/ku5jlm73lr4blj4zor4HmtYvor5VAWjExMTExMTExQDEwWTATBgcqhkjOPQIBBggqgRzPVQGCLQNCAAR3CJx7gJheFkuIyrd9MkDU+fYXa2p/GX6+S3bwfzVR1T5NhpJzo9NKt0AjuGKUnJ5/2pMA6RqpvX79EiO2MQSoo4IBBjCCAQIwHwYDVR0jBBgwFoAUa/4Y2o9COqa4bbMuiIM6NKLBMOEwDAYDVR0TAQH/BAIwADBIBgNVHSAEQTA/MD0GCGCBHIbvKgEBMDEwLwYIKwYBBQUHAgEWI2h0dHA6Ly93d3cuY2ZjYS5jb20uY24vdXMvdXMtMTQuaHRtMDkGA1UdHwQyMDAwLqAsoCqGKGh0dHA6Ly91Y3JsLmNmY2EuY29tLmNuL1NNMi9jcmwyOTkxNS5jcmwwDgYDVR0PAQH/BAQDAgbAMB0GA1UdDgQWBBSZQYQ90WdD82Dt3CiE1anENsJQGjAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwDAYIKoEcz1UBg3UFAANIADBFAiEArrWzDB2I+z6jHswZJx6z3q7cgavXs4aq1K2mu+fV3doCIFskV5SJho4H7r8ub32dOryrpX4UR30m1Ul8mkXTCXhvMYHTMIHQAgEBMGUwXDELMAkGA1UEBhMCQ04xMDAuBgNVBAoMJ0NoaW5hIEZpbmFuY2lhbCBDZXJ0aWZpY2F0aW9uIEF1dGhvcml0eTEbMBkGA1UEAwwSQ0ZDQSBURVNUIFNNMiBPQ0ExAgUQSAgIJjAMBggqgRzPVQGDEQUAMA0GCSqBHM9VAYItAQUABEcwRQIgbMJa5LFAho1FzlN+24nfTubfVu1STuxlhwzd6GZ9PjYCIQDwkwMFB388ifjC83yGy5yQnj4aDKcNCeR64ywneEFshg==","message":"无可下载项","success":false,"signType":"SM2","status":"RRB-08000057"}
+            //{"code":200,"data":{"merCstNo":"1656319357076471813"}}
+        } catch (Exception e) {
+            log.error("出现异常", e);
+        }
+        return map;
+    }
+
+    /**
+     * 付款对账文件申请 T1 调用的是1.51接口 billType传01，bizType传CheckPayOrder
+     * @param date  2023-12-04
+     * @param partnerId  合作伙伴id 信联唯一商户号 channelMchtNo
+     */
+    public Map<String,String> applyCheckPayOrderTest(String date,String partnerId) {
+        Map<String,String> map=new HashMap<>();
+        try {
+            String keyId="ae06b5c8ffa73bc3bdb83c193082010a";
+            Map<String, String> business = new HashMap<>();
+            business.put("partnerId", partnerId);
+            business.put("checkDt",date);//yyyy-MM-dd
+            //文件类型 01-收单类 03-付款
+            business.put("billType", "01");
+            //CheckPayOrder-收单对账文件
+            String  respBody=common(business, "CheckPayOrder", "/api/wc/payTransaction",keyId);
+            JSONObject respData=JSONObject.parseObject(respBody);
+            JSONObject data=respData.getJSONObject("data");
+            //{"downloadUrl":"https://testrans.xlpayment.com/api/oss/merBill/2023-12-05/1656438344850440193_20231205013009_01.txt","downloadToken":"b7a652d5c8b252b0324915abd67f98267c7180db226fcbaff6ee50bf4d5a105b","fileMac":"aa912de994c493926faf2b5059de5e67","partnerId":"1656438344850440193"}
+            if(data!=null&& !StringUtils.isEmpty(data.getString("downloadUrl"))){
+                log.info("申请成功,downloadUrl:{}",data.getString("downloadUrl"));
+                log.info("downloadToken:{}",data.getString("downloadToken"));
+                map.put("downloadUrl",data.getString("downloadUrl"));
+                map.put("downloadToken",data.getString("downloadToken"));
+                return map;
             }else{
                 log.info("申请失败:");
             }
@@ -290,6 +333,7 @@ public class XinUnionTest {
         } catch (Exception e) {
             log.error("出现异常", e);
         }
+        return null;
     }
 
     /**
@@ -297,10 +341,20 @@ public class XinUnionTest {
      */
     @Test
     public void downloadFileTest() throws Exception{
-        String url = "https://testrans.xlpayment.com/api/oss/merBill/2023-12-06/1656438344850440193_20231206013010_01.txt";
-        downloadFile(url, "2a9ab1eecdac9f497026761bb7fe0d69798868efdfd9ad0fe7541578b4dd9700", "temp2", "1656438344850440193_20231206013010_01.txt");
+        //下载日期
+        String date="2023-12-06";
+//        Map<String, String> map = applyCheckPaymentOrderTest(date,partnerId);
+        Map<String, String> map = applyCheckPayOrderTest(date,partnerId);
+        if (StrUtil.isNotEmpty(map.get("downloadUrl"))){
+            //        String url = "https://testrans.xlpayment.com/api/oss/merBill/2023-12-06/1656438344850440193_20231206013010_01.txt";
+            String url =map.get("downloadUrl");
+            String downloadToken = map.get("downloadToken");
+            String fileName=partnerId+"_"+date+"_"+"01"+".txt";;
+            downloadFile(url, downloadToken, "temp2", fileName);
+        }else {
+            log.info("申请文件失败");
+        }
     }
-
 
 
     /**
@@ -359,6 +413,7 @@ public class XinUnionTest {
         int responseCode = httpConn.getResponseCode();
         // 检查服务器响应
         if (responseCode == HttpURLConnection.HTTP_OK) {
+
             //如果不存在,创建目录
             File saveDirFile = new File(saveDir);
             if (!saveDirFile.exists()) {
@@ -380,6 +435,7 @@ public class XinUnionTest {
             outputStream.close();
             inputStream.close();
             log.info("文件下载成功,fileName：{}", fileName);
+
         } else {
             log.info("文件下载失败.响应码 HTTP code: {}", responseCode);
         }

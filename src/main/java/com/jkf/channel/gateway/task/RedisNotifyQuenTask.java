@@ -1,13 +1,10 @@
 package com.jkf.channel.gateway.task;
 
 import com.jkf.channel.gateway.constant.RedisConstants;
-import com.jkf.channel.gateway.entity.RequestLog;
 import com.jkf.channel.gateway.service.IBussinessNotifyService;
-import com.jkf.channel.gateway.utils.DateUtil;
 import com.jkf.channel.gateway.utils.JsonUtils;
 import com.jkf.channel.gateway.utils.RedisUtil;
 import com.jkf.channel.gateway.vo.NotifyVo;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +13,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.util.ObjectUtils;
 
-import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -43,7 +39,7 @@ public class RedisNotifyQuenTask {
         //将redis中的数据保存到数据库
 //        long timeMillis = DateUtil.getDateByCutDayAfterSecond(0).getTime();
         long timeMillis = System.currentTimeMillis();
-        log.info("本次执行的最大值:{}",timeMillis);
+//        log.info("本次执行的最大值:{}",timeMillis);
         ZSetOperations<String, String> set = RedisUtil.getZSetOperations();
         //获取缓存中的数据,获取比当前排序值小的数据取出来
         /*Set<String> list = set.rangeByScore(RedisConstants.REDIS_NOTIFY_SET, 0, timeMillis);
@@ -75,14 +71,12 @@ public class RedisNotifyQuenTask {
 */
         Set<ZSetOperations.TypedTuple<String>> listTest = set.rangeByScoreWithScores(RedisConstants.REDIS_NOTIFY_SET, 0, timeMillis);
         if (ObjectUtils.isEmpty(listTest)) {
-            log.info("有序集合集合中获取的数据为空");
+//            log.info("有序集合集合中获取的数据为空");
+            return;
         } else {
             log.info("有序集合集合中获取的数据为:{}", listTest.size());
         }
-        if (ObjectUtils.isEmpty(listTest)) {
-            log.info("集合中获取的数据为空");
-            return;
-        }
+
         Iterator<ZSetOperations.TypedTuple<String>> iterator = listTest.iterator();
         while (iterator.hasNext()) {
             ZSetOperations.TypedTuple<String> tuple = iterator.next();

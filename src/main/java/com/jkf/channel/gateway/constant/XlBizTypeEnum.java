@@ -8,7 +8,9 @@ import lombok.Getter;
  */
 @Getter
 public enum XlBizTypeEnum {
+    //T1对账
     CheckPayOrder("CheckPayOrder", "收单对账文件"),
+    //D0对账
     CheckPaymentOrder("CheckPaymentOrder", "付款对账文件"),
 
     ;

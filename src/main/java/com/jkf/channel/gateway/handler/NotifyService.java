@@ -49,6 +49,7 @@ public class NotifyService {
     /**
      * 通知到业务系统
      * 不用事务，业务方做    重复通知幂等处理
+     * 失败通知时间计算 次数的3次方 * 1分钟  1, 8, 27, 64, 125, 216, 343, 512, 729, 1000
      */
     public void noticeOrderNotifyLog(){
         List<OrderNotifyLog> orderNotifyLogList = orderNotifyLogService.selectNeedNoticeList();
@@ -126,7 +127,6 @@ public class NotifyService {
                             return;
                         }
                         OrderNotifyLog updateEntity=new OrderNotifyLog();
-                        updateEntity.setRetryTime(new Date());
                         updateEntity.setRetryFlag("1");
 
                         Long orgId = orderNotifyLog.getOrgId();
@@ -150,7 +150,7 @@ public class NotifyService {
                         result.put("sign", RSAUtil.sign(result, platPrivateKey));
                         log.info("通知地址：{}，请求数据:{}",orderNotifyLog.getNotifyUrl(),result.toString());
                         //请求业务方
-                        String response = HttpUtil.sendPost(orderNotifyLog.getNotifyUrl(), result.toString());
+                        String response = HttpUtil.sendJson(orderNotifyLog.getNotifyUrl(), JSONObject.toJSONString(result));
                         log.info("响应response:{}",response);
                         boolean dealSucces=false;
                         if (StringUtils.isNotEmpty(response)) {
@@ -176,12 +176,36 @@ public class NotifyService {
                             }else {
                                 //置为 未通知，下次任务再查
                                 updateEntity.setNotifyStatus("0");
+                                //通知时间计算 次数的3次方 * 60秒
+                                int intervalMillis=notifyCount * notifyCount * notifyCount * 60 * 1000;
+                                long nextMillis = System.currentTimeMillis() + intervalMillis;
+                                Date nextDate=new Date(nextMillis);
+                                updateEntity.setRetryTime(nextDate);
                             }
                             updateEntity.setUpdateTime(new Date());
                         }
                         orderNotifyLogService.updateByPrimaryKeySelective(updateEntity);
                     } catch (Exception e) {
                         log.error("noticeOrderNotifyLog发生异常,Exception",e);
+                        OrderNotifyLog updateEntity=new OrderNotifyLog();
+                        updateEntity.setId(orderNotifyLog.getId());
+                        updateEntity.setRetryFlag("1");
+                        Integer notifyCount = orderNotifyLog.getNotifyCount();
+                        updateEntity.setNotifyCount(notifyCount+1);
+                        if (notifyCount >= 9){
+                            //之前已经通知了9次，这次还是失败，因此 通知失败
+                            updateEntity.setNotifyStatus("2");
+                        }else {
+                            //置为 未通知，下次任务再查
+                            updateEntity.setNotifyStatus("0");
+                            //通知时间计算 次数的3次方 * 60秒
+                            int intervalMillis=notifyCount * notifyCount * notifyCount* 60 * 1000;
+                            long nextMillis = System.currentTimeMillis() + intervalMillis;
+                            Date nextDate=new Date(nextMillis);
+                            updateEntity.setRetryTime(nextDate);
+                        }
+                        updateEntity.setUpdateTime(new Date());
+                        orderNotifyLogService.updateByPrimaryKeySelective(updateEntity);
                     }
                 });
 
