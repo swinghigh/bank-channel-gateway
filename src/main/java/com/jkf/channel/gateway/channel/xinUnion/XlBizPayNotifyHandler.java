@@ -80,9 +80,9 @@ public class XlBizPayNotifyHandler implements IXlBizNotifyHandler{
         Long mchId = channelMchtXl.getMchId();
         MchInfo mchInfo = mchInfoService.selectByPrimaryKey(mchId);
         //重复通知
-        OrderInfo oriOrderInfo = orderInfoService.selectByOutSerial(oriOrderId);
+        OrderInfo oriOrderInfo = orderInfoService.selectByChannelOrderNo(oriOrderId);
         if (ObjectUtil.isNotEmpty(oriOrderInfo)) {
-            log.info("已处理outSerial：{}", oriOrderId);
+            log.info("已处理channelOrderNo：{}", oriOrderId);
             return;
         }
 
@@ -93,8 +93,8 @@ public class XlBizPayNotifyHandler implements IXlBizNotifyHandler{
         orderInfo.setSerial(uuid);
         //系统外部单号 == 服务商或代理  对接我们的商户请求我们的订单
         orderInfo.setOutSerial(oriOrderId);
-//        //信联的唯一订单号 我们请求别人（如信联）对应他们的唯一订单号  在对账文件处理时，填入信联支付流水号
-//        orderInfo.setChannelOrderNo(oriOrderId);
+        //信联的唯一订单号 我们请求别人（如信联）对应他们的唯一订单号
+        orderInfo.setChannelOrderNo(oriOrderId);
         //外部商户号 == 服务商或代理
         orderInfo.setOutMchId(mchInfo.getOutMchNo());
         //系统商户号
