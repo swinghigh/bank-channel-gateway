@@ -72,9 +72,9 @@ public class XlBizRefundNotifyHandler implements IXlBizNotifyHandler{
         //查商户信息
         ChannelMchtXl channelMchtXl = channelMchtXlService.getByChannelMchtNo(partnerId);
         //重复通知
-        OrderInfo oriOrderInfo = orderInfoService.selectByChannelOrderNo(refundOrderId);
+        OrderInfo oriOrderInfo = orderInfoService.selectByOutSerial(refundOrderId);
         if (ObjectUtil.isNotEmpty(oriOrderInfo)){
-            log.info("已处理channelOrderNo：{}",refundOrderId);
+            log.info("已处理outSerial：{}",refundOrderId);
             return;
         }
 
@@ -88,8 +88,8 @@ public class XlBizRefundNotifyHandler implements IXlBizNotifyHandler{
         orderInfo.setSerial(uuid);
         //系统外部单号 == 服务商或代理
         orderInfo.setOutSerial(refundOrderId);
-        //渠道订单号，信联唯一
-        orderInfo.setChannelOrderNo(refundOrderId);
+//        //渠道订单号，信联唯一  ,在对账文件处理时，填入信联支付流水号
+//        orderInfo.setChannelOrderNo(refundOrderId);
         //外部商户号 == 服务商或代理
         orderInfo.setOutMchId(mchInfo.getOutMchNo());
         //系统商户号
@@ -106,7 +106,7 @@ public class XlBizRefundNotifyHandler implements IXlBizNotifyHandler{
         orderInfo.setMchName(mchInfo.getMchName());
         orderInfo.setChannelId(channelMchtXl.getChannelId());
         orderInfo.setChannelMchNo(channelMchtXl.getChannelMchtNo());
-        //TODO 查到原来的交易订单，然后把serial 存到 origSerial字段里面，做关联
+        //查到原来的交易订单，然后把serial 存到 origSerial字段里面，做关联
         OrderInfo tradeOrderInfo = orderInfoService.selectByChannelOrderNo(oriOrderId);
         if (tradeOrderInfo!=null){
             //退款订单的原系统单号
