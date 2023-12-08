@@ -333,7 +333,7 @@ public class XinUnionTest {
         } catch (Exception e) {
             log.error("出现异常", e);
         }
-        return null;
+        return map;
     }
 
     /**
