@@ -46,6 +46,7 @@ file:
   imgUrl: http://192.168.1.111:9888/
   #文件下载缓存目录
   temp: /home/file/
+#  temp: F:/file/
 
 buss:
   phonePrefix: 172
