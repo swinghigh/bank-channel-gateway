@@ -11,9 +11,9 @@
     </appender>
 
     <appender name="systemLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>${log_home}/ref_system.log</File>
+        <File>${log_home}/channelgateway_system.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${log_home}/ref_system.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>${log_home}/channelgateway_system.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <encoder charset="UTF-8">
@@ -22,9 +22,9 @@
     </appender>
 
     <appender name="businessAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>${log_home}/ref_business.log</File>
+        <File>${log_home}/channelgateway_business.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${log_home}/ref_business.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>${log_home}/channelgateway_business.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
         <encoder charset="UTF-8">
