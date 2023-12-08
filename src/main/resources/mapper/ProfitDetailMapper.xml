@@ -32,12 +32,15 @@
     <result column="trade_mcht_name" property="tradeMchtName" jdbcType="VARCHAR" />
     <result column="check_status" property="checkStatus" jdbcType="CHAR" />
     <result column="check_name" property="checkName" jdbcType="VARCHAR" />
+    <result column="check_remark" property="checkRemark" jdbcType="VARCHAR" />
     <result column="settle_status" property="settleStatus" jdbcType="CHAR" />
     <result column="settle_finish_time" property="settleFinishTime" jdbcType="TIMESTAMP" />
+    <result column="settle_patch_no" property="settlePatchNo" jdbcType="VARCHAR" />
     <result column="create_id" property="createId" jdbcType="BIGINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_id" property="updateId" jdbcType="BIGINT" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="profit_account_type" property="profitAccountType" jdbcType="CHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -103,8 +106,8 @@
     trade_charge_amount, trade_add_charge_amount, trade_rate, trade_charge_profit_amount, 
     trade_add_charge_profit_amount, trade_profit_rate, other_profit_amount, total_profit_amount, 
     profit_date, trade_mcht_id, trade_finish_time, `source`, trade_mcht_name, check_status, 
-    check_name, settle_status, settle_finish_time, create_id, create_time, update_id, 
-    update_time
+    check_name, check_remark, settle_status, settle_finish_time, settle_patch_no, create_id, 
+    create_time, update_id, update_time, profit_account_type
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jkf.channel.gateway.entity.ProfitDetailExample" >
     select
@@ -148,9 +151,10 @@
       trade_profit_rate, other_profit_amount, total_profit_amount, 
       profit_date, trade_mcht_id, trade_finish_time, 
       `source`, trade_mcht_name, check_status, 
-      check_name, settle_status, settle_finish_time, 
-      create_id, create_time, update_id, 
-      update_time)
+      check_name, check_remark, settle_status, 
+      settle_finish_time, settle_patch_no, create_id, 
+      create_time, update_id, update_time, 
+      profit_account_type)
     values (#{id,jdbcType=BIGINT}, #{profitOrg,jdbcType=VARCHAR}, #{profitOrgType,jdbcType=VARCHAR}, 
       #{profitOrgName,jdbcType=VARCHAR}, #{virtualNo,jdbcType=VARCHAR}, #{profitType,jdbcType=VARCHAR}, 
       #{profitRemark,jdbcType=VARCHAR}, #{profitOrgLevel,jdbcType=VARCHAR}, #{serial,jdbcType=VARCHAR}, 
@@ -161,9 +165,10 @@
       #{tradeProfitRate,jdbcType=VARCHAR}, #{otherProfitAmount,jdbcType=BIGINT}, #{totalProfitAmount,jdbcType=BIGINT}, 
       #{profitDate,jdbcType=VARCHAR}, #{tradeMchtId,jdbcType=BIGINT}, #{tradeFinishTime,jdbcType=VARCHAR}, 
       #{source,jdbcType=VARCHAR}, #{tradeMchtName,jdbcType=VARCHAR}, #{checkStatus,jdbcType=CHAR}, 
-      #{checkName,jdbcType=VARCHAR}, #{settleStatus,jdbcType=CHAR}, #{settleFinishTime,jdbcType=TIMESTAMP}, 
-      #{createId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+      #{checkName,jdbcType=VARCHAR}, #{checkRemark,jdbcType=VARCHAR}, #{settleStatus,jdbcType=CHAR}, 
+      #{settleFinishTime,jdbcType=TIMESTAMP}, #{settlePatchNo,jdbcType=VARCHAR}, #{createId,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{profitAccountType,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jkf.channel.gateway.entity.ProfitDetail" >
     insert into profit_detail
@@ -258,11 +263,17 @@
       <if test="checkName != null" >
         check_name,
       </if>
+      <if test="checkRemark != null" >
+        check_remark,
+      </if>
       <if test="settleStatus != null" >
         settle_status,
       </if>
       <if test="settleFinishTime != null" >
         settle_finish_time,
+      </if>
+      <if test="settlePatchNo != null" >
+        settle_patch_no,
       </if>
       <if test="createId != null" >
         create_id,
@@ -275,6 +286,9 @@
       </if>
       <if test="updateTime != null" >
         update_time,
+      </if>
+      <if test="profitAccountType != null" >
+        profit_account_type,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -368,11 +382,17 @@
       <if test="checkName != null" >
         #{checkName,jdbcType=VARCHAR},
       </if>
+      <if test="checkRemark != null" >
+        #{checkRemark,jdbcType=VARCHAR},
+      </if>
       <if test="settleStatus != null" >
         #{settleStatus,jdbcType=CHAR},
       </if>
       <if test="settleFinishTime != null" >
         #{settleFinishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="settlePatchNo != null" >
+        #{settlePatchNo,jdbcType=VARCHAR},
       </if>
       <if test="createId != null" >
         #{createId,jdbcType=BIGINT},
@@ -385,6 +405,9 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="profitAccountType != null" >
+        #{profitAccountType,jdbcType=CHAR},
       </if>
     </trim>
   </insert>
@@ -487,11 +510,17 @@
       <if test="record.checkName != null" >
         check_name = #{record.checkName,jdbcType=VARCHAR},
       </if>
+      <if test="record.checkRemark != null" >
+        check_remark = #{record.checkRemark,jdbcType=VARCHAR},
+      </if>
       <if test="record.settleStatus != null" >
         settle_status = #{record.settleStatus,jdbcType=CHAR},
       </if>
       <if test="record.settleFinishTime != null" >
         settle_finish_time = #{record.settleFinishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.settlePatchNo != null" >
+        settle_patch_no = #{record.settlePatchNo,jdbcType=VARCHAR},
       </if>
       <if test="record.createId != null" >
         create_id = #{record.createId,jdbcType=BIGINT},
@@ -504,6 +533,9 @@
       </if>
       <if test="record.updateTime != null" >
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.profitAccountType != null" >
+        profit_account_type = #{record.profitAccountType,jdbcType=CHAR},
       </if>
     </set>
     <if test="_parameter != null" >
@@ -542,12 +574,15 @@
       trade_mcht_name = #{record.tradeMchtName,jdbcType=VARCHAR},
       check_status = #{record.checkStatus,jdbcType=CHAR},
       check_name = #{record.checkName,jdbcType=VARCHAR},
+      check_remark = #{record.checkRemark,jdbcType=VARCHAR},
       settle_status = #{record.settleStatus,jdbcType=CHAR},
       settle_finish_time = #{record.settleFinishTime,jdbcType=TIMESTAMP},
+      settle_patch_no = #{record.settlePatchNo,jdbcType=VARCHAR},
       create_id = #{record.createId,jdbcType=BIGINT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_id = #{record.updateId,jdbcType=BIGINT},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      profit_account_type = #{record.profitAccountType,jdbcType=CHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -642,11 +677,17 @@
       <if test="checkName != null" >
         check_name = #{checkName,jdbcType=VARCHAR},
       </if>
+      <if test="checkRemark != null" >
+        check_remark = #{checkRemark,jdbcType=VARCHAR},
+      </if>
       <if test="settleStatus != null" >
         settle_status = #{settleStatus,jdbcType=CHAR},
       </if>
       <if test="settleFinishTime != null" >
         settle_finish_time = #{settleFinishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="settlePatchNo != null" >
+        settle_patch_no = #{settlePatchNo,jdbcType=VARCHAR},
       </if>
       <if test="createId != null" >
         create_id = #{createId,jdbcType=BIGINT},
@@ -659,6 +700,9 @@
       </if>
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="profitAccountType != null" >
+        profit_account_type = #{profitAccountType,jdbcType=CHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -694,12 +738,15 @@
       trade_mcht_name = #{tradeMchtName,jdbcType=VARCHAR},
       check_status = #{checkStatus,jdbcType=CHAR},
       check_name = #{checkName,jdbcType=VARCHAR},
+      check_remark = #{checkRemark,jdbcType=VARCHAR},
       settle_status = #{settleStatus,jdbcType=CHAR},
       settle_finish_time = #{settleFinishTime,jdbcType=TIMESTAMP},
+      settle_patch_no = #{settlePatchNo,jdbcType=VARCHAR},
       create_id = #{createId,jdbcType=BIGINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_id = #{updateId,jdbcType=BIGINT},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      profit_account_type = #{profitAccountType,jdbcType=CHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

@@ -19,6 +19,8 @@ public enum OpenMethodEnum {
     XL_MCHT_ADD("XL_MCHT_ADD","信联商户开通"),
     XL_MCHT_QUERY("XL_MCHT_QUERY","信联商户查询"),
     AGENT_PROFIT_SYNC("AGENT_PROFIT_SYNC","代理商分润同步"),
+    AGENT_DRAW("AGENT_DRAW","代理商提现"),
+    AGENT_DRAW_QUERY("AGENT_DRAW_QUERY","代理商提现查询"),
     ;
 
     private String method;

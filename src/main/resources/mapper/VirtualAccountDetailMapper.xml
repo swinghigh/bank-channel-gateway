@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.jkf.channel.gateway.dao.VirtualAccountMapper" >
-  <resultMap id="BaseResultMap" type="com.jkf.channel.gateway.entity.VirtualAccount" >
+<mapper namespace="com.jkf.channel.gateway.dao.VirtualAccountDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.jkf.channel.gateway.entity.VirtualAccountDetail" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="virtual_no" property="virtualNo" jdbcType="VARCHAR" />
-    <result column="virtual_name" property="virtualName" jdbcType="VARCHAR" />
-    <result column="virtual_account_type" property="virtualAccountType" jdbcType="CHAR" />
-    <result column="use_amount" property="useAmount" jdbcType="VARCHAR" />
-    <result column="dis_use_amount" property="disUseAmount" jdbcType="VARCHAR" />
-    <result column="freeze_amount" property="freezeAmount" jdbcType="VARCHAR" />
-    <result column="encry_amount" property="encryAmount" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="CHAR" />
-    <result column="pwd" property="pwd" jdbcType="VARCHAR" />
+    <result column="is_add" property="isAdd" jdbcType="VARCHAR" />
+    <result column="act_type" property="actType" jdbcType="CHAR" />
+    <result column="amount" property="amount" jdbcType="VARCHAR" />
+    <result column="charge" property="charge" jdbcType="VARCHAR" />
+    <result column="final_amount" property="finalAmount" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="act_date" property="actDate" jdbcType="VARCHAR" />
+    <result column="serial" property="serial" jdbcType="VARCHAR" />
+    <result column="add_blance" property="addBlance" jdbcType="CHAR" />
+    <result column="add_name" property="addName" jdbcType="VARCHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="create_id" property="createId" jdbcType="BIGINT" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
@@ -76,17 +78,17 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, virtual_no, virtual_name, virtual_account_type, use_amount, dis_use_amount, freeze_amount, 
-    encry_amount, `status`, pwd, create_time, create_id, update_time, update_id
+    id, virtual_no, is_add, act_type, amount, charge, final_amount, remark, act_date, 
+    serial, add_blance, add_name, create_time, create_id, update_time, update_id
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jkf.channel.gateway.entity.VirtualAccountExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jkf.channel.gateway.entity.VirtualAccountDetailExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     'true' as QUERYID,
     <include refid="Base_Column_List" />
-    from virtual_account
+    from virtual_account_detail
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -97,35 +99,35 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
-    from virtual_account
+    from virtual_account_detail
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from virtual_account
+    delete from virtual_account_detail
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.jkf.channel.gateway.entity.VirtualAccountExample" >
-    delete from virtual_account
+  <delete id="deleteByExample" parameterType="com.jkf.channel.gateway.entity.VirtualAccountDetailExample" >
+    delete from virtual_account_detail
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jkf.channel.gateway.entity.VirtualAccount" useGeneratedKeys="true"
-          keyProperty="id">
-    insert into virtual_account (id, virtual_no, virtual_name, 
-      virtual_account_type, use_amount, dis_use_amount, 
-      freeze_amount, encry_amount, `status`, 
-      pwd, create_time, create_id, 
-      update_time, update_id)
-    values (#{id,jdbcType=BIGINT}, #{virtualNo,jdbcType=VARCHAR}, #{virtualName,jdbcType=VARCHAR}, 
-      #{virtualAccountType,jdbcType=CHAR}, #{useAmount,jdbcType=VARCHAR}, #{disUseAmount,jdbcType=VARCHAR}, 
-      #{freezeAmount,jdbcType=VARCHAR}, #{encryAmount,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, 
-      #{pwd,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createId,jdbcType=BIGINT}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{updateId,jdbcType=BIGINT})
+  <insert id="insert" parameterType="com.jkf.channel.gateway.entity.VirtualAccountDetail" >
+    insert into virtual_account_detail (id, virtual_no, is_add, 
+      act_type, amount, charge, 
+      final_amount, remark, act_date, 
+      serial, add_blance, add_name, 
+      create_time, create_id, update_time, 
+      update_id)
+    values (#{id,jdbcType=BIGINT}, #{virtualNo,jdbcType=VARCHAR}, #{isAdd,jdbcType=VARCHAR}, 
+      #{actType,jdbcType=CHAR}, #{amount,jdbcType=VARCHAR}, #{charge,jdbcType=VARCHAR}, 
+      #{finalAmount,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{actDate,jdbcType=VARCHAR}, 
+      #{serial,jdbcType=VARCHAR}, #{addBlance,jdbcType=CHAR}, #{addName,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createId,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateId,jdbcType=BIGINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.jkf.channel.gateway.entity.VirtualAccount" useGeneratedKeys="true"
-          keyProperty="id">
-    insert into virtual_account
+  <insert id="insertSelective" parameterType="com.jkf.channel.gateway.entity.VirtualAccountDetail" >
+    insert into virtual_account_detail
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
         id,
@@ -133,29 +135,35 @@
       <if test="virtualNo != null" >
         virtual_no,
       </if>
-      <if test="virtualName != null" >
-        virtual_name,
+      <if test="isAdd != null" >
+        is_add,
       </if>
-      <if test="virtualAccountType != null" >
-        virtual_account_type,
+      <if test="actType != null" >
+        act_type,
       </if>
-      <if test="useAmount != null" >
-        use_amount,
+      <if test="amount != null" >
+        amount,
       </if>
-      <if test="disUseAmount != null" >
-        dis_use_amount,
+      <if test="charge != null" >
+        charge,
       </if>
-      <if test="freezeAmount != null" >
-        freeze_amount,
+      <if test="finalAmount != null" >
+        final_amount,
       </if>
-      <if test="encryAmount != null" >
-        encry_amount,
+      <if test="remark != null" >
+        remark,
       </if>
-      <if test="status != null" >
-        `status`,
+      <if test="actDate != null" >
+        act_date,
       </if>
-      <if test="pwd != null" >
-        pwd,
+      <if test="serial != null" >
+        serial,
+      </if>
+      <if test="addBlance != null" >
+        add_blance,
+      </if>
+      <if test="addName != null" >
+        add_name,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -177,29 +185,35 @@
       <if test="virtualNo != null" >
         #{virtualNo,jdbcType=VARCHAR},
       </if>
-      <if test="virtualName != null" >
-        #{virtualName,jdbcType=VARCHAR},
+      <if test="isAdd != null" >
+        #{isAdd,jdbcType=VARCHAR},
       </if>
-      <if test="virtualAccountType != null" >
-        #{virtualAccountType,jdbcType=CHAR},
+      <if test="actType != null" >
+        #{actType,jdbcType=CHAR},
       </if>
-      <if test="useAmount != null" >
-        #{useAmount,jdbcType=VARCHAR},
+      <if test="amount != null" >
+        #{amount,jdbcType=VARCHAR},
       </if>
-      <if test="disUseAmount != null" >
-        #{disUseAmount,jdbcType=VARCHAR},
+      <if test="charge != null" >
+        #{charge,jdbcType=VARCHAR},
       </if>
-      <if test="freezeAmount != null" >
-        #{freezeAmount,jdbcType=VARCHAR},
+      <if test="finalAmount != null" >
+        #{finalAmount,jdbcType=VARCHAR},
       </if>
-      <if test="encryAmount != null" >
-        #{encryAmount,jdbcType=VARCHAR},
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="status != null" >
-        #{status,jdbcType=CHAR},
+      <if test="actDate != null" >
+        #{actDate,jdbcType=VARCHAR},
       </if>
-      <if test="pwd != null" >
-        #{pwd,jdbcType=VARCHAR},
+      <if test="serial != null" >
+        #{serial,jdbcType=VARCHAR},
+      </if>
+      <if test="addBlance != null" >
+        #{addBlance,jdbcType=CHAR},
+      </if>
+      <if test="addName != null" >
+        #{addName,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -215,14 +229,14 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jkf.channel.gateway.entity.VirtualAccountExample" resultType="java.lang.Integer" >
-    select count(*) from virtual_account
+  <select id="countByExample" parameterType="com.jkf.channel.gateway.entity.VirtualAccountDetailExample" resultType="java.lang.Integer" >
+    select count(*) from virtual_account_detail
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update virtual_account
+    update virtual_account_detail
     <set >
       <if test="record.id != null" >
         id = #{record.id,jdbcType=BIGINT},
@@ -230,29 +244,35 @@
       <if test="record.virtualNo != null" >
         virtual_no = #{record.virtualNo,jdbcType=VARCHAR},
       </if>
-      <if test="record.virtualName != null" >
-        virtual_name = #{record.virtualName,jdbcType=VARCHAR},
+      <if test="record.isAdd != null" >
+        is_add = #{record.isAdd,jdbcType=VARCHAR},
       </if>
-      <if test="record.virtualAccountType != null" >
-        virtual_account_type = #{record.virtualAccountType,jdbcType=CHAR},
+      <if test="record.actType != null" >
+        act_type = #{record.actType,jdbcType=CHAR},
       </if>
-      <if test="record.useAmount != null" >
-        use_amount = #{record.useAmount,jdbcType=VARCHAR},
+      <if test="record.amount != null" >
+        amount = #{record.amount,jdbcType=VARCHAR},
       </if>
-      <if test="record.disUseAmount != null" >
-        dis_use_amount = #{record.disUseAmount,jdbcType=VARCHAR},
+      <if test="record.charge != null" >
+        charge = #{record.charge,jdbcType=VARCHAR},
       </if>
-      <if test="record.freezeAmount != null" >
-        freeze_amount = #{record.freezeAmount,jdbcType=VARCHAR},
+      <if test="record.finalAmount != null" >
+        final_amount = #{record.finalAmount,jdbcType=VARCHAR},
       </if>
-      <if test="record.encryAmount != null" >
-        encry_amount = #{record.encryAmount,jdbcType=VARCHAR},
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
       </if>
-      <if test="record.status != null" >
-        `status` = #{record.status,jdbcType=CHAR},
+      <if test="record.actDate != null" >
+        act_date = #{record.actDate,jdbcType=VARCHAR},
       </if>
-      <if test="record.pwd != null" >
-        pwd = #{record.pwd,jdbcType=VARCHAR},
+      <if test="record.serial != null" >
+        serial = #{record.serial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addBlance != null" >
+        add_blance = #{record.addBlance,jdbcType=CHAR},
+      </if>
+      <if test="record.addName != null" >
+        add_name = #{record.addName,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -272,17 +292,19 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update virtual_account
+    update virtual_account_detail
     set id = #{record.id,jdbcType=BIGINT},
       virtual_no = #{record.virtualNo,jdbcType=VARCHAR},
-      virtual_name = #{record.virtualName,jdbcType=VARCHAR},
-      virtual_account_type = #{record.virtualAccountType,jdbcType=CHAR},
-      use_amount = #{record.useAmount,jdbcType=VARCHAR},
-      dis_use_amount = #{record.disUseAmount,jdbcType=VARCHAR},
-      freeze_amount = #{record.freezeAmount,jdbcType=VARCHAR},
-      encry_amount = #{record.encryAmount,jdbcType=VARCHAR},
-      `status` = #{record.status,jdbcType=CHAR},
-      pwd = #{record.pwd,jdbcType=VARCHAR},
+      is_add = #{record.isAdd,jdbcType=VARCHAR},
+      act_type = #{record.actType,jdbcType=CHAR},
+      amount = #{record.amount,jdbcType=VARCHAR},
+      charge = #{record.charge,jdbcType=VARCHAR},
+      final_amount = #{record.finalAmount,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      act_date = #{record.actDate,jdbcType=VARCHAR},
+      serial = #{record.serial,jdbcType=VARCHAR},
+      add_blance = #{record.addBlance,jdbcType=CHAR},
+      add_name = #{record.addName,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_id = #{record.createId,jdbcType=BIGINT},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -291,35 +313,41 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jkf.channel.gateway.entity.VirtualAccount" >
-    update virtual_account
+  <update id="updateByPrimaryKeySelective" parameterType="com.jkf.channel.gateway.entity.VirtualAccountDetail" >
+    update virtual_account_detail
     <set >
       <if test="virtualNo != null" >
         virtual_no = #{virtualNo,jdbcType=VARCHAR},
       </if>
-      <if test="virtualName != null" >
-        virtual_name = #{virtualName,jdbcType=VARCHAR},
+      <if test="isAdd != null" >
+        is_add = #{isAdd,jdbcType=VARCHAR},
       </if>
-      <if test="virtualAccountType != null" >
-        virtual_account_type = #{virtualAccountType,jdbcType=CHAR},
+      <if test="actType != null" >
+        act_type = #{actType,jdbcType=CHAR},
       </if>
-      <if test="useAmount != null" >
-        use_amount = #{useAmount,jdbcType=VARCHAR},
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=VARCHAR},
       </if>
-      <if test="disUseAmount != null" >
-        dis_use_amount = #{disUseAmount,jdbcType=VARCHAR},
+      <if test="charge != null" >
+        charge = #{charge,jdbcType=VARCHAR},
       </if>
-      <if test="freezeAmount != null" >
-        freeze_amount = #{freezeAmount,jdbcType=VARCHAR},
+      <if test="finalAmount != null" >
+        final_amount = #{finalAmount,jdbcType=VARCHAR},
       </if>
-      <if test="encryAmount != null" >
-        encry_amount = #{encryAmount,jdbcType=VARCHAR},
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="status != null" >
-        `status` = #{status,jdbcType=CHAR},
+      <if test="actDate != null" >
+        act_date = #{actDate,jdbcType=VARCHAR},
       </if>
-      <if test="pwd != null" >
-        pwd = #{pwd,jdbcType=VARCHAR},
+      <if test="serial != null" >
+        serial = #{serial,jdbcType=VARCHAR},
+      </if>
+      <if test="addBlance != null" >
+        add_blance = #{addBlance,jdbcType=CHAR},
+      </if>
+      <if test="addName != null" >
+        add_name = #{addName,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -336,27 +364,23 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jkf.channel.gateway.entity.VirtualAccount" >
-    update virtual_account
+  <update id="updateByPrimaryKey" parameterType="com.jkf.channel.gateway.entity.VirtualAccountDetail" >
+    update virtual_account_detail
     set virtual_no = #{virtualNo,jdbcType=VARCHAR},
-      virtual_name = #{virtualName,jdbcType=VARCHAR},
-      virtual_account_type = #{virtualAccountType,jdbcType=CHAR},
-      use_amount = #{useAmount,jdbcType=VARCHAR},
-      dis_use_amount = #{disUseAmount,jdbcType=VARCHAR},
-      freeze_amount = #{freezeAmount,jdbcType=VARCHAR},
-      encry_amount = #{encryAmount,jdbcType=VARCHAR},
-      `status` = #{status,jdbcType=CHAR},
-      pwd = #{pwd,jdbcType=VARCHAR},
+      is_add = #{isAdd,jdbcType=VARCHAR},
+      act_type = #{actType,jdbcType=CHAR},
+      amount = #{amount,jdbcType=VARCHAR},
+      charge = #{charge,jdbcType=VARCHAR},
+      final_amount = #{finalAmount,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      act_date = #{actDate,jdbcType=VARCHAR},
+      serial = #{serial,jdbcType=VARCHAR},
+      add_blance = #{addBlance,jdbcType=CHAR},
+      add_name = #{addName,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_id = #{createId,jdbcType=BIGINT},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       update_id = #{updateId,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <select id="selectByLock" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select
-    <include refid="Base_Column_List" />
-    from virtual_account
-    where virtual_no = #{virtualNo,jdbcType=VARCHAR}
-  </select>
 </mapper>

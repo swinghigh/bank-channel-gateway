@@ -3,10 +3,7 @@ package com.jkf.channel.gateway.handler.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.jkf.channel.gateway.constant.ErrorCode;
 import com.jkf.channel.gateway.constant.OpenMethodEnum;
-import com.jkf.channel.gateway.dao.AgentInfoMapper;
-import com.jkf.channel.gateway.dao.MchInfoMapper;
-import com.jkf.channel.gateway.dao.OrderInfoMapper;
-import com.jkf.channel.gateway.dao.ProfitDetailMapper;
+import com.jkf.channel.gateway.dao.*;
 import com.jkf.channel.gateway.entity.*;
 import com.jkf.channel.gateway.exception.BusinessException;
 import com.jkf.channel.gateway.handler.IOpenHandler;
@@ -18,6 +15,7 @@ import com.jkf.channel.gateway.utils.ResultUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.util.DateUtils;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -44,6 +42,10 @@ public class AgentProfitSyncHandler implements IOpenHandler {
     private AgentService agentService;
     @Autowired
     private IVirtualAccountService virtualAccountService;
+    @Resource
+    private VirtualAccountMapper virtualAccountMapper;
+    @Resource
+    private VirtualAccountDetailMapper virtualAccountDetailMapper;
 
     @Override
     public String getMethod() {
@@ -163,7 +165,32 @@ public class AgentProfitSyncHandler implements IOpenHandler {
         record.setSource("2");
         record.setProfitDate(DateUtil.getFormat(new Date(),"yyyy-MM-dd"));
         record.setCreateTime(new Date());
+        record.setProfitAccountType("1");//进入余额账户
         profitDetailMapper.insertSelective(record);
+        //这里如果是是进入待结算账户的话,需要处理,添加待结算记录，实时
+        if("2".equals(record.getProfitAccountType())){
+            VirtualAccount  virtualAccount=virtualAccountMapper.selectByLock(record.getVirtualNo());
+            AssertUtils.customNotNull(virtualAccount,ErrorCode.PARAM_ERROR.getErrorCode(),"账户不存在");
+            //修改账户待结算余额
+            virtualAccount.setDisUseAmount((Long.parseLong(virtualAccount.getDisUseAmount())+record.getTotalProfitAmount())+"");
+            virtualAccount.setUpdateTime(new Date());
+            virtualAccountMapper.updateByPrimaryKeySelective(virtualAccount);
+            //插入一笔入账流水
+            VirtualAccountDetail virtualAccountDetailU=new VirtualAccountDetail();
+            virtualAccountDetailU.setVirtualNo(virtualAccount.getVirtualNo());
+            virtualAccountDetailU.setIsAdd("in");
+            virtualAccountDetailU.setActType("2");
+            virtualAccountDetailU.setAmount(record.getTotalProfitAmount()+"");
+            virtualAccountDetailU.setCharge("0");
+            virtualAccountDetailU.setFinalAmount(virtualAccount.getDisUseAmount());
+            virtualAccountDetailU.setRemark("分润");
+            virtualAccountDetailU.setActDate(DateUtil.getFormat(new Date(),"yyyy-MM-dd"));
+            virtualAccountDetailU.setSerial(record.getPlatSerial());
+            virtualAccountDetailU.setAddBlance("0");
+            virtualAccountDetailU.setAddName("系统自动");
+            virtualAccountDetailU.setCreateTime(new Date());
+            virtualAccountDetailMapper.insertSelective(virtualAccountDetailU);
+        }
         Map<String, Object> result = ResultUtils.businessResult(ErrorCode.SUCCESS.getErrorCode(), "申请成功");
         result.put("platSerial", record.getPlatSerial());
         return result;

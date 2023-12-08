@@ -2105,6 +2105,76 @@ public class ProfitDetailExample {
             return (Criteria) this;
         }
 
+        public Criteria andCheckRemarkIsNull() {
+            addCriterion("check_remark is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckRemarkIsNotNull() {
+            addCriterion("check_remark is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckRemarkEqualTo(String value) {
+            addCriterion("check_remark =", value, "checkRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckRemarkNotEqualTo(String value) {
+            addCriterion("check_remark <>", value, "checkRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckRemarkGreaterThan(String value) {
+            addCriterion("check_remark >", value, "checkRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckRemarkGreaterThanOrEqualTo(String value) {
+            addCriterion("check_remark >=", value, "checkRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckRemarkLessThan(String value) {
+            addCriterion("check_remark <", value, "checkRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckRemarkLessThanOrEqualTo(String value) {
+            addCriterion("check_remark <=", value, "checkRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckRemarkLike(String value) {
+            addCriterion("check_remark like", value, "checkRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckRemarkNotLike(String value) {
+            addCriterion("check_remark not like", value, "checkRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckRemarkIn(List<String> values) {
+            addCriterion("check_remark in", values, "checkRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckRemarkNotIn(List<String> values) {
+            addCriterion("check_remark not in", values, "checkRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckRemarkBetween(String value1, String value2) {
+            addCriterion("check_remark between", value1, value2, "checkRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckRemarkNotBetween(String value1, String value2) {
+            addCriterion("check_remark not between", value1, value2, "checkRemark");
+            return (Criteria) this;
+        }
+
         public Criteria andSettleStatusIsNull() {
             addCriterion("settle_status is null");
             return (Criteria) this;
@@ -2232,6 +2302,76 @@ public class ProfitDetailExample {
 
         public Criteria andSettleFinishTimeNotBetween(Date value1, Date value2) {
             addCriterion("settle_finish_time not between", value1, value2, "settleFinishTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSettlePatchNoIsNull() {
+            addCriterion("settle_patch_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSettlePatchNoIsNotNull() {
+            addCriterion("settle_patch_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSettlePatchNoEqualTo(String value) {
+            addCriterion("settle_patch_no =", value, "settlePatchNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSettlePatchNoNotEqualTo(String value) {
+            addCriterion("settle_patch_no <>", value, "settlePatchNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSettlePatchNoGreaterThan(String value) {
+            addCriterion("settle_patch_no >", value, "settlePatchNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSettlePatchNoGreaterThanOrEqualTo(String value) {
+            addCriterion("settle_patch_no >=", value, "settlePatchNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSettlePatchNoLessThan(String value) {
+            addCriterion("settle_patch_no <", value, "settlePatchNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSettlePatchNoLessThanOrEqualTo(String value) {
+            addCriterion("settle_patch_no <=", value, "settlePatchNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSettlePatchNoLike(String value) {
+            addCriterion("settle_patch_no like", value, "settlePatchNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSettlePatchNoNotLike(String value) {
+            addCriterion("settle_patch_no not like", value, "settlePatchNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSettlePatchNoIn(List<String> values) {
+            addCriterion("settle_patch_no in", values, "settlePatchNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSettlePatchNoNotIn(List<String> values) {
+            addCriterion("settle_patch_no not in", values, "settlePatchNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSettlePatchNoBetween(String value1, String value2) {
+            addCriterion("settle_patch_no between", value1, value2, "settlePatchNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andSettlePatchNoNotBetween(String value1, String value2) {
+            addCriterion("settle_patch_no not between", value1, value2, "settlePatchNo");
             return (Criteria) this;
         }
 
@@ -2475,6 +2615,76 @@ public class ProfitDetailExample {
             return (Criteria) this;
         }
 
+        public Criteria andProfitAccountTypeIsNull() {
+            addCriterion("profit_account_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProfitAccountTypeIsNotNull() {
+            addCriterion("profit_account_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProfitAccountTypeEqualTo(String value) {
+            addCriterion("profit_account_type =", value, "profitAccountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProfitAccountTypeNotEqualTo(String value) {
+            addCriterion("profit_account_type <>", value, "profitAccountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProfitAccountTypeGreaterThan(String value) {
+            addCriterion("profit_account_type >", value, "profitAccountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProfitAccountTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("profit_account_type >=", value, "profitAccountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProfitAccountTypeLessThan(String value) {
+            addCriterion("profit_account_type <", value, "profitAccountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProfitAccountTypeLessThanOrEqualTo(String value) {
+            addCriterion("profit_account_type <=", value, "profitAccountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProfitAccountTypeLike(String value) {
+            addCriterion("profit_account_type like", value, "profitAccountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProfitAccountTypeNotLike(String value) {
+            addCriterion("profit_account_type not like", value, "profitAccountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProfitAccountTypeIn(List<String> values) {
+            addCriterion("profit_account_type in", values, "profitAccountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProfitAccountTypeNotIn(List<String> values) {
+            addCriterion("profit_account_type not in", values, "profitAccountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProfitAccountTypeBetween(String value1, String value2) {
+            addCriterion("profit_account_type between", value1, value2, "profitAccountType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProfitAccountTypeNotBetween(String value1, String value2) {
+            addCriterion("profit_account_type not between", value1, value2, "profitAccountType");
+            return (Criteria) this;
+        }
+
         public Criteria andProfitOrgLikeInsensitive(String value) {
             addCriterion("upper(profit_org) like", value.toUpperCase(), "profitOrg");
             return (Criteria) this;
@@ -2575,8 +2785,23 @@ public class ProfitDetailExample {
             return (Criteria) this;
         }
 
+        public Criteria andCheckRemarkLikeInsensitive(String value) {
+            addCriterion("upper(check_remark) like", value.toUpperCase(), "checkRemark");
+            return (Criteria) this;
+        }
+
         public Criteria andSettleStatusLikeInsensitive(String value) {
             addCriterion("upper(settle_status) like", value.toUpperCase(), "settleStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andSettlePatchNoLikeInsensitive(String value) {
+            addCriterion("upper(settle_patch_no) like", value.toUpperCase(), "settlePatchNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andProfitAccountTypeLikeInsensitive(String value) {
+            addCriterion("upper(profit_account_type) like", value.toUpperCase(), "profitAccountType");
             return (Criteria) this;
         }
     }

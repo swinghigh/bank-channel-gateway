@@ -30,4 +30,6 @@ public interface VirtualAccountMapper {
     int updateByPrimaryKeySelective(VirtualAccount record);
 
     int updateByPrimaryKey(VirtualAccount record);
+
+    VirtualAccount selectByLock(@Param("virtualNo")String virtualNo);
 }

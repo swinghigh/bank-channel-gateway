@@ -1,0 +1,672 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jkf.channel.gateway.dao.OrderDrawMapper" >
+  <resultMap id="BaseResultMap" type="com.jkf.channel.gateway.entity.OrderDraw" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="out_serial" property="outSerial" jdbcType="VARCHAR" />
+    <result column="org_id" property="orgId" jdbcType="BIGINT" />
+    <result column="serial" property="serial" jdbcType="VARCHAR" />
+    <result column="virtual_no" property="virtualNo" jdbcType="VARCHAR" />
+    <result column="profit_org" property="profitOrg" jdbcType="VARCHAR" />
+    <result column="profit_org_type" property="profitOrgType" jdbcType="CHAR" />
+    <result column="profit_org_name" property="profitOrgName" jdbcType="VARCHAR" />
+    <result column="draw_amount" property="drawAmount" jdbcType="BIGINT" />
+    <result column="draw_charge_amount" property="drawChargeAmount" jdbcType="BIGINT" />
+    <result column="virtual_amount_pre" property="virtualAmountPre" jdbcType="BIGINT" />
+    <result column="virtual_amount_finish" property="virtualAmountFinish" jdbcType="BIGINT" />
+    <result column="charge_type" property="chargeType" jdbcType="CHAR" />
+    <result column="charge cost rate" property="chargeCostRate" jdbcType="VARCHAR" />
+    <result column="charge_cost_amount" property="chargeCostAmount" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="virtual_customer" property="virtualCustomer" jdbcType="CHAR" />
+    <result column="channel_reason" property="channelReason" jdbcType="VARCHAR" />
+    <result column="channel_id" property="channelId" jdbcType="BIGINT" />
+    <result column="channel_mcht_no" property="channelMchtNo" jdbcType="VARCHAR" />
+    <result column="channel_mcht_term_no" property="channelMchtTermNo" jdbcType="VARCHAR" />
+    <result column="channel_order_no" property="channelOrderNo" jdbcType="VARCHAR" />
+    <result column="draw_time" property="drawTime" jdbcType="VARCHAR" />
+    <result column="channel_charge" property="channelCharge" jdbcType="BIGINT" />
+    <result column="channel_add_charge" property="channelAddCharge" jdbcType="BIGINT" />
+    <result column="channel_bill_status" property="channelBillStatus" jdbcType="CHAR" />
+    <result column="bank_name" property="bankName" jdbcType="VARCHAR" />
+    <result column="bank_account_no" property="bankAccountNo" jdbcType="VARCHAR" />
+    <result column="bank_account_name" property="bankAccountName" jdbcType="VARCHAR" />
+    <result column="create_id" property="createId" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_id" property="updateId" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, out_serial, org_id, serial, virtual_no, profit_org, profit_org_type, profit_org_name, 
+    draw_amount, draw_charge_amount, virtual_amount_pre, virtual_amount_finish, charge_type, 
+    `charge cost rate`, charge_cost_amount, `status`, remark, virtual_customer, channel_reason, 
+    channel_id, channel_mcht_no, channel_mcht_term_no, channel_order_no, draw_time, channel_charge, 
+    channel_add_charge, channel_bill_status, bank_name, bank_account_no, bank_account_name, 
+    create_id, create_time, update_id, update_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jkf.channel.gateway.entity.OrderDrawExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from order_draw
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from order_draw
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from order_draw
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jkf.channel.gateway.entity.OrderDrawExample" >
+    delete from order_draw
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jkf.channel.gateway.entity.OrderDraw" >
+    insert into order_draw (id, out_serial, org_id, 
+      serial, virtual_no, profit_org, 
+      profit_org_type, profit_org_name, draw_amount, 
+      draw_charge_amount, virtual_amount_pre, virtual_amount_finish, 
+      charge_type, `charge cost rate`, charge_cost_amount, 
+      `status`, remark, virtual_customer, 
+      channel_reason, channel_id, channel_mcht_no, 
+      channel_mcht_term_no, channel_order_no, draw_time, 
+      channel_charge, channel_add_charge, channel_bill_status, 
+      bank_name, bank_account_no, bank_account_name, 
+      create_id, create_time, update_id, 
+      update_time)
+    values (#{id,jdbcType=BIGINT}, #{outSerial,jdbcType=VARCHAR}, #{orgId,jdbcType=BIGINT}, 
+      #{serial,jdbcType=VARCHAR}, #{virtualNo,jdbcType=VARCHAR}, #{profitOrg,jdbcType=VARCHAR}, 
+      #{profitOrgType,jdbcType=CHAR}, #{profitOrgName,jdbcType=VARCHAR}, #{drawAmount,jdbcType=BIGINT}, 
+      #{drawChargeAmount,jdbcType=BIGINT}, #{virtualAmountPre,jdbcType=BIGINT}, #{virtualAmountFinish,jdbcType=BIGINT}, 
+      #{chargeType,jdbcType=CHAR}, #{chargeCostRate,jdbcType=VARCHAR}, #{chargeCostAmount,jdbcType=BIGINT}, 
+      #{status,jdbcType=CHAR}, #{remark,jdbcType=VARCHAR}, #{virtualCustomer,jdbcType=CHAR}, 
+      #{channelReason,jdbcType=VARCHAR}, #{channelId,jdbcType=BIGINT}, #{channelMchtNo,jdbcType=VARCHAR}, 
+      #{channelMchtTermNo,jdbcType=VARCHAR}, #{channelOrderNo,jdbcType=VARCHAR}, #{drawTime,jdbcType=VARCHAR}, 
+      #{channelCharge,jdbcType=BIGINT}, #{channelAddCharge,jdbcType=BIGINT}, #{channelBillStatus,jdbcType=CHAR}, 
+      #{bankName,jdbcType=VARCHAR}, #{bankAccountNo,jdbcType=VARCHAR}, #{bankAccountName,jdbcType=VARCHAR}, 
+      #{createId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateId,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jkf.channel.gateway.entity.OrderDraw" >
+    insert into order_draw
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="outSerial != null" >
+        out_serial,
+      </if>
+      <if test="orgId != null" >
+        org_id,
+      </if>
+      <if test="serial != null" >
+        serial,
+      </if>
+      <if test="virtualNo != null" >
+        virtual_no,
+      </if>
+      <if test="profitOrg != null" >
+        profit_org,
+      </if>
+      <if test="profitOrgType != null" >
+        profit_org_type,
+      </if>
+      <if test="profitOrgName != null" >
+        profit_org_name,
+      </if>
+      <if test="drawAmount != null" >
+        draw_amount,
+      </if>
+      <if test="drawChargeAmount != null" >
+        draw_charge_amount,
+      </if>
+      <if test="virtualAmountPre != null" >
+        virtual_amount_pre,
+      </if>
+      <if test="virtualAmountFinish != null" >
+        virtual_amount_finish,
+      </if>
+      <if test="chargeType != null" >
+        charge_type,
+      </if>
+      <if test="chargeCostRate != null" >
+        `charge cost rate`,
+      </if>
+      <if test="chargeCostAmount != null" >
+        charge_cost_amount,
+      </if>
+      <if test="status != null" >
+        `status`,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="virtualCustomer != null" >
+        virtual_customer,
+      </if>
+      <if test="channelReason != null" >
+        channel_reason,
+      </if>
+      <if test="channelId != null" >
+        channel_id,
+      </if>
+      <if test="channelMchtNo != null" >
+        channel_mcht_no,
+      </if>
+      <if test="channelMchtTermNo != null" >
+        channel_mcht_term_no,
+      </if>
+      <if test="channelOrderNo != null" >
+        channel_order_no,
+      </if>
+      <if test="drawTime != null" >
+        draw_time,
+      </if>
+      <if test="channelCharge != null" >
+        channel_charge,
+      </if>
+      <if test="channelAddCharge != null" >
+        channel_add_charge,
+      </if>
+      <if test="channelBillStatus != null" >
+        channel_bill_status,
+      </if>
+      <if test="bankName != null" >
+        bank_name,
+      </if>
+      <if test="bankAccountNo != null" >
+        bank_account_no,
+      </if>
+      <if test="bankAccountName != null" >
+        bank_account_name,
+      </if>
+      <if test="createId != null" >
+        create_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateId != null" >
+        update_id,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="outSerial != null" >
+        #{outSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="orgId != null" >
+        #{orgId,jdbcType=BIGINT},
+      </if>
+      <if test="serial != null" >
+        #{serial,jdbcType=VARCHAR},
+      </if>
+      <if test="virtualNo != null" >
+        #{virtualNo,jdbcType=VARCHAR},
+      </if>
+      <if test="profitOrg != null" >
+        #{profitOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="profitOrgType != null" >
+        #{profitOrgType,jdbcType=CHAR},
+      </if>
+      <if test="profitOrgName != null" >
+        #{profitOrgName,jdbcType=VARCHAR},
+      </if>
+      <if test="drawAmount != null" >
+        #{drawAmount,jdbcType=BIGINT},
+      </if>
+      <if test="drawChargeAmount != null" >
+        #{drawChargeAmount,jdbcType=BIGINT},
+      </if>
+      <if test="virtualAmountPre != null" >
+        #{virtualAmountPre,jdbcType=BIGINT},
+      </if>
+      <if test="virtualAmountFinish != null" >
+        #{virtualAmountFinish,jdbcType=BIGINT},
+      </if>
+      <if test="chargeType != null" >
+        #{chargeType,jdbcType=CHAR},
+      </if>
+      <if test="chargeCostRate != null" >
+        #{chargeCostRate,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeCostAmount != null" >
+        #{chargeCostAmount,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="virtualCustomer != null" >
+        #{virtualCustomer,jdbcType=CHAR},
+      </if>
+      <if test="channelReason != null" >
+        #{channelReason,jdbcType=VARCHAR},
+      </if>
+      <if test="channelId != null" >
+        #{channelId,jdbcType=BIGINT},
+      </if>
+      <if test="channelMchtNo != null" >
+        #{channelMchtNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelMchtTermNo != null" >
+        #{channelMchtTermNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelOrderNo != null" >
+        #{channelOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="drawTime != null" >
+        #{drawTime,jdbcType=VARCHAR},
+      </if>
+      <if test="channelCharge != null" >
+        #{channelCharge,jdbcType=BIGINT},
+      </if>
+      <if test="channelAddCharge != null" >
+        #{channelAddCharge,jdbcType=BIGINT},
+      </if>
+      <if test="channelBillStatus != null" >
+        #{channelBillStatus,jdbcType=CHAR},
+      </if>
+      <if test="bankName != null" >
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccountNo != null" >
+        #{bankAccountNo,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccountName != null" >
+        #{bankAccountName,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateId != null" >
+        #{updateId,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jkf.channel.gateway.entity.OrderDrawExample" resultType="java.lang.Integer" >
+    select count(*) from order_draw
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update order_draw
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.outSerial != null" >
+        out_serial = #{record.outSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orgId != null" >
+        org_id = #{record.orgId,jdbcType=BIGINT},
+      </if>
+      <if test="record.serial != null" >
+        serial = #{record.serial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.virtualNo != null" >
+        virtual_no = #{record.virtualNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.profitOrg != null" >
+        profit_org = #{record.profitOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.profitOrgType != null" >
+        profit_org_type = #{record.profitOrgType,jdbcType=CHAR},
+      </if>
+      <if test="record.profitOrgName != null" >
+        profit_org_name = #{record.profitOrgName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.drawAmount != null" >
+        draw_amount = #{record.drawAmount,jdbcType=BIGINT},
+      </if>
+      <if test="record.drawChargeAmount != null" >
+        draw_charge_amount = #{record.drawChargeAmount,jdbcType=BIGINT},
+      </if>
+      <if test="record.virtualAmountPre != null" >
+        virtual_amount_pre = #{record.virtualAmountPre,jdbcType=BIGINT},
+      </if>
+      <if test="record.virtualAmountFinish != null" >
+        virtual_amount_finish = #{record.virtualAmountFinish,jdbcType=BIGINT},
+      </if>
+      <if test="record.chargeType != null" >
+        charge_type = #{record.chargeType,jdbcType=CHAR},
+      </if>
+      <if test="record.chargeCostRate != null" >
+        `charge cost rate` = #{record.chargeCostRate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.chargeCostAmount != null" >
+        charge_cost_amount = #{record.chargeCostAmount,jdbcType=BIGINT},
+      </if>
+      <if test="record.status != null" >
+        `status` = #{record.status,jdbcType=CHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.virtualCustomer != null" >
+        virtual_customer = #{record.virtualCustomer,jdbcType=CHAR},
+      </if>
+      <if test="record.channelReason != null" >
+        channel_reason = #{record.channelReason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.channelId != null" >
+        channel_id = #{record.channelId,jdbcType=BIGINT},
+      </if>
+      <if test="record.channelMchtNo != null" >
+        channel_mcht_no = #{record.channelMchtNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.channelMchtTermNo != null" >
+        channel_mcht_term_no = #{record.channelMchtTermNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.channelOrderNo != null" >
+        channel_order_no = #{record.channelOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.drawTime != null" >
+        draw_time = #{record.drawTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.channelCharge != null" >
+        channel_charge = #{record.channelCharge,jdbcType=BIGINT},
+      </if>
+      <if test="record.channelAddCharge != null" >
+        channel_add_charge = #{record.channelAddCharge,jdbcType=BIGINT},
+      </if>
+      <if test="record.channelBillStatus != null" >
+        channel_bill_status = #{record.channelBillStatus,jdbcType=CHAR},
+      </if>
+      <if test="record.bankName != null" >
+        bank_name = #{record.bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankAccountNo != null" >
+        bank_account_no = #{record.bankAccountNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankAccountName != null" >
+        bank_account_name = #{record.bankAccountName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createId != null" >
+        create_id = #{record.createId,jdbcType=BIGINT},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateId != null" >
+        update_id = #{record.updateId,jdbcType=INTEGER},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update order_draw
+    set id = #{record.id,jdbcType=BIGINT},
+      out_serial = #{record.outSerial,jdbcType=VARCHAR},
+      org_id = #{record.orgId,jdbcType=BIGINT},
+      serial = #{record.serial,jdbcType=VARCHAR},
+      virtual_no = #{record.virtualNo,jdbcType=VARCHAR},
+      profit_org = #{record.profitOrg,jdbcType=VARCHAR},
+      profit_org_type = #{record.profitOrgType,jdbcType=CHAR},
+      profit_org_name = #{record.profitOrgName,jdbcType=VARCHAR},
+      draw_amount = #{record.drawAmount,jdbcType=BIGINT},
+      draw_charge_amount = #{record.drawChargeAmount,jdbcType=BIGINT},
+      virtual_amount_pre = #{record.virtualAmountPre,jdbcType=BIGINT},
+      virtual_amount_finish = #{record.virtualAmountFinish,jdbcType=BIGINT},
+      charge_type = #{record.chargeType,jdbcType=CHAR},
+      `charge cost rate` = #{record.chargeCostRate,jdbcType=VARCHAR},
+      charge_cost_amount = #{record.chargeCostAmount,jdbcType=BIGINT},
+      `status` = #{record.status,jdbcType=CHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      virtual_customer = #{record.virtualCustomer,jdbcType=CHAR},
+      channel_reason = #{record.channelReason,jdbcType=VARCHAR},
+      channel_id = #{record.channelId,jdbcType=BIGINT},
+      channel_mcht_no = #{record.channelMchtNo,jdbcType=VARCHAR},
+      channel_mcht_term_no = #{record.channelMchtTermNo,jdbcType=VARCHAR},
+      channel_order_no = #{record.channelOrderNo,jdbcType=VARCHAR},
+      draw_time = #{record.drawTime,jdbcType=VARCHAR},
+      channel_charge = #{record.channelCharge,jdbcType=BIGINT},
+      channel_add_charge = #{record.channelAddCharge,jdbcType=BIGINT},
+      channel_bill_status = #{record.channelBillStatus,jdbcType=CHAR},
+      bank_name = #{record.bankName,jdbcType=VARCHAR},
+      bank_account_no = #{record.bankAccountNo,jdbcType=VARCHAR},
+      bank_account_name = #{record.bankAccountName,jdbcType=VARCHAR},
+      create_id = #{record.createId,jdbcType=BIGINT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_id = #{record.updateId,jdbcType=INTEGER},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jkf.channel.gateway.entity.OrderDraw" >
+    update order_draw
+    <set >
+      <if test="outSerial != null" >
+        out_serial = #{outSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="orgId != null" >
+        org_id = #{orgId,jdbcType=BIGINT},
+      </if>
+      <if test="serial != null" >
+        serial = #{serial,jdbcType=VARCHAR},
+      </if>
+      <if test="virtualNo != null" >
+        virtual_no = #{virtualNo,jdbcType=VARCHAR},
+      </if>
+      <if test="profitOrg != null" >
+        profit_org = #{profitOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="profitOrgType != null" >
+        profit_org_type = #{profitOrgType,jdbcType=CHAR},
+      </if>
+      <if test="profitOrgName != null" >
+        profit_org_name = #{profitOrgName,jdbcType=VARCHAR},
+      </if>
+      <if test="drawAmount != null" >
+        draw_amount = #{drawAmount,jdbcType=BIGINT},
+      </if>
+      <if test="drawChargeAmount != null" >
+        draw_charge_amount = #{drawChargeAmount,jdbcType=BIGINT},
+      </if>
+      <if test="virtualAmountPre != null" >
+        virtual_amount_pre = #{virtualAmountPre,jdbcType=BIGINT},
+      </if>
+      <if test="virtualAmountFinish != null" >
+        virtual_amount_finish = #{virtualAmountFinish,jdbcType=BIGINT},
+      </if>
+      <if test="chargeType != null" >
+        charge_type = #{chargeType,jdbcType=CHAR},
+      </if>
+      <if test="chargeCostRate != null" >
+        `charge cost rate` = #{chargeCostRate,jdbcType=VARCHAR},
+      </if>
+      <if test="chargeCostAmount != null" >
+        charge_cost_amount = #{chargeCostAmount,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        `status` = #{status,jdbcType=CHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="virtualCustomer != null" >
+        virtual_customer = #{virtualCustomer,jdbcType=CHAR},
+      </if>
+      <if test="channelReason != null" >
+        channel_reason = #{channelReason,jdbcType=VARCHAR},
+      </if>
+      <if test="channelId != null" >
+        channel_id = #{channelId,jdbcType=BIGINT},
+      </if>
+      <if test="channelMchtNo != null" >
+        channel_mcht_no = #{channelMchtNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelMchtTermNo != null" >
+        channel_mcht_term_no = #{channelMchtTermNo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelOrderNo != null" >
+        channel_order_no = #{channelOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="drawTime != null" >
+        draw_time = #{drawTime,jdbcType=VARCHAR},
+      </if>
+      <if test="channelCharge != null" >
+        channel_charge = #{channelCharge,jdbcType=BIGINT},
+      </if>
+      <if test="channelAddCharge != null" >
+        channel_add_charge = #{channelAddCharge,jdbcType=BIGINT},
+      </if>
+      <if test="channelBillStatus != null" >
+        channel_bill_status = #{channelBillStatus,jdbcType=CHAR},
+      </if>
+      <if test="bankName != null" >
+        bank_name = #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccountNo != null" >
+        bank_account_no = #{bankAccountNo,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccountName != null" >
+        bank_account_name = #{bankAccountName,jdbcType=VARCHAR},
+      </if>
+      <if test="createId != null" >
+        create_id = #{createId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateId != null" >
+        update_id = #{updateId,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jkf.channel.gateway.entity.OrderDraw" >
+    update order_draw
+    set out_serial = #{outSerial,jdbcType=VARCHAR},
+      org_id = #{orgId,jdbcType=BIGINT},
+      serial = #{serial,jdbcType=VARCHAR},
+      virtual_no = #{virtualNo,jdbcType=VARCHAR},
+      profit_org = #{profitOrg,jdbcType=VARCHAR},
+      profit_org_type = #{profitOrgType,jdbcType=CHAR},
+      profit_org_name = #{profitOrgName,jdbcType=VARCHAR},
+      draw_amount = #{drawAmount,jdbcType=BIGINT},
+      draw_charge_amount = #{drawChargeAmount,jdbcType=BIGINT},
+      virtual_amount_pre = #{virtualAmountPre,jdbcType=BIGINT},
+      virtual_amount_finish = #{virtualAmountFinish,jdbcType=BIGINT},
+      charge_type = #{chargeType,jdbcType=CHAR},
+      `charge cost rate` = #{chargeCostRate,jdbcType=VARCHAR},
+      charge_cost_amount = #{chargeCostAmount,jdbcType=BIGINT},
+      `status` = #{status,jdbcType=CHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      virtual_customer = #{virtualCustomer,jdbcType=CHAR},
+      channel_reason = #{channelReason,jdbcType=VARCHAR},
+      channel_id = #{channelId,jdbcType=BIGINT},
+      channel_mcht_no = #{channelMchtNo,jdbcType=VARCHAR},
+      channel_mcht_term_no = #{channelMchtTermNo,jdbcType=VARCHAR},
+      channel_order_no = #{channelOrderNo,jdbcType=VARCHAR},
+      draw_time = #{drawTime,jdbcType=VARCHAR},
+      channel_charge = #{channelCharge,jdbcType=BIGINT},
+      channel_add_charge = #{channelAddCharge,jdbcType=BIGINT},
+      channel_bill_status = #{channelBillStatus,jdbcType=CHAR},
+      bank_name = #{bankName,jdbcType=VARCHAR},
+      bank_account_no = #{bankAccountNo,jdbcType=VARCHAR},
+      bank_account_name = #{bankAccountName,jdbcType=VARCHAR},
+      create_id = #{createId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_id = #{updateId,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
