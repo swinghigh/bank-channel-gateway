@@ -33,5 +33,5 @@ public interface SysConfigMapper {
      * @param seqName
      * @return
      */
-    int getSeq(String seqName);
+    long getSeq(String seqName);
 }

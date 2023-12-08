@@ -2,6 +2,7 @@ package com.jkf.channel.gateway.service;
 
 import cn.hutool.core.collection.CollUtil;
 import com.jkf.channel.gateway.dao.OrderInfoMapper;
+import com.jkf.channel.gateway.dao.SysConfigMapper;
 import com.jkf.channel.gateway.entity.OrderInfo;
 import com.jkf.channel.gateway.entity.OrderInfoExample;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,11 @@ public class OrderInfoService {
 
     @Resource
     private OrderInfoMapper orderInfoMapper;
+    @Resource
+    private SysConfigMapper sysConfigMapper;
+    public String getSerial(){
+        return "D"+(100000000000L+sysConfigMapper.getSeq("trade_no"));
+    }
 
     public int insert(OrderInfo orderInfo){
         return orderInfoMapper.insert(orderInfo);

@@ -89,7 +89,8 @@ public class XlBizPayNotifyHandler implements IXlBizNotifyHandler{
         OrderInfo orderInfo = new OrderInfo();
 //        orderInfo.setId(1234L); //自动递增
         //系统订单号(订单唯一标识) 32位
-        String uuid = UUID.randomUUID().toString().replace("-", "");
+//        String uuid = UUID.randomUUID().toString().replace("-", "");
+        String uuid =orderInfoService.getSerial();
         orderInfo.setSerial(uuid);
         //系统外部单号 == 服务商或代理  对接我们的商户请求我们的订单
         orderInfo.setOutSerial(oriOrderId);

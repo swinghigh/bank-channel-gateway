@@ -275,7 +275,7 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
-  <select id="getSeq" resultType="int" parameterType="java.lang.String" >
+  <select id="getSeq" resultType="long" parameterType="java.lang.String" >
     select get_seq(#{seqName})
   </select>
 </mapper>
