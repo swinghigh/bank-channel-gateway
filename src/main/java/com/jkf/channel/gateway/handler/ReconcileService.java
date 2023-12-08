@@ -358,6 +358,9 @@ public class ReconcileService {
         if (directory.exists()) {
             // 遍历目录
             if (directory.isDirectory()) {
+                //对账批次号 UUID 或 yyyyMMddHHmmssSSS
+//                            String patchNo=UUID.randomUUID().toString().replace("-", "");
+                String patchNo=DateUtil.format(new Date(),DatePattern.PURE_DATETIME_MS_PATTERN);
                 File[] files = directory.listFiles();
                 if (files != null) {
                     for (File file : files) {
@@ -367,6 +370,7 @@ public class ReconcileService {
                             // 如 1656438344850440193_20231206_01
                             //billType 文件类型，01-收单类  03-付款类
                             String fileAbsolutePath = file.getAbsolutePath();
+                            log.info("处理对账文件：{}",fileAbsolutePath);
                             String fileName = file.getAbsoluteFile().getName();
                             //文件名前缀
                             String filePrefix = fileName.substring(0, fileName.lastIndexOf('.'));
@@ -384,7 +388,7 @@ public class ReconcileService {
 //                        Map firstMap = (Map)fileMap.get("firstMap");
                             ArrayList secondHeaderList = (ArrayList) fileMap.get("secondHeaderList");
                             ArrayList<ArrayList> secondDataListList = (ArrayList<ArrayList>) fileMap.get("secondDataList");
-                            log.info("fileMap:{}", fileMap);
+//                            log.debug("fileMap:{}", fileMap);
                             ArrayList<XlTradeInfo> xlTradeInfoList = convert2TradeInfoList(secondHeaderList, secondDataListList);
                             //排序 先交易后退款，避免退款找不到原订单
                             Collections.sort(xlTradeInfoList, Comparator.comparing(XlTradeInfo::getTransactionType));
@@ -394,11 +398,13 @@ public class ReconcileService {
                             //业务处理
                             for (XlTradeInfo xlTradeInfo : xlTradeInfoList) {
                                 try{
-                                    reconcileDataDealService.xlDealTradeInfo(xlTradeInfo, channelMchtXl, mchInfo, orgInterfceKey);
+                                    reconcileDataDealService.xlDealTradeInfo(xlTradeInfo, channelMchtXl, mchInfo, orgInterfceKey,patchNo);
                                 }catch (Exception e){
                                     log.error("reconcileDataDealService.xlDealTradeInfo 发生异常",e);
                                 }
                             }
+
+                            log.info("对账文件：{},处理结束",fileAbsolutePath);
 
                         });
 
@@ -410,7 +416,7 @@ public class ReconcileService {
 
         //处理结算文件
         //存结算表 mch_trade_settle
-        log.info("对账完成：{}",date);
+        log.info("对账完成，对账日期：{}",date);
     }
 
 
@@ -450,7 +456,7 @@ public class ReconcileService {
                 } else if (lineNum == 3) {
                     // 处理第2种标题行
                     secondHeaders = line.split("\\|");
-                    log.info("secondHeaders大小:{}", secondHeaders.length);
+//                    log.debug("secondHeaders大小:{}", secondHeaders.length);
                     secondHeaderList = new ArrayList(Arrays.asList(secondHeaders));
                     secondHeaderValueListList = new ArrayList<>(secondHeaderList.size());
                     // 创建 secondHeaders.length 个空的 ArrayList
@@ -460,7 +466,7 @@ public class ReconcileService {
                 } else {
                     // 处理第2种标题行和数据
                     String[] secondFields = line.split("\\|", -1);
-                    log.info("secondFields大小:{}", secondFields.length);
+//                    log.debug("secondFields大小:{}", secondFields.length);
                     // 将标题行的数据和数据行的数据对应起来
                     Map<String, String> dataMap = new HashMap<>();
                     for (int i = 0; i < secondHeaders.length; i++) {
@@ -470,7 +476,7 @@ public class ReconcileService {
                 }
                 lineNum++;
             }
-            log.info("firstHeaderMap:{}，secondHeaderList:{},secondHeaderValueListList：{}", firstHeaderMap, secondHeaderList, secondHeaderValueListList);
+//            log.debug("firstHeaderMap:{}，secondHeaderList:{},secondHeaderValueListList：{}", firstHeaderMap, secondHeaderList, secondHeaderValueListList);
             Map<String, Object> map = new HashMap<>();
             map.put("firstMap", firstHeaderMap);
             map.put("secondHeaderList", secondHeaderList);
@@ -545,6 +551,10 @@ public class ReconcileService {
                                 case "退汇状态":
                                     tradeInfo.setRefundStatus(value);
                                     break;
+//                                    //TODO 他们如果返回了再做处理
+//                                case "退款订单的原交易订单号":
+//                                    tradeInfo.setRefundOrderId(value);
+//                                    break;
                                 default:
                                     // 默认情况下的处理逻辑
                                     break;

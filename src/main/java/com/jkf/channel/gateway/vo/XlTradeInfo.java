@@ -66,4 +66,8 @@ public class XlTradeInfo {
      * 退汇状态
      */
     private String refundStatus;
+    /**
+     * 针对退款订单，返回原交易订单号
+     */
+    private String tradeOrderId;
 }

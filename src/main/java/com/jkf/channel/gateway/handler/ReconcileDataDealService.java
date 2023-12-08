@@ -1,12 +1,15 @@
 package com.jkf.channel.gateway.handler;
 
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import com.jkf.channel.gateway.entity.*;
-import com.jkf.channel.gateway.service.*;
+import com.jkf.channel.gateway.service.OrderBillService;
+import com.jkf.channel.gateway.service.OrderInfoService;
+import com.jkf.channel.gateway.service.OrderNotifyLogService;
 import com.jkf.channel.gateway.vo.XlTradeInfo;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,24 +24,33 @@ public class ReconcileDataDealService {
 
     @Resource
     private OrderInfoService orderInfoService;
-    @Autowired
-    private OrgInfoService orgInfoService;
-
-    @Autowired
-    private ChannelMchtXlService channelMchtXlService;
-    @Autowired
-    private MchInfoService mchInfoService;
     @Resource
     private OrderNotifyLogService orderNotifyLogService;
+    @Resource
+    private OrderBillService orderBillService;
 
+    /**
+     * 处理交易对账
+     * @param tradeInfo 交易对账数据
+     * @param channelMchtXl
+     * @param mchInfo
+     * @param orgInterfceKey
+     * @param patchNo   对账批次号
+     */
+    public void xlDealTradeInfo(XlTradeInfo tradeInfo, ChannelMchtXl channelMchtXl,MchInfo mchInfo,OrgInterfceKey orgInterfceKey,String patchNo){
+        //重复标识 对账流水
+        OrderBill oldOrderBill = orderBillService.selectByChannelOrderNo(tradeInfo.getOriOrderId());
+        if (oldOrderBill != null){
+            log.info("已处理过对账channelOrderNo：{}",tradeInfo.getOriOrderId());
+            return ;
+        }
 
-    public void xlDealTradeInfo(XlTradeInfo tradeInfo, ChannelMchtXl channelMchtXl,MchInfo mchInfo,OrgInterfceKey orgInterfceKey){
         if("2001".equals(tradeInfo.getTransactionType())){
             //支付订单处理
-            dealPayTradeInfo( tradeInfo,  channelMchtXl, mchInfo, orgInterfceKey);
+            dealPayTradeInfo( tradeInfo,  channelMchtXl, mchInfo, orgInterfceKey,patchNo);
         }else if("2002".equals(tradeInfo.getTransactionType())){
             //退款订单处理
-            dealRefundTradeInfo( tradeInfo,  channelMchtXl, mchInfo, orgInterfceKey);
+            dealRefundTradeInfo( tradeInfo,  channelMchtXl, mchInfo, orgInterfceKey,patchNo);
         }
     }
 
@@ -48,8 +60,9 @@ public class ReconcileDataDealService {
      * @param channelMchtXl
      * @param mchInfo
      * @param orgInterfceKey
+     * @param patchNo 对账批次号
      */
-    private void dealPayTradeInfo(XlTradeInfo tradeInfo, ChannelMchtXl channelMchtXl,MchInfo mchInfo,OrgInterfceKey orgInterfceKey){
+    private void dealPayTradeInfo(XlTradeInfo tradeInfo, ChannelMchtXl channelMchtXl,MchInfo mchInfo,OrgInterfceKey orgInterfceKey,String patchNo){
         String oriOrderId = tradeInfo.getOriOrderId();
         //手续费   转分
         long chargeAmt=0;
@@ -61,7 +74,22 @@ public class ReconcileDataDealService {
         double trxAmtDouble = Double.parseDouble(tradeInfo.getTrxAmt());
         long trxAmt = (long) (trxAmtDouble * 100);
         OrderInfo orderInfo = orderInfoService.selectByChannelOrderNo(oriOrderId);
-        if (orderInfo != null){
+        //对账前，判断是否已存在在订单表里面
+        boolean exsist=true;
+        if (orderInfo == null){
+            exsist=false;
+        }
+
+        //系统订单号(订单唯一标识) 32位
+        String orderSerial="";
+        if (exsist){
+            orderSerial = orderInfo.getSerial();
+        }
+        //存 对账文件流水
+        dealOrderBill(patchNo,exsist, orderSerial,"1", tradeInfo, channelMchtXl, mchInfo, orgInterfceKey);
+
+        if (exsist){
+            //更新
             //订单类型 1交易订单 2退款订单3预授权4分账订单
             if (!orderInfo.getOrderType().equals("1")){
                 //对账金额错误
@@ -86,9 +114,8 @@ public class ReconcileDataDealService {
             //新增
             OrderInfo insertOrderInfo = new OrderInfo();
 //        insertOrderInfo.setId(1234L); //自动递增
-            //系统订单号(订单唯一标识) 32位
-            String uuid = UUID.randomUUID().toString().replace("-", "");
-            insertOrderInfo.setSerial(uuid);
+            String serial=UUID.randomUUID().toString().replace("-","");
+            insertOrderInfo.setSerial(serial);
             //系统外部单号 == 服务商或代理  对接我们的商户请求我们的订单
             insertOrderInfo.setOutSerial(oriOrderId);
             //信联的唯一订单号 我们请求别人（如信联）对应他们的唯一订单号
@@ -165,10 +192,11 @@ public class ReconcileDataDealService {
             orderInfoService.insert(insertOrderInfo);
             if (tradeSuccess) {
                 //交易成功 需要新增通知表
-                addOrderNotifyLog(uuid,mchInfo.getOrgId(),payNotifyUrl);
+                addOrderNotifyLog(serial,mchInfo.getOrgId(),payNotifyUrl);
             }
         }
     }
+
 
     /**
      * 处理退款通知
@@ -177,7 +205,7 @@ public class ReconcileDataDealService {
      * @param mchInfo
      * @param orgInterfceKey
      */
-    private void dealRefundTradeInfo(XlTradeInfo tradeInfo, ChannelMchtXl channelMchtXl,MchInfo mchInfo,OrgInterfceKey orgInterfceKey){
+    private void dealRefundTradeInfo(XlTradeInfo tradeInfo, ChannelMchtXl channelMchtXl,MchInfo mchInfo,OrgInterfceKey orgInterfceKey,String patchNo){
         String oriOrderId = tradeInfo.getOriOrderId();
         String trxStatus = tradeInfo.getTrxStatus();
         //手续费   转分
@@ -190,7 +218,19 @@ public class ReconcileDataDealService {
         double trxAmtDouble = Double.parseDouble(tradeInfo.getTrxAmt());
         long trxAmt = (long) (trxAmtDouble * 100);
         OrderInfo orderInfo = orderInfoService.selectByChannelOrderNo(oriOrderId);
-        if (orderInfo != null){
+        //对账前，是否存在订单表里面
+        boolean exsist=true;
+        if (orderInfo == null){
+            exsist=false;
+        }
+        //系统订单号(订单唯一标识) 32位
+        String serial="";
+        if (exsist){
+            serial = orderInfo.getSerial();
+        }
+        //存 对账文件流水
+        dealOrderBill(patchNo,exsist,serial,"2", tradeInfo,  channelMchtXl, mchInfo, orgInterfceKey);
+        if (exsist){
             //订单类型 1交易订单 2退款订单3预授权4分账订单
             if (!orderInfo.getOrderType().equals("2")){
                 //对账金额错误
@@ -241,7 +281,8 @@ public class ReconcileDataDealService {
             insertOrderInfo.setChannelId(channelMchtXl.getChannelId());
             insertOrderInfo.setChannelMchNo(channelMchtXl.getChannelMchtNo());
             //TODO 查到原来的交易订单，然后把serial 存到 origSerial字段里面，做关联
-            OrderInfo tradeOrderInfo = orderInfoService.selectByChannelOrderNo(oriOrderId);
+            String tradeOrderId = tradeInfo.getTradeOrderId();
+            OrderInfo tradeOrderInfo = orderInfoService.selectByChannelOrderNo(tradeOrderId);
             if (tradeOrderInfo!=null){
                 //退款订单的原系统单号
                 insertOrderInfo.setOrigSerial(tradeOrderInfo.getSerial());
@@ -315,4 +356,75 @@ public class ReconcileDataDealService {
 //            orderNotifyLog.setUpdateId(updateId);
         orderNotifyLogService.insert(orderNotifyLog);
     }
+
+    /**
+     * 保存对账文件记录到 order_bill通道对账流水表
+     * @param patchNo 对账批次号
+     * @param exsist
+     * @param serial 关联订单serial
+     * @param orderType 订单类型 1交易订单 2退款订单3预授权4分账订单
+     * @param tradeInfo
+     * @param channelMchtXl
+     * @param mchInfo
+     * @param orgInterfceKey
+     */
+    private void dealOrderBill(String patchNo,boolean exsist,String serial, String orderType,XlTradeInfo tradeInfo, ChannelMchtXl channelMchtXl, MchInfo mchInfo, OrgInterfceKey orgInterfceKey) {
+        //手续费   转分
+        long chargeAmt=0;
+        if (StrUtil.isNotEmpty(tradeInfo.getChargeAmt())){
+            double chargeAmtDouble = Double.parseDouble(tradeInfo.getChargeAmt());
+            chargeAmt = (long) (chargeAmtDouble * 100);
+        }
+        //交易金额  转分
+        double trxAmtDouble = Double.parseDouble(tradeInfo.getTrxAmt());
+        long trxAmt = (long) (trxAmtDouble * 100);
+        //交易结算金额=交易金额 - 手续费 - 附加费（0）
+        long settleAmt=trxAmt-chargeAmt;
+        //存库
+        OrderBill orderBill = new OrderBill();
+        orderBill.setPatchNo(patchNo);
+//        orderBill.setId(1L);
+        orderBill.setChannelId(channelMchtXl.getChannelId());
+        orderBill.setChannelMchtNo(channelMchtXl.getChannelMchtNo());
+        orderBill.setChannelOrderNo(tradeInfo.getOriOrderId());
+        //系统单号(订单唯一标识) 32位
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        orderBill.setSerial(uuid);
+        //对账日期，格式应为yyyy-MM-dd
+        String dateStr = DateUtil.format(DateUtil.parse(tradeInfo.getTradeDate(), DatePattern.PURE_DATE_PATTERN), DatePattern.NORM_DATE_FORMAT);
+        orderBill.setBillDate(dateStr);
+        orderBill.setMchId(channelMchtXl.getMchId());
+        orderBill.setAgentId(mchInfo.getAgentId());
+        orderBill.setOrgId(mchInfo.getOrgId());
+        orderBill.setOrderType(orderType);
+
+        orderBill.setOrderAmount(trxAmt);
+        orderBill.setChargeAmount(chargeAmt);
+        orderBill.setAddFeeAmount(0L);
+        orderBill.setSettleAmount(settleAmt);
+        //交易时间：yyyyMMddHHmmss
+        orderBill.setFinishTime(tradeInfo.getTradeDate() + tradeInfo.getTradeTime());
+        String trxStatus = tradeInfo.getTrxStatus();
+        if ("70".equals(trxStatus)) {
+            //本系统 交易状态-1 聚合码未扫码 0：未支付/处理中  1 成功 2 失败 3 申请退款 4退款成功（全部） 5退款失败 6交易关闭 7退款成功（部分）
+            //交易失败
+            orderBill.setStatus("2");
+        } else if ("90".equals(trxStatus)) {
+            //交易成功
+            orderBill.setStatus("1");
+        }
+        if (exsist){
+            //是否存在: 0系统不存在 1系统存在
+            orderBill.setExitFlag("1");
+            //存在 才存关联关系
+            orderBill.setSerial(serial);
+        }else {
+            orderBill.setExitFlag("0");
+        }
+        orderBill.setCreateTime(new Date());
+        orderBill.setUpdateTime(new Date());
+
+        orderBillService.insert(orderBill);
+    }
+
 }

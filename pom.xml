@@ -79,11 +79,11 @@
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>2.2.1</version>
         </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.1.10</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.alibaba</groupId>-->
+<!--            <artifactId>druid-spring-boot-starter</artifactId>-->
+<!--            <version>1.1.10</version>-->
+<!--        </dependency>-->
         <!--添加 Alibaba 数据源-->
     <!--    <dependency>
             <groupId>com.alibaba</groupId>
@@ -99,11 +99,11 @@
         <!--访问mysql-->
         <!--JDBC-->
         <!-- MySql 5.5 Connector -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.24</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>mysql</groupId>-->
+<!--            <artifactId>mysql-connector-java</artifactId>-->
+<!--            <version>5.1.24</version>-->
+<!--        </dependency>-->
         <!--<dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
@@ -137,34 +137,34 @@
             <version>1.2.69</version>
         </dependency>
         <!--RSA -->
-        <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk16</artifactId>
-            <version>1.45</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.json-lib</groupId>
-            <artifactId>json-lib</artifactId>
-            <version>2.4</version>
-            <classifier>jdk15</classifier>
-            <exclusions>
-                <exclusion>
-                    <artifactId>commons-lang</artifactId>
-                    <groupId>commons-lang</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.bouncycastle</groupId>-->
+<!--            <artifactId>bcprov-jdk16</artifactId>-->
+<!--            <version>1.45</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>net.sf.json-lib</groupId>-->
+<!--            <artifactId>json-lib</artifactId>-->
+<!--            <version>2.4</version>-->
+<!--            <classifier>jdk15</classifier>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <artifactId>commons-lang</artifactId>-->
+<!--                    <groupId>commons-lang</groupId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
         <!--jdbc多数据源 -->
        <!-- <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
             <version>1.8.9</version>
         </dependency>-->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-expression</artifactId>
-            <version>5.0.5.RELEASE</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework</groupId>-->
+<!--            <artifactId>spring-expression</artifactId>-->
+<!--            <version>5.0.5.RELEASE</version>-->
+<!--        </dependency>-->
         <!-- https://mvnrepository.com/artifact/org.springframework/org.springframework.core -->
         <!--<dependency>-->
         <!--<groupId>org.springframework</groupId>-->
@@ -194,17 +194,17 @@
             <artifactId>httpcore</artifactId>
             <version>4.4.4</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpmime</artifactId>
-            <version>4.5</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>httpclient</artifactId>
-                    <groupId>org.apache.httpcomponents</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.apache.httpcomponents</groupId>-->
+<!--            <artifactId>httpmime</artifactId>-->
+<!--            <version>4.5</version>-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <artifactId>httpclient</artifactId>-->
+<!--                    <groupId>org.apache.httpcomponents</groupId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>commons-lang</groupId>
@@ -213,16 +213,16 @@
         </dependency>
 
         <!-- jedis -->
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>2.9.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.logstash.logback</groupId>
-            <artifactId>logstash-logback-encoder</artifactId>
-            <version>5.3</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>redis.clients</groupId>-->
+<!--            <artifactId>jedis</artifactId>-->
+<!--            <version>2.9.0</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>net.logstash.logback</groupId>-->
+<!--            <artifactId>logstash-logback-encoder</artifactId>-->
+<!--            <version>5.3</version>-->
+<!--        </dependency>-->
 
         <!-- 导入模板 -->
         <dependency>
@@ -236,11 +236,11 @@
         </dependency>
 
         <!--内置tomcat对Jsp支持的依赖，用于编译Jsp-->
-        <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-jasper</artifactId>
-            <scope>provided</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.apache.tomcat.embed</groupId>-->
+<!--            <artifactId>tomcat-embed-jasper</artifactId>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
 
         <!-- 加密 -->
 <!--        <dependency>
