@@ -80,9 +80,9 @@ public class ReconcileService {
             for (ChannelMchtXl item : channelMchtXlList) {
                 //下载信联对账文件 T0 用1.51接口，D0用1.52接口
                 //每个商户，依次申请并下载  交易T1文件  1.51     CheckPayOrder,billType:01
-                downloadByBizType(date,channelMchtXl.getChannelMchtNo(),XlBizTypeEnum.CheckPayOrder.getBizType(), "01",proMap);
+                downloadByBizType(date,item.getChannelMchtNo(),XlBizTypeEnum.CheckPayOrder.getBizType(), "01",proMap);
                 //每个商户，依次申请并下载 交易D0文件   1.52 CheckPaymentOrder,billType:03
-                downloadByBizType(date,channelMchtXl.getChannelMchtNo(),XlBizTypeEnum.CheckPaymentOrder.getBizType(), "03",proMap);
+                downloadByBizType(date,item.getChannelMchtNo(),XlBizTypeEnum.CheckPaymentOrder.getBizType(), "03",proMap);
                 //TODO 信联暂时没提供这个接口  每个商户，依次申请并下载 结算文件
             }
         }
