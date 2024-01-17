@@ -8,8 +8,6 @@ import lombok.Getter;
 @Getter
 public enum BusNotifyEnum {
     XL_REGISTER("XL_REGISTER", "信联入网审核通知"),
-    XL_PAY("XL_PAY", "信联支付结果通知"),
-    XL_REFUND("XL_REFUND", "信联退款结果通知"),
     ;
 
     private String  bussType;
